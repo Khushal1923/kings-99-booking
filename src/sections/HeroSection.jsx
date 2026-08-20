@@ -16,7 +16,7 @@ export const HeroSection = ({ onOpenBookingModal }) => {
   };
 
   return (
-    <section id="home" style={{ position: 'relative', minHeight: '88vh', display: 'flex', alignItems: 'center', overflow: 'hidden' }}>
+    <section id="home" style={{ position: 'relative', minHeight: '92vh', display: 'flex', alignItems: 'center', overflow: 'hidden' }}>
       {/* Background Video element or background image */}
       {cms.heroVideo ? (
         <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, zIndex: 1, overflow: 'hidden' }}>
@@ -30,14 +30,14 @@ export const HeroSection = ({ onOpenBookingModal }) => {
           >
             <source src={cms.heroVideo} type="video/mp4" />
           </video>
-          {/* Subtle Ambient Vignette Overlay */}
+          {/* Subtle Ambient Vignette & Gradient Overlay */}
           <div style={{
             position: 'absolute',
             top: 0,
             left: 0,
             right: 0,
             bottom: 0,
-            background: 'linear-gradient(180deg, rgba(15, 23, 21, 0.4) 0%, rgba(15, 23, 21, 0.65) 60%, var(--bg-primary) 100%)'
+            background: 'linear-gradient(180deg, rgba(15, 23, 21, 0.45) 0%, rgba(15, 23, 21, 0.68) 60%, var(--bg-primary) 100%)'
           }}></div>
         </div>
       ) : (
@@ -47,99 +47,129 @@ export const HeroSection = ({ onOpenBookingModal }) => {
           left: 0,
           right: 0,
           bottom: 0,
-          backgroundImage: `linear-gradient(180deg, rgba(15, 23, 21, 0.35) 0%, rgba(15, 23, 21, 0.65) 60%, var(--bg-primary) 100%), url(${cms.heroImage})`,
+          backgroundImage: `linear-gradient(180deg, rgba(15, 23, 21, 0.4) 0%, rgba(15, 23, 21, 0.68) 60%, var(--bg-primary) 100%), url(${cms.heroImage})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           zIndex: 1
         }}></div>
       )}
 
-      <div className="container" style={{ position: 'relative', zIndex: 2, padding: '100px 20px 70px' }}>
-        <div style={{ maxWidth: '820px', margin: '0 auto', textAlign: 'center' }}>
+      <div className="container" style={{ position: 'relative', zIndex: 2, padding: '110px 20px 70px' }}>
+        <div style={{ maxWidth: '880px', margin: '0 auto', textAlign: 'center' }}>
           <span className="badge-gold" style={{
-            marginBottom: '18px',
+            marginBottom: '20px',
             display: 'inline-flex',
             alignItems: 'center',
             gap: '8px',
-            background: 'rgba(255, 255, 255, 0.9)',
+            background: 'rgba(255, 255, 255, 0.95)',
             borderColor: 'var(--accent-gold)',
             color: 'var(--accent-gold-dark)',
-            boxShadow: '0 4px 14px rgba(0,0,0,0.1)'
+            boxShadow: '0 4px 16px rgba(0,0,0,0.15)',
+            fontWeight: 700,
+            letterSpacing: '1px'
           }}>
             <Sparkles size={14} /> Luxury Private Pool Resort • Nashik
           </span>
 
           <h1 className="font-serif" style={{
-            fontSize: 'clamp(2.4rem, 5vw, 4.2rem)',
+            fontSize: 'clamp(2.5rem, 5.2vw, 4.4rem)',
             fontWeight: 800,
             lineHeight: 1.15,
-            marginBottom: '20px',
+            marginBottom: '22px',
             color: '#ffffff',
-            textShadow: '0 4px 20px rgba(0,0,0,0.5)'
+            textShadow: '0 4px 24px rgba(0,0,0,0.6)',
+            letterSpacing: '0.5px'
           }}>
             {cms.tagline}
           </h1>
 
           <p style={{
-            fontSize: 'clamp(1rem, 2vw, 1.2rem)',
+            fontSize: 'clamp(1rem, 2.2vw, 1.25rem)',
             color: 'rgba(255, 255, 255, 0.95)',
-            marginBottom: '36px',
+            marginBottom: '42px',
             lineHeight: 1.6,
             fontWeight: 500,
-            textShadow: '0 2px 10px rgba(0,0,0,0.4)'
+            textShadow: '0 2px 12px rgba(0,0,0,0.5)',
+            maxWidth: '780px',
+            marginLeft: 'auto',
+            marginRight: 'auto'
           }}>
             {cms.heroSubtitle}
           </p>
 
           {/* Quick Date Availability Search Widget in Bright White Card */}
           <form onSubmit={handleQuickSearch} className="glass-card" style={{
-            padding: '24px',
+            padding: '28px 32px',
             borderRadius: 'var(--radius-lg)',
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(190px, 1fr))',
-            gap: '16px',
-            alignItems: 'end',
-            textAlign: 'left',
             background: '#ffffff',
             boxShadow: 'var(--shadow-elevated)',
-            border: '2px solid var(--border-glass)'
+            border: '2px solid var(--border-glass)',
+            backdropFilter: 'blur(20px)'
           }}>
-            <div>
-              <label className="form-label" style={{ color: 'var(--accent-gold-dark)' }}>Villa Type</label>
-              <select
-                className="form-input"
-                value={selectedVillaId}
-                onChange={(e) => setSelectedVillaId(e.target.value)}
+            {/* Top 3 Input Controls Row */}
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+              gap: '20px',
+              textAlign: 'left',
+              marginBottom: '24px'
+            }}>
+              <div>
+                <label className="form-label" style={{ color: 'var(--accent-gold-dark)', fontWeight: 700 }}>Villa Type</label>
+                <select
+                  className="form-input"
+                  value={selectedVillaId}
+                  onChange={(e) => setSelectedVillaId(e.target.value)}
+                  style={{ background: '#fafaf7' }}
+                >
+                  <option value="">All Private Pool Villas</option>
+                  {villas.map(v => (
+                    <option key={v.id} value={v.id}>{v.name}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="form-label" style={{ color: 'var(--accent-gold-dark)', fontWeight: 700 }}>Check-In Date</label>
+                <input
+                  type="date"
+                  className="form-input"
+                  value={searchCheckIn}
+                  onChange={(e) => setSearchCheckIn(e.target.value)}
+                  style={{ background: '#fafaf7' }}
+                />
+              </div>
+
+              <div>
+                <label className="form-label" style={{ color: 'var(--accent-gold-dark)', fontWeight: 700 }}>Check-Out Date</label>
+                <input
+                  type="date"
+                  className="form-input"
+                  value={searchCheckOut}
+                  onChange={(e) => setSearchCheckOut(e.target.value)}
+                  style={{ background: '#fafaf7' }}
+                />
+              </div>
+            </div>
+
+            {/* Centered Check Rates & Availability Button */}
+            <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+              <button
+                type="submit"
+                className="btn-gold"
+                style={{
+                  padding: '14px 36px',
+                  fontSize: '0.95rem',
+                  letterSpacing: '0.5px',
+                  borderRadius: 'var(--radius-full)',
+                  boxShadow: 'var(--shadow-gold)',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '10px',
+                  minWidth: '280px'
+                }}
               >
-                <option value="">All Private Pool Villas</option>
-                {villas.map(v => (
-                  <option key={v.id} value={v.id}>{v.name}</option>
-                ))}
-              </select>
-            </div>
-
-            <div>
-              <label className="form-label" style={{ color: 'var(--accent-gold-dark)' }}>Check-In Date</label>
-              <input
-                type="date"
-                className="form-input"
-                value={searchCheckIn}
-                onChange={(e) => setSearchCheckIn(e.target.value)}
-              />
-            </div>
-
-            <div>
-              <label className="form-label" style={{ color: 'var(--accent-gold-dark)' }}>Check-Out Date</label>
-              <input
-                type="date"
-                className="form-input"
-                value={searchCheckOut}
-                onChange={(e) => setSearchCheckOut(e.target.value)}
-              />
-            </div>
-
-            <div>
-              <button type="submit" className="btn-gold" style={{ width: '100%', justifyContent: 'center', padding: '12px' }}>
                 <Search size={18} /> Check Rates & Availability
               </button>
             </div>
@@ -150,9 +180,9 @@ export const HeroSection = ({ onOpenBookingModal }) => {
             display: 'inline-flex',
             alignItems: 'center',
             gap: '8px',
-            color: 'rgba(255, 255, 255, 0.9)',
+            color: 'rgba(255, 255, 255, 0.92)',
             fontSize: '0.88rem',
-            marginTop: '24px',
+            marginTop: '28px',
             fontWeight: 600,
             textShadow: '0 2px 8px rgba(0,0,0,0.5)'
           }}>
