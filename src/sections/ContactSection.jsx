@@ -1,28 +1,44 @@
 import React from 'react';
 import { useResort } from '../context/ResortContext';
-import { MapPin, Navigation, Clock, Phone, ExternalLink, Compass } from 'lucide-react';
+import { MapPin, Navigation, Clock, Phone, ExternalLink } from 'lucide-react';
 
-// Official SVG Brand Icons
-export const InstagramIcon = ({ size = 18 }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+// Exact Full-Color Instagram Gradient App Badge SVG (Matching User's Image 1)
+export const InstagramAppLogo = ({ size = 22 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" style={{ borderRadius: '6px', flexShrink: 0, boxShadow: '0 2px 6px rgba(0,0,0,0.15)' }}>
+    <defs>
+      <linearGradient id="igAppGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+        <stop offset="0%" stopColor="#fdf497" />
+        <stop offset="15%" stopColor="#fdf497" />
+        <stop offset="45%" stopColor="#fd5949" />
+        <stop offset="60%" stopColor="#d6249f" />
+        <stop offset="100%" stopColor="#285AEB" />
+      </linearGradient>
+    </defs>
+    <rect width="24" height="24" rx="6" fill="url(#igAppGrad)" />
+    <path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zm0 8.2A3.2 3.2 0 1 1 12 8.8a3.2 3.2 0 0 1 0 6.4z" fill="#ffffff" />
+    <circle cx="16.5" cy="7.5" r="1.1" fill="#ffffff" />
+    <path d="M16 3H8C5.24 3 3 5.24 3 8v8c0 2.76 2.24 5 5 5h8c2.76 0 5-2.24 5-5V8c0-2.76-2.24-5-5-5zm3.2 13c0 1.76-1.44 3.2-3.2 3.2H8c-1.76 0-3.2-1.44-3.2-3.2V8c0-1.76 1.44-3.2 3.2-3.2h8c1.76 0 3.2 1.44 3.2 3.2v8z" fill="#ffffff" />
   </svg>
 );
 
-export const WhatsAppIcon = ({ size = 18 }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
-    <path d="M12.012 2c-5.506 0-9.989 4.478-9.99 9.984 0 1.761.459 3.479 1.332 5.001l-1.416 5.17 5.292-1.387c1.467.8 3.127 1.22 4.782 1.221h.004c5.505 0 9.988-4.478 9.99-9.985 0-2.668-1.039-5.176-2.926-7.062a9.923 9.923 0 0 0-7.061-2.942zm.004 1.666a8.272 8.272 0 0 1 5.889 2.451 8.272 8.272 0 0 1 2.446 5.88c-.002 4.587-3.737 8.318-8.327 8.318h-.003a8.27 8.27 0 0 1-4.225-1.157l-.303-.18-3.14.822.837-3.061-.197-.314a8.261 8.261 0 0 1-1.266-4.417c0-4.587 3.735-8.32 8.326-8.322zm-3.6 3.6c-.206 0-.442.078-.673.328-.231.25-.88.86-.88 2.098 0 1.238.902 2.434 1.027 2.602.126.168 1.777 2.712 4.305 3.804 2.528 1.092 2.528.728 2.98.683.453-.045 1.46-.597 1.666-1.173.206-.576.206-1.069.145-1.173-.06-.104-.226-.168-.432-.272-.206-.104-1.222-.603-1.413-.672-.19-.07-.33-.104-.47.104-.14.208-.544.683-.667.824-.124.14-.247.157-.453.052-.206-.104-.87-.321-1.657-1.023-.614-.547-1.028-1.222-1.149-1.429-.121-.208-.013-.32.09-.423.094-.093.206-.244.309-.366.104-.122.138-.208.207-.348.069-.14.034-.262-.017-.366-.052-.104-.469-1.13-.642-1.547-.168-.407-.338-.352-.469-.358l-.4-.007z"/>
+// Exact Full-Color WhatsApp Bright Green App Badge SVG (Matching User's Image 2)
+export const WhatsAppAppLogo = ({ size = 22 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" style={{ borderRadius: '6px', flexShrink: 0, boxShadow: '0 2px 6px rgba(0,0,0,0.15)' }}>
+    <rect width="24" height="24" rx="6" fill="#25D366" />
+    <path fill="#ffffff" d="M12.012 4c-4.405 0-7.991 3.582-7.992 7.987 0 1.409.367 2.783 1.066 3.999l-1.133 4.136 4.234-1.11c1.174.64 2.502.977 3.826.977h.003c4.404 0 7.99-3.582 7.992-7.988 0-2.134-.831-4.14-2.34-5.649A7.938 7.938 0 0 0 12.012 4zm.003 1.333c1.777 0 3.447.693 4.711 1.961a6.618 6.618 0 0 1 1.957 4.704c-.002 3.67-2.99 6.654-6.662 6.654h-.002a6.616 6.616 0 0 1-3.38-.925l-.242-.144-2.512.658.67-2.449-.158-.251a6.609 6.609 0 0 1-1.013-3.534c0-3.67 2.988-6.656 6.661-6.658zm-2.88 2.88c-.165 0-.354.062-.538.262-.185.2-.704.688-.704 1.678 0 .99.722 1.947.822 2.082.1.134 1.421 2.17 3.444 3.043 2.023.874 2.023.582 2.384.546.362-.036 1.168-.478 1.333-.938.165-.461.165-.855.116-.938-.048-.083-.181-.134-.346-.218-.165-.083-.977-.482-1.13-.537-.152-.056-.264-.083-.376.083-.112.166-.435.546-.534.659-.099.112-.198.125-.363.042-.165-.083-.696-.257-1.326-.818-.491-.437-.822-.977-.919-1.143-.097-.166-.01-.256.072-.338.075-.074.165-.195.247-.293.083-.098.11-.166.166-.278.055-.112.027-.21-.014-.293-.042-.083-.375-.904-.514-1.238-.134-.325-.27-.282-.375-.286l-.32-.006z"/>
   </svg>
 );
 
-export const GoogleIcon = ({ size = 18 }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24">
-    <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/>
-    <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.11-6.72-4.96H1.29v3.15C3.26 21.3 7.31 24 12 24z"/>
-    <path fill="#FBBC05" d="M5.28 14.24a7.185 7.185 0 0 1 0-4.48V6.61H1.29a11.97 11.97 0 0 0 0 10.78l3.99-3.15z"/>
-    <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.31 0 3.26 2.7 1.29 6.61l3.99 3.15c.95-2.85 3.6-4.96 6.72-4.96z"/>
+// Full-Color Google Multi-Color App Badge SVG
+export const GoogleAppLogo = ({ size = 22 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" style={{ borderRadius: '6px', flexShrink: 0, boxShadow: '0 2px 6px rgba(0,0,0,0.1)' }}>
+    <rect width="24" height="24" rx="6" fill="#ffffff" stroke="rgba(0,0,0,0.12)" />
+    <g transform="translate(3.5, 3.5) scale(0.7)">
+      <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/>
+      <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.11-6.72-4.96H1.29v3.15C3.26 21.3 7.31 24 12 24z"/>
+      <path fill="#FBBC05" d="M5.28 14.24a7.185 7.185 0 0 1 0-4.48V6.61H1.29a11.97 11.97 0 0 0 0 10.78l3.99-3.15z"/>
+      <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.31 0 3.26 2.7 1.29 6.61l3.99 3.15c.95-2.85 3.6-4.96 6.72-4.96z"/>
+    </g>
   </svg>
 );
 
@@ -164,14 +180,14 @@ export const ContactSection = () => {
               </div>
             </div>
 
-            {/* Card 3: Connected Social Links & Platforms (With Official Brand SVG Icons) */}
+            {/* Card 3: Connected Social Links (With User's exact Instagram & WhatsApp App Badge Logos) */}
             <div className="glass-card" style={{ padding: '24px', borderRadius: '20px' }}>
               <span style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px', display: 'block', marginBottom: '14px' }}>
                 CONNECTED SOCIAL & DIRECTORIES
               </span>
 
               <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-                {/* Instagram Button with Official SVG Icon */}
+                {/* Instagram App Badge Button (Image 1 Logo) */}
                 <a
                   href={cms.instagramLink}
                   target="_blank"
@@ -180,19 +196,21 @@ export const ContactSection = () => {
                   style={{
                     padding: '8px 16px',
                     fontSize: '0.85rem',
-                    borderColor: '#e1306c',
-                    color: '#e1306c',
+                    borderColor: '#d6249f',
+                    color: '#c13584',
+                    background: '#ffffff',
                     display: 'inline-flex',
                     alignItems: 'center',
-                    gap: '8px',
+                    gap: '10px',
                     fontWeight: 700,
-                    textDecoration: 'none'
+                    textDecoration: 'none',
+                    boxShadow: '0 4px 12px rgba(214, 36, 159, 0.12)'
                   }}
                 >
-                  <InstagramIcon size={18} /> Instagram (@kings99official)
+                  <InstagramAppLogo size={22} /> Instagram (@kings99official)
                 </a>
 
-                {/* WhatsApp Button with Official SVG Icon */}
+                {/* WhatsApp App Badge Button (Image 2 Logo) */}
                 <a
                   href={`https://wa.me/${cms.whatsappNumber}?text=${encodeURIComponent('Namaste Kings 99 Nashik, I would like to make an inquiry!')}`}
                   target="_blank"
@@ -202,18 +220,20 @@ export const ContactSection = () => {
                     padding: '8px 16px',
                     fontSize: '0.85rem',
                     borderColor: '#25D366',
-                    color: '#128C7E',
+                    color: '#075E54',
+                    background: '#ffffff',
                     display: 'inline-flex',
                     alignItems: 'center',
-                    gap: '8px',
+                    gap: '10px',
                     fontWeight: 700,
-                    textDecoration: 'none'
+                    textDecoration: 'none',
+                    boxShadow: '0 4px 12px rgba(37, 211, 102, 0.15)'
                   }}
                 >
-                  <WhatsAppIcon size={18} /> WhatsApp Direct
+                  <WhatsAppAppLogo size={22} /> WhatsApp Direct
                 </a>
 
-                {/* Google Maps Button with Multi-Color Google G SVG Icon */}
+                {/* Google Business App Badge Button */}
                 <a
                   href={cms.googleLink}
                   target="_blank"
@@ -224,20 +244,21 @@ export const ContactSection = () => {
                     fontSize: '0.85rem',
                     borderColor: 'var(--border-glass)',
                     color: 'var(--text-dark)',
+                    background: '#ffffff',
                     display: 'inline-flex',
                     alignItems: 'center',
-                    gap: '8px',
+                    gap: '10px',
                     fontWeight: 700,
                     textDecoration: 'none'
                   }}
                 >
-                  <GoogleIcon size={18} /> Google Business
+                  <GoogleAppLogo size={22} /> Google Business
                 </a>
               </div>
             </div>
           </div>
 
-          {/* RIGHT COLUMN: Interactive Embedded Google Map with Custom Overlay */}
+          {/* RIGHT COLUMN: Interactive Embedded Google Map */}
           <div style={{ position: 'relative' }}>
             <div className="glass-card" style={{
               borderRadius: '24px',
