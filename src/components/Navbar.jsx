@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useResort } from '../context/ResortContext';
-import { Compass, ShieldCheck, Menu, X, CalendarCheck, Sparkles, UserCheck, KeyRound } from 'lucide-react';
+import { Compass, ShieldCheck, Menu, X, CalendarCheck, Sparkles, KeyRound } from 'lucide-react';
 
 export const Navbar = ({ onOpenBookingModal }) => {
   const { cms, userSession, logout, openLoginModal } = useResort();
@@ -22,18 +22,18 @@ export const Navbar = ({ onOpenBookingModal }) => {
         <div style={{
           background: 'linear-gradient(90deg, #aa8620 0%, #d4af37 50%, #aa8620 100%)',
           color: '#0b1310',
-          padding: '6px 16px',
+          padding: '6px 12px',
           textAlign: 'center',
-          fontSize: '0.8rem',
+          fontSize: '0.75rem',
           fontWeight: 700,
           letterSpacing: '0.5px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          gap: '8px'
+          gap: '6px'
         }}>
-          <Sparkles size={14} />
-          {cms.announcementText}
+          <Sparkles size={14} shrink={0} />
+          <span>{cms.announcementText}</span>
         </div>
       )}
 
@@ -42,7 +42,7 @@ export const Navbar = ({ onOpenBookingModal }) => {
         position: 'sticky',
         top: 0,
         zIndex: 900,
-        background: scrolled ? 'rgba(11, 19, 16, 0.95)' : 'rgba(11, 19, 16, 0.75)',
+        background: scrolled ? 'rgba(11, 19, 16, 0.95)' : 'rgba(11, 19, 16, 0.85)',
         backdropFilter: 'blur(16px)',
         borderBottom: '1px solid var(--border-glass)',
         transition: 'all 0.3s ease'
@@ -51,35 +51,37 @@ export const Navbar = ({ onOpenBookingModal }) => {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          height: '75px'
+          height: '70px'
         }}>
           {/* Logo & Brand */}
-          <a href="#" style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none' }}>
+          <a href="#" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none' }}>
             <div style={{
-              width: '42px',
-              height: '42px',
+              width: '38px',
+              height: '38px',
               borderRadius: '50%',
               background: 'linear-gradient(135deg, #d4af37, #aa8620)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               color: '#0b1310',
-              boxShadow: 'var(--shadow-gold)'
+              boxShadow: 'var(--shadow-gold)',
+              shrink: 0
             }}>
-              <Compass size={24} />
+              <Compass size={22} />
             </div>
             <div>
               <span className="font-serif" style={{
-                fontSize: '1.2rem',
+                fontSize: '1.1rem',
                 fontWeight: 700,
                 color: '#fff',
                 letterSpacing: '0.5px',
-                display: 'block'
+                display: 'block',
+                lineHeight: 1.2
               }}>
                 {cms.resortName}
               </span>
-              <span style={{ fontSize: '0.7rem', color: 'var(--accent-gold)', letterSpacing: '1px', textTransform: 'uppercase' }}>
-                Nashik • Restaurant & Villa
+              <span style={{ fontSize: '0.65rem', color: 'var(--accent-gold)', letterSpacing: '1px', textTransform: 'uppercase' }}>
+                Nashik • Villa & Restaurant
               </span>
             </div>
           </a>
@@ -95,12 +97,12 @@ export const Navbar = ({ onOpenBookingModal }) => {
           </nav>
 
           {/* Right Action Buttons */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             {userSession ? (
               <button
                 onClick={logout}
                 className="btn-outline"
-                style={{ padding: '8px 14px', fontSize: '0.8rem', borderColor: '#ef4444', color: '#ef4444' }}
+                style={{ padding: '6px 12px', fontSize: '0.78rem', borderColor: '#ef4444', color: '#ef4444' }}
               >
                 Logout ({userSession.username})
               </button>
@@ -109,21 +111,21 @@ export const Navbar = ({ onOpenBookingModal }) => {
                 {/* Staff Login Button */}
                 <button
                   onClick={() => openLoginModal('STAFF')}
-                  className="btn-outline"
-                  style={{ padding: '8px 12px', fontSize: '0.8rem', borderColor: '#10b981', color: '#10b981' }}
+                  className="btn-outline nav-btn-compact"
+                  style={{ padding: '6px 10px', fontSize: '0.78rem', borderColor: '#10b981', color: '#10b981' }}
                   title="Staff Concierge Login"
                 >
-                  <KeyRound size={14} /> Staff Portal
+                  <KeyRound size={14} /> <span className="hide-on-mobile">Staff</span>
                 </button>
 
                 {/* Owner / Admin Login Button */}
                 <button
                   onClick={() => openLoginModal('ADMIN')}
-                  className="btn-outline"
-                  style={{ padding: '8px 12px', fontSize: '0.8rem' }}
+                  className="btn-outline nav-btn-compact"
+                  style={{ padding: '6px 10px', fontSize: '0.78rem' }}
                   title="Owner / Admin Login"
                 >
-                  <ShieldCheck size={14} /> Owner Admin
+                  <ShieldCheck size={14} /> <span className="hide-on-mobile">Owner</span>
                 </button>
               </>
             )}
@@ -132,7 +134,7 @@ export const Navbar = ({ onOpenBookingModal }) => {
             <button
               onClick={() => onOpenBookingModal(null)}
               className="btn-gold"
-              style={{ padding: '8px 16px', fontSize: '0.85rem' }}
+              style={{ padding: '8px 14px', fontSize: '0.8rem' }}
             >
               <CalendarCheck size={16} /> Book Villa
             </button>
@@ -145,11 +147,12 @@ export const Navbar = ({ onOpenBookingModal }) => {
                 border: 'none',
                 color: 'var(--text-main)',
                 cursor: 'pointer',
-                display: 'none'
+                display: 'none',
+                padding: '4px'
               }}
               className="mobile-toggle"
             >
-              {mobileMenuOpen ? <X size={26} /> : <Menu size={26} />}
+              {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
           </div>
         </div>
@@ -159,16 +162,16 @@ export const Navbar = ({ onOpenBookingModal }) => {
       {mobileMenuOpen && (
         <div style={{
           position: 'fixed',
-          top: '75px',
+          top: '70px',
           left: 0,
           right: 0,
           background: 'var(--bg-surface-elevated)',
           borderBottom: '1px solid var(--border-glass)',
-          padding: '24px',
+          padding: '20px 16px',
           zIndex: 899,
           display: 'flex',
           flexDirection: 'column',
-          gap: '16px'
+          gap: '12px'
         }}>
           <a href="#home" onClick={() => setMobileMenuOpen(false)} style={mobileNavLinkStyle}>Home</a>
           <a href="#villas" onClick={() => setMobileMenuOpen(false)} style={mobileNavLinkStyle}>Pool Villas & Suites</a>
@@ -186,6 +189,10 @@ export const Navbar = ({ onOpenBookingModal }) => {
         @media (max-width: 991px) {
           .mobile-toggle { display: block !important; }
         }
+        @media (max-width: 576px) {
+          .hide-on-mobile { display: none !important; }
+          .nav-btn-compact { padding: 6px 8px !important; }
+        }
       `}</style>
     </>
   );
@@ -202,8 +209,8 @@ const navLinkStyle = {
 const mobileNavLinkStyle = {
   color: '#fff',
   textDecoration: 'none',
-  fontSize: '1.1rem',
+  fontSize: '1rem',
   fontWeight: 600,
-  padding: '8px 0',
+  padding: '6px 0',
   borderBottom: '1px solid var(--border-subtle)'
 };
