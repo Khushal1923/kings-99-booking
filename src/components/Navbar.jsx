@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useResort } from '../context/ResortContext';
-import { Compass, ShieldCheck, Menu, X, CalendarCheck, Sparkles, KeyRound } from 'lucide-react';
+import { Compass, ShieldCheck, Menu, X, Calendar, Phone, Sparkles, KeyRound } from 'lucide-react';
 
 export const Navbar = ({ onOpenBookingModal }) => {
   const { cms, userSession, logout, openLoginModal } = useResort();
@@ -20,9 +20,9 @@ export const Navbar = ({ onOpenBookingModal }) => {
       {/* Announcement Bar */}
       {cms.announcementText && (
         <div style={{
-          background: 'linear-gradient(90deg, #c5a059 0%, #dfc88b 50%, #c5a059 100%)',
-          color: '#0f1715',
-          padding: '7px 14px',
+          background: 'linear-gradient(90deg, #aa8620 0%, #d4af37 50%, #aa8620 100%)',
+          color: '#0b1310',
+          padding: '6px 14px',
           textAlign: 'center',
           fontSize: '0.78rem',
           fontWeight: 700,
@@ -30,81 +30,88 @@ export const Navbar = ({ onOpenBookingModal }) => {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          gap: '6px',
-          boxShadow: '0 2px 10px rgba(197, 160, 89, 0.2)'
+          gap: '6px'
         }}>
           <Sparkles size={14} />
           <span>{cms.announcementText}</span>
         </div>
       )}
 
-      {/* Main Glass Navbar */}
+      {/* Main Reference Style Navbar */}
       <header style={{
         position: 'sticky',
         top: 0,
         zIndex: 900,
-        background: scrolled ? 'rgba(255, 255, 255, 0.96)' : 'rgba(248, 246, 240, 0.92)',
+        background: scrolled ? 'rgba(11, 19, 16, 0.96)' : 'rgba(15, 23, 21, 0.88)',
         backdropFilter: 'blur(16px)',
-        borderBottom: '1px solid var(--border-glass)',
-        boxShadow: scrolled ? '0 10px 30px rgba(0,0,0,0.05)' : 'none',
+        borderBottom: '1px solid rgba(212, 175, 55, 0.18)',
+        boxShadow: scrolled ? '0 10px 30px rgba(0,0,0,0.35)' : 'none',
         transition: 'all 0.3s ease'
       }}>
         <div className="container" style={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          height: '74px'
+          height: '72px'
         }}>
-          {/* Logo & Brand */}
+          {/* Logo & Brand (Reference Image Style: Icon Pill + Serif Name + Gold Subtitle) */}
           <a href="#" style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none' }}>
             <div style={{
-              width: '42px',
-              height: '42px',
-              borderRadius: '50%',
-              background: 'linear-gradient(135deg, #c5a059, #9a7632)',
+              width: '40px',
+              height: '40px',
+              borderRadius: '12px',
+              background: 'rgba(255, 255, 255, 0.12)',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               color: '#ffffff',
-              boxShadow: 'var(--shadow-gold)',
-              flexShrink: 0
+              shrink: 0
             }}>
-              <Compass size={24} />
+              <Compass size={22} color="var(--accent-gold-light)" />
             </div>
             <div>
               <span className="font-serif" style={{
-                fontSize: '1.2rem',
+                fontSize: '1.25rem',
                 fontWeight: 800,
-                color: 'var(--text-dark)',
+                color: '#ffffff',
                 letterSpacing: '0.5px',
                 display: 'block',
-                lineHeight: 1.2
+                lineHeight: 1.1
               }}>
-                {cms.resortName}
+                Kings 99
               </span>
-              <span style={{ fontSize: '0.68rem', color: 'var(--accent-gold-dark)', letterSpacing: '1px', textTransform: 'uppercase', fontWeight: 700 }}>
-                Nashik • Private Pool Villas & Dining
+              <span style={{
+                fontSize: '0.62rem',
+                color: '#d4af37',
+                letterSpacing: '1.5px',
+                textTransform: 'uppercase',
+                fontWeight: 800,
+                display: 'block',
+                marginTop: '1px'
+              }}>
+                RESTAURANT & VILLA
               </span>
             </div>
           </a>
 
-          {/* Desktop Nav Links */}
-          <nav style={{ display: 'none', gap: '24px', alignItems: 'center' }} className="desktop-nav">
+          {/* Center Nav Links (Reference Image Style: Clean White Text Nav) */}
+          <nav style={{ display: 'none', gap: '26px', alignItems: 'center' }} className="desktop-nav">
             <a href="#home" style={navLinkStyle}>Home</a>
             <a href="#villas" style={navLinkStyle}>Pool Villas</a>
-            <a href="#dining" style={navLinkStyle}>Restaurant Menu</a>
+            <a href="#dining" style={navLinkStyle}>Menu</a>
             <a href="#gallery" style={navLinkStyle}>Gallery</a>
             <a href="#about" style={navLinkStyle}>About Us</a>
-            <a href="#contact" style={navLinkStyle}>Contact & Location</a>
+            <a href="#contact" style={navLinkStyle}>Location</a>
           </nav>
 
-          {/* Right Action Buttons */}
+          {/* Right Action Area (Reference Image Style: Teal Pill CTA + Phone Circle Icon + Portals) */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             {userSession ? (
               <button
                 onClick={logout}
                 className="btn-outline"
-                style={{ padding: '7px 14px', fontSize: '0.8rem', borderColor: '#dc2626', color: '#dc2626' }}
+                style={{ padding: '6px 12px', fontSize: '0.78rem', borderColor: '#ef4444', color: '#ef4444', background: 'transparent' }}
               >
                 Logout ({userSession.username})
               </button>
@@ -113,33 +120,69 @@ export const Navbar = ({ onOpenBookingModal }) => {
                 {/* Staff Login Button */}
                 <button
                   onClick={() => openLoginModal('STAFF')}
-                  className="btn-outline nav-btn-compact"
-                  style={{ padding: '7px 12px', fontSize: '0.8rem', borderColor: 'var(--accent-emerald)', color: 'var(--accent-emerald)' }}
+                  style={portalButtonStyle}
                   title="Staff Concierge Login"
+                  className="hide-on-mobile"
                 >
-                  <KeyRound size={14} /> <span className="hide-on-mobile">Staff Portal</span>
+                  <KeyRound size={13} color="#10b981" /> Staff
                 </button>
 
                 {/* Owner / Admin Login Button */}
                 <button
                   onClick={() => openLoginModal('ADMIN')}
-                  className="btn-outline nav-btn-compact"
-                  style={{ padding: '7px 12px', fontSize: '0.8rem' }}
+                  style={portalButtonStyle}
                   title="Owner / Admin Login"
+                  className="hide-on-mobile"
                 >
-                  <ShieldCheck size={14} /> <span className="hide-on-mobile">Owner Admin</span>
+                  <ShieldCheck size={13} color="#d4af37" /> Owner
                 </button>
               </>
             )}
 
-            {/* Book Now Button */}
+            {/* Reference Image Style Teal Pill CTA Button */}
             <button
               onClick={() => onOpenBookingModal(null)}
-              className="btn-gold"
-              style={{ padding: '9px 18px', fontSize: '0.85rem' }}
+              style={{
+                background: 'linear-gradient(135deg, #1b5e4d 0%, #166534 100%)',
+                color: '#ffffff',
+                fontWeight: 800,
+                padding: '9px 18px',
+                borderRadius: 'var(--radius-full)',
+                border: '1px solid rgba(255, 255, 255, 0.2)',
+                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                fontSize: '0.8rem',
+                letterSpacing: '0.8px',
+                textTransform: 'uppercase',
+                boxShadow: '0 4px 14px rgba(27, 94, 77, 0.4)'
+              }}
             >
-              <CalendarCheck size={16} /> Book Villa
+              <Calendar size={15} /> BOOK VILLA
             </button>
+
+            {/* Reference Image Style Circular Phone Icon Button */}
+            <a
+              href={`tel:${cms.phone}`}
+              style={{
+                width: '38px',
+                height: '38px',
+                borderRadius: '50%',
+                background: 'rgba(255, 255, 255, 0.12)',
+                border: '1px solid rgba(255, 255, 255, 0.2)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: '#ffffff',
+                textDecoration: 'none',
+                transition: 'background 0.2s ease',
+                shrink: 0
+              }}
+              title="Call Resort Inquiries"
+            >
+              <Phone size={16} />
+            </a>
 
             {/* Mobile Menu Toggle */}
             <button
@@ -147,7 +190,7 @@ export const Navbar = ({ onOpenBookingModal }) => {
               style={{
                 background: 'transparent',
                 border: 'none',
-                color: 'var(--text-dark)',
+                color: '#ffffff',
                 cursor: 'pointer',
                 display: 'none',
                 padding: '4px'
@@ -164,24 +207,42 @@ export const Navbar = ({ onOpenBookingModal }) => {
       {mobileMenuOpen && (
         <div style={{
           position: 'fixed',
-          top: '74px',
+          top: '72px',
           left: 0,
           right: 0,
-          background: '#ffffff',
-          borderBottom: '2px solid var(--border-glass)',
+          background: 'rgba(11, 19, 16, 0.98)',
+          borderBottom: '1px solid var(--border-glass)',
           padding: '24px 20px',
           zIndex: 899,
           display: 'flex',
           flexDirection: 'column',
           gap: '14px',
-          boxShadow: 'var(--shadow-elevated)'
+          backdropFilter: 'blur(20px)'
         }}>
           <a href="#home" onClick={() => setMobileMenuOpen(false)} style={mobileNavLinkStyle}>Home</a>
           <a href="#villas" onClick={() => setMobileMenuOpen(false)} style={mobileNavLinkStyle}>Pool Villas & Suites</a>
           <a href="#dining" onClick={() => setMobileMenuOpen(false)} style={mobileNavLinkStyle}>Kings Restaurant & Dining</a>
           <a href="#gallery" onClick={() => setMobileMenuOpen(false)} style={mobileNavLinkStyle}>Resort Gallery</a>
           <a href="#about" onClick={() => setMobileMenuOpen(false)} style={mobileNavLinkStyle}>About Kings 99</a>
-          <a href="#contact" onClick={() => setMobileMenuOpen(false)} style={mobileNavLinkStyle}>Contact & Location</a>
+          <a href="#contact" onClick={() => setMobileMenuOpen(false)} style={mobileNavLinkStyle}>Location & Contact</a>
+
+          {/* Staff & Admin logins inside mobile menu */}
+          <div style={{ display: 'flex', gap: '10px', marginTop: '10px', paddingTop: '10px', borderTop: '1px solid var(--border-subtle)' }}>
+            <button
+              onClick={() => { setMobileMenuOpen(false); openLoginModal('STAFF'); }}
+              className="btn-outline"
+              style={{ flex: 1, justifyContent: 'center', borderColor: '#10b981', color: '#10b981', padding: '8px' }}
+            >
+              <KeyRound size={14} /> Staff Portal
+            </button>
+            <button
+              onClick={() => { setMobileMenuOpen(false); openLoginModal('ADMIN'); }}
+              className="btn-outline"
+              style={{ flex: 1, justifyContent: 'center', borderColor: '#d4af37', color: '#d4af37', padding: '8px' }}
+            >
+              <ShieldCheck size={14} /> Owner Admin
+            </button>
+          </div>
         </div>
       )}
 
@@ -192,9 +253,8 @@ export const Navbar = ({ onOpenBookingModal }) => {
         @media (max-width: 991px) {
           .mobile-toggle { display: block !important; }
         }
-        @media (max-width: 576px) {
+        @media (max-width: 650px) {
           .hide-on-mobile { display: none !important; }
-          .nav-btn-compact { padding: 6px 8px !important; }
         }
       `}</style>
     </>
@@ -202,18 +262,33 @@ export const Navbar = ({ onOpenBookingModal }) => {
 };
 
 const navLinkStyle = {
-  color: 'var(--text-main)',
+  color: '#ffffff',
   textDecoration: 'none',
-  fontSize: '0.9rem',
+  fontSize: '0.88rem',
   fontWeight: 600,
   transition: 'color 0.2s ease',
+  letterSpacing: '0.3px'
 };
 
 const mobileNavLinkStyle = {
-  color: 'var(--text-dark)',
+  color: '#ffffff',
   textDecoration: 'none',
   fontSize: '1.05rem',
   fontWeight: 700,
   padding: '8px 0',
   borderBottom: '1px solid var(--border-subtle)'
+};
+
+const portalButtonStyle = {
+  background: 'rgba(255, 255, 255, 0.08)',
+  border: '1px solid rgba(255, 255, 255, 0.15)',
+  color: '#ffffff',
+  borderRadius: 'var(--radius-full)',
+  padding: '6px 12px',
+  fontSize: '0.78rem',
+  fontWeight: 600,
+  cursor: 'pointer',
+  display: 'inline-flex',
+  alignItems: 'center',
+  gap: '6px'
 };
