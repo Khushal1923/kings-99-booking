@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useResort } from '../context/ResortContext';
 import { exportToCSV } from '../utils/exportUtils';
-import { Utensils, CheckCircle2, XCircle, Search, MessageSquare, FileSpreadsheet } from 'lucide-react';
+import { CheckCircle2, XCircle, Search, MessageSquare, FileSpreadsheet } from 'lucide-react';
 
 export const DiningBookingsTab = () => {
   const { diningBookings, updateDiningStatus, cms } = useResort();
@@ -47,7 +47,7 @@ export const DiningBookingsTab = () => {
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px', marginBottom: '24px' }}>
         <div>
-          <h3 className="font-serif" style={{ fontSize: '1.5rem', color: '#fff' }}>
+          <h3 className="font-serif" style={{ fontSize: '1.5rem', color: 'var(--text-dark)', fontWeight: 800 }}>
             🍽️ Restaurant Dining Table Reservations
           </h3>
           <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
@@ -60,7 +60,7 @@ export const DiningBookingsTab = () => {
           <button
             onClick={handleExportExcel}
             className="btn-gold"
-            style={{ padding: '8px 14px', fontSize: '0.8rem', background: '#10b981', color: '#fff' }}
+            style={{ padding: '8px 14px', fontSize: '0.8rem', background: 'var(--accent-emerald)', color: '#fff' }}
             title="Download Excel Spreadsheet"
           >
             <FileSpreadsheet size={16} /> Excel Export
@@ -97,33 +97,33 @@ export const DiningBookingsTab = () => {
       <div className="glass-card" style={{ overflowX: 'auto', borderRadius: '12px' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.9rem' }}>
           <thead>
-            <tr style={{ background: 'var(--bg-surface-elevated)', borderBottom: '1px solid var(--border-glass)' }}>
-              <th style={{ padding: '14px 16px', color: 'var(--text-muted)' }}>Ref ID</th>
-              <th style={{ padding: '14px 16px', color: 'var(--text-muted)' }}>Guest Name</th>
-              <th style={{ padding: '14px 16px', color: 'var(--text-muted)' }}>Mobile Number</th>
-              <th style={{ padding: '14px 16px', color: 'var(--text-muted)' }}>Date & Time Slot</th>
-              <th style={{ padding: '14px 16px', color: 'var(--text-muted)' }}>Guests</th>
-              <th style={{ padding: '14px 16px', color: 'var(--text-muted)' }}>Notes / Seating</th>
-              <th style={{ padding: '14px 16px', color: 'var(--text-muted)' }}>Status</th>
-              <th style={{ padding: '14px 16px', color: 'var(--text-muted)', textAlign: 'right' }}>Actions</th>
+            <tr style={{ background: 'var(--bg-primary)', borderBottom: '2px solid var(--border-glass)' }}>
+              <th style={{ padding: '14px 16px', color: 'var(--text-dark)', fontWeight: 700 }}>Ref ID</th>
+              <th style={{ padding: '14px 16px', color: 'var(--text-dark)', fontWeight: 700 }}>Guest Name</th>
+              <th style={{ padding: '14px 16px', color: 'var(--text-dark)', fontWeight: 700 }}>Mobile Number</th>
+              <th style={{ padding: '14px 16px', color: 'var(--text-dark)', fontWeight: 700 }}>Date & Time Slot</th>
+              <th style={{ padding: '14px 16px', color: 'var(--text-dark)', fontWeight: 700 }}>Guests</th>
+              <th style={{ padding: '14px 16px', color: 'var(--text-dark)', fontWeight: 700 }}>Notes / Seating</th>
+              <th style={{ padding: '14px 16px', color: 'var(--text-dark)', fontWeight: 700 }}>Status</th>
+              <th style={{ padding: '14px 16px', color: 'var(--text-dark)', fontWeight: 700, textAlign: 'right' }}>Actions</th>
             </tr>
           </thead>
           <tbody>
             {filtered.length > 0 ? (
               filtered.map(d => (
                 <tr key={d.id} style={{ borderBottom: '1px solid var(--border-subtle)' }}>
-                  <td style={{ padding: '14px 16px', fontWeight: 700, color: 'var(--accent-gold)' }}>
+                  <td style={{ padding: '14px 16px', fontWeight: 800, color: 'var(--accent-gold-dark)' }}>
                     {d.id}
                   </td>
-                  <td style={{ padding: '14px 16px', fontWeight: 700, color: '#fff' }}>
+                  <td style={{ padding: '14px 16px', fontWeight: 700, color: 'var(--text-dark)' }}>
                     {d.customerName}
                   </td>
                   <td style={{ padding: '14px 16px' }}>
-                    <a href={`tel:${d.phone}`} style={{ color: 'var(--accent-gold)', textDecoration: 'none' }}>
+                    <a href={`tel:${d.phone}`} style={{ color: 'var(--accent-gold-dark)', textDecoration: 'none', fontWeight: 600 }}>
                       {d.phone}
                     </a>
                   </td>
-                  <td style={{ padding: '14px 16px', color: '#fff' }}>
+                  <td style={{ padding: '14px 16px', color: 'var(--text-dark)' }}>
                     <div>📅 {d.date}</div>
                     <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>⏰ {d.time}</div>
                   </td>
@@ -144,7 +144,7 @@ export const DiningBookingsTab = () => {
                         <button
                           onClick={() => updateDiningStatus(d.id, 'CONFIRMED')}
                           className="btn-gold"
-                          style={{ padding: '4px 10px', fontSize: '0.75rem', background: '#10b981', color: '#fff' }}
+                          style={{ padding: '4px 10px', fontSize: '0.75rem', background: 'var(--accent-emerald)', color: '#fff' }}
                           title="Confirm Table"
                         >
                           <CheckCircle2 size={14} /> Confirm
@@ -167,7 +167,7 @@ export const DiningBookingsTab = () => {
                         target="_blank"
                         rel="noreferrer"
                         className="btn-outline"
-                        style={{ padding: '4px 10px', fontSize: '0.75rem', borderColor: '#10b981', color: '#10b981' }}
+                        style={{ padding: '4px 10px', fontSize: '0.75rem', borderColor: 'var(--accent-emerald)', color: 'var(--accent-emerald)' }}
                         title="Dispatch WhatsApp Alert"
                       >
                         <MessageSquare size={14} /> WhatsApp

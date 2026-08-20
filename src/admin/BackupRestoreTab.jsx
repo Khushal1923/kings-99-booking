@@ -49,7 +49,7 @@ export const BackupRestoreTab = () => {
   return (
     <div>
       <div style={{ marginBottom: '24px' }}>
-        <h3 className="font-serif" style={{ fontSize: '1.5rem', color: '#fff' }}>
+        <h3 className="font-serif" style={{ fontSize: '1.5rem', color: 'var(--text-dark)', fontWeight: 800 }}>
           💾 Data Export, Backup & PDF Reports
         </h3>
         <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
@@ -59,13 +59,14 @@ export const BackupRestoreTab = () => {
 
       {importStatus && (
         <div style={{
-          background: importStatus.includes('✅') ? 'rgba(16, 185, 129, 0.15)' : 'rgba(239, 68, 68, 0.15)',
-          border: `1px solid ${importStatus.includes('✅') ? '#10b981' : '#ef4444'}`,
-          color: importStatus.includes('✅') ? '#10b981' : '#ef4444',
+          background: importStatus.includes('✅') ? 'rgba(13, 92, 70, 0.12)' : 'rgba(220, 38, 38, 0.12)',
+          border: `1px solid ${importStatus.includes('✅') ? '#0d5c46' : '#dc2626'}`,
+          color: importStatus.includes('✅') ? '#0d5c46' : '#dc2626',
           padding: '12px 16px',
           borderRadius: '8px',
           marginBottom: '20px',
-          fontSize: '0.9rem'
+          fontSize: '0.9rem',
+          fontWeight: 700
         }}>
           {importStatus}
         </div>
@@ -78,8 +79,8 @@ export const BackupRestoreTab = () => {
             width: '48px',
             height: '48px',
             borderRadius: '50%',
-            background: 'rgba(16, 185, 129, 0.15)',
-            color: '#10b981',
+            background: 'rgba(13, 92, 70, 0.12)',
+            color: '#0d5c46',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -88,14 +89,14 @@ export const BackupRestoreTab = () => {
             <FileSpreadsheet size={24} />
           </div>
 
-          <h4 className="font-serif" style={{ fontSize: '1.2rem', color: '#fff', marginBottom: '8px' }}>
+          <h4 className="font-serif" style={{ fontSize: '1.2rem', color: 'var(--text-dark)', marginBottom: '8px', fontWeight: 700 }}>
             Download Excel Spreadsheet (.csv)
           </h4>
           <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '20px', lineHeight: 1.5 }}>
             Export all guest booking records, mobile numbers, tariffs, and dates into a formatted Excel CSV file.
           </p>
 
-          <button onClick={handleExportExcel} className="btn-gold" style={{ width: '100%', justifyContent: 'center', background: '#10b981', color: '#fff' }}>
+          <button onClick={handleExportExcel} className="btn-gold" style={{ width: '100%', justifyContent: 'center', background: '#0d5c46', color: '#fff' }}>
             <FileSpreadsheet size={18} /> Download Excel File (.csv)
           </button>
         </div>
@@ -106,8 +107,8 @@ export const BackupRestoreTab = () => {
             width: '48px',
             height: '48px',
             borderRadius: '50%',
-            background: 'rgba(212,175,55,0.15)',
-            color: 'var(--accent-gold)',
+            background: 'rgba(197, 160, 89, 0.15)',
+            color: 'var(--accent-gold-dark)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -116,7 +117,7 @@ export const BackupRestoreTab = () => {
             <FileText size={24} />
           </div>
 
-          <h4 className="font-serif" style={{ fontSize: '1.2rem', color: '#fff', marginBottom: '8px' }}>
+          <h4 className="font-serif" style={{ fontSize: '1.2rem', color: 'var(--text-dark)', marginBottom: '8px', fontWeight: 700 }}>
             Generate Printable PDF Report
           </h4>
           <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '20px', lineHeight: 1.5 }}>
@@ -134,8 +135,8 @@ export const BackupRestoreTab = () => {
             width: '48px',
             height: '48px',
             borderRadius: '50%',
-            background: 'rgba(59, 130, 246, 0.15)',
-            color: '#3b82f6',
+            background: 'rgba(59, 130, 246, 0.12)',
+            color: '#2563eb',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -144,7 +145,7 @@ export const BackupRestoreTab = () => {
             <FileJson size={24} />
           </div>
 
-          <h4 className="font-serif" style={{ fontSize: '1.2rem', color: '#fff', marginBottom: '8px' }}>
+          <h4 className="font-serif" style={{ fontSize: '1.2rem', color: 'var(--text-dark)', marginBottom: '8px', fontWeight: 700 }}>
             System JSON Backup & Restore
           </h4>
           <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '20px', lineHeight: 1.5 }}>
@@ -168,8 +169,8 @@ export const BackupRestoreTab = () => {
             width: '48px',
             height: '48px',
             borderRadius: '50%',
-            background: 'rgba(239, 68, 68, 0.15)',
-            color: '#ef4444',
+            background: 'rgba(220, 38, 38, 0.12)',
+            color: '#dc2626',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -178,7 +179,7 @@ export const BackupRestoreTab = () => {
             <RotateCcw size={24} />
           </div>
 
-          <h4 className="font-serif" style={{ fontSize: '1.2rem', color: '#fff', marginBottom: '8px' }}>
+          <h4 className="font-serif" style={{ fontSize: '1.2rem', color: 'var(--text-dark)', marginBottom: '8px', fontWeight: 700 }}>
             Reset to Factory Defaults
           </h4>
           <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '20px', lineHeight: 1.5 }}>

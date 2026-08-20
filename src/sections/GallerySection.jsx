@@ -1,37 +1,37 @@
 import React, { useState } from 'react';
 import { useResort } from '../context/ResortContext';
-import { Maximize2, X } from 'lucide-react';
+import { Camera, X } from 'lucide-react';
 
 export const GallerySection = () => {
   const { gallery } = useResort();
-  const [activeCategory, setActiveCategory] = useState('ALL');
-  const [lightboxImg, setLightboxImg] = useState(null);
+  const [activeFilter, setActiveFilter] = useState('ALL');
+  const [lightboxImage, setLightboxImage] = useState(null);
 
-  const categories = ['ALL', 'Villas', 'Dining', 'Experiences', 'Views'];
+  const categories = ['ALL', 'Villas', 'Dining', 'Experiences'];
 
-  const filteredGallery = activeCategory === 'ALL'
-    ? gallery
-    : gallery.filter(item => item.category === activeCategory);
+  const filteredGallery = gallery.filter(g =>
+    activeFilter === 'ALL' || g.category === activeFilter
+  );
 
   return (
     <section id="gallery" className="section-padding" style={{ background: 'var(--bg-primary)' }}>
       <div className="container">
-        <div style={{ textAlign: 'center', maxWidth: '700px', margin: '0 auto 50px' }}>
-          <span className="badge-gold">Resort Showcase</span>
-          <h2 className="font-serif text-gold-gradient" style={{ fontSize: '2.5rem', marginTop: '10px', color: '#fff' }}>
-            Life at Aura Haven
+        <div style={{ textAlign: 'center', maxWidth: '750px', margin: '0 auto 50px' }}>
+          <span className="badge-gold">Kings 99 Visual Experience</span>
+          <h2 className="font-serif" style={{ fontSize: '2.5rem', marginTop: '10px', color: 'var(--text-dark)', fontWeight: 800 }}>
+            Resort Gallery & Ambiance
           </h2>
-          <p style={{ color: 'var(--text-muted)', fontSize: '1rem', marginTop: '8px' }}>
-            Explore our tropical paradise, private infinity pools, turquoise ocean views, and luxury amenities.
+          <p style={{ color: 'var(--text-muted)', fontSize: '1rem', marginTop: '10px' }}>
+            Take a glance into our private pool villas, lush celebration lawns, and fine dining spaces in Nashik.
           </p>
 
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', flexWrap: 'wrap', marginTop: '24px' }}>
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', marginTop: '24px', flexWrap: 'wrap' }}>
             {categories.map(cat => (
               <button
                 key={cat}
-                onClick={() => setActiveCategory(cat)}
-                className={activeCategory === cat ? 'btn-gold' : 'btn-outline'}
-                style={{ padding: '8px 18px', fontSize: '0.85rem' }}
+                onClick={() => setActiveFilter(cat)}
+                className={activeFilter === cat ? 'btn-gold' : 'btn-outline'}
+                style={{ padding: '8px 20px' }}
               >
                 {cat}
               </button>
@@ -39,86 +39,72 @@ export const GallerySection = () => {
           </div>
         </div>
 
-        {/* Gallery Grid */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
           gap: '24px'
         }}>
-          {filteredGallery.map(img => (
+          {filteredGallery.map(item => (
             <div
-              key={img.id}
-              onClick={() => setLightboxImg(img)}
+              key={item.id}
+              onClick={() => setLightboxImage(item)}
               className="glass-card"
               style={{
+                height: '280px',
                 position: 'relative',
-                height: '260px',
-                borderRadius: '16px',
                 overflow: 'hidden',
+                borderRadius: '16px',
                 cursor: 'pointer'
               }}
             >
               <img
-                src={img.url}
-                alt={img.title}
-                style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.4s ease' }}
+                src={item.url}
+                alt={item.title}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                  transition: 'transform 0.5s ease'
+                }}
                 onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.08)'}
                 onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
               />
+
               <div style={{
                 position: 'absolute',
                 bottom: 0,
                 left: 0,
                 right: 0,
-                background: 'linear-gradient(0deg, rgba(11,19,16,0.9) 0%, transparent 100%)',
-                padding: '20px 16px 12px',
+                padding: '20px',
+                background: 'linear-gradient(180deg, transparent 0%, rgba(15, 23, 21, 0.85) 100%)',
+                color: '#fff',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between'
               }}>
-                <span style={{ fontSize: '0.95rem', fontWeight: 600, color: '#fff' }}>{img.title}</span>
-                <Maximize2 size={16} color="var(--accent-gold)" />
+                <div>
+                  <span style={{ fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '1px', color: 'var(--accent-gold-light)', fontWeight: 700 }}>
+                    {item.category}
+                  </span>
+                  <h4 style={{ fontSize: '1rem', fontWeight: 700 }}>{item.title}</h4>
+                </div>
+                <Camera size={18} color="var(--accent-gold-light)" />
               </div>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Lightbox Modal */}
-      {lightboxImg && (
-        <div className="modal-overlay" onClick={() => setLightboxImg(null)}>
-          <div style={{ position: 'relative', maxWidth: '90vw', maxHeight: '90vh' }} onClick={(e) => e.stopPropagation()}>
-            <img
-              src={lightboxImg.url}
-              alt={lightboxImg.title}
-              style={{ maxWidth: '100%', maxHeight: '85vh', borderRadius: '16px', boxShadow: 'var(--shadow-card)' }}
-            />
-            <div style={{
-              position: 'absolute',
-              bottom: '20px',
-              left: '20px',
-              background: 'rgba(11,19,16,0.85)',
-              padding: '8px 16px',
-              borderRadius: 'var(--radius-full)',
-              color: '#fff',
-              fontSize: '0.9rem'
-            }}>
-              {lightboxImg.title} ({lightboxImg.category})
+      {lightboxImage && (
+        <div className="modal-overlay" onClick={() => setLightboxImage(null)}>
+          <div style={{ position: 'relative', maxWidth: '90vw', maxHeight: '90vh' }}>
+            <img src={lightboxImage.url} alt={lightboxImage.title} style={{ maxWidth: '100%', maxHeight: '85vh', borderRadius: '12px' }} />
+            <div style={{ textAlign: 'center', marginTop: '12px', color: '#fff' }}>
+              <h3>{lightboxImage.title}</h3>
             </div>
             <button
-              onClick={() => setLightboxImg(null)}
-              style={{
-                position: 'absolute',
-                top: '-15px',
-                right: '-15px',
-                background: '#ef4444',
-                color: '#fff',
-                border: 'none',
-                borderRadius: '50%',
-                width: '36px',
-                height: '36px',
-                cursor: 'pointer'
-              }}
+              onClick={() => setLightboxImage(null)}
+              style={{ position: 'absolute', top: '-15px', right: '-15px', background: '#dc2626', color: '#fff', border: 'none', borderRadius: '50%', width: '36px', height: '36px', cursor: 'pointer' }}
             >
               <X size={20} />
             </button>

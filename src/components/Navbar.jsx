@@ -20,19 +20,20 @@ export const Navbar = ({ onOpenBookingModal }) => {
       {/* Announcement Bar */}
       {cms.announcementText && (
         <div style={{
-          background: 'linear-gradient(90deg, #aa8620 0%, #d4af37 50%, #aa8620 100%)',
-          color: '#0b1310',
-          padding: '6px 12px',
+          background: 'linear-gradient(90deg, #c5a059 0%, #dfc88b 50%, #c5a059 100%)',
+          color: '#0f1715',
+          padding: '7px 14px',
           textAlign: 'center',
-          fontSize: '0.75rem',
+          fontSize: '0.78rem',
           fontWeight: 700,
           letterSpacing: '0.5px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          gap: '6px'
+          gap: '6px',
+          boxShadow: '0 2px 10px rgba(197, 160, 89, 0.2)'
         }}>
-          <Sparkles size={14} shrink={0} />
+          <Sparkles size={14} />
           <span>{cms.announcementText}</span>
         </div>
       )}
@@ -42,52 +43,53 @@ export const Navbar = ({ onOpenBookingModal }) => {
         position: 'sticky',
         top: 0,
         zIndex: 900,
-        background: scrolled ? 'rgba(11, 19, 16, 0.95)' : 'rgba(11, 19, 16, 0.85)',
+        background: scrolled ? 'rgba(255, 255, 255, 0.96)' : 'rgba(248, 246, 240, 0.92)',
         backdropFilter: 'blur(16px)',
         borderBottom: '1px solid var(--border-glass)',
+        boxShadow: scrolled ? '0 10px 30px rgba(0,0,0,0.05)' : 'none',
         transition: 'all 0.3s ease'
       }}>
         <div className="container" style={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          height: '70px'
+          height: '74px'
         }}>
           {/* Logo & Brand */}
-          <a href="#" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none' }}>
+          <a href="#" style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none' }}>
             <div style={{
-              width: '38px',
-              height: '38px',
+              width: '42px',
+              height: '42px',
               borderRadius: '50%',
-              background: 'linear-gradient(135deg, #d4af37, #aa8620)',
+              background: 'linear-gradient(135deg, #c5a059, #9a7632)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              color: '#0b1310',
+              color: '#ffffff',
               boxShadow: 'var(--shadow-gold)',
-              shrink: 0
+              flexShrink: 0
             }}>
-              <Compass size={22} />
+              <Compass size={24} />
             </div>
             <div>
               <span className="font-serif" style={{
-                fontSize: '1.1rem',
-                fontWeight: 700,
-                color: '#fff',
+                fontSize: '1.2rem',
+                fontWeight: 800,
+                color: 'var(--text-dark)',
                 letterSpacing: '0.5px',
                 display: 'block',
                 lineHeight: 1.2
               }}>
                 {cms.resortName}
               </span>
-              <span style={{ fontSize: '0.65rem', color: 'var(--accent-gold)', letterSpacing: '1px', textTransform: 'uppercase' }}>
-                Nashik • Villa & Restaurant
+              <span style={{ fontSize: '0.68rem', color: 'var(--accent-gold-dark)', letterSpacing: '1px', textTransform: 'uppercase', fontWeight: 700 }}>
+                Nashik • Private Pool Villas & Dining
               </span>
             </div>
           </a>
 
           {/* Desktop Nav Links */}
-          <nav style={{ display: 'none', gap: '22px', alignItems: 'center' }} className="desktop-nav">
+          <nav style={{ display: 'none', gap: '24px', alignItems: 'center' }} className="desktop-nav">
             <a href="#home" style={navLinkStyle}>Home</a>
             <a href="#villas" style={navLinkStyle}>Pool Villas</a>
             <a href="#dining" style={navLinkStyle}>Restaurant Menu</a>
@@ -97,12 +99,12 @@ export const Navbar = ({ onOpenBookingModal }) => {
           </nav>
 
           {/* Right Action Buttons */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             {userSession ? (
               <button
                 onClick={logout}
                 className="btn-outline"
-                style={{ padding: '6px 12px', fontSize: '0.78rem', borderColor: '#ef4444', color: '#ef4444' }}
+                style={{ padding: '7px 14px', fontSize: '0.8rem', borderColor: '#dc2626', color: '#dc2626' }}
               >
                 Logout ({userSession.username})
               </button>
@@ -112,20 +114,20 @@ export const Navbar = ({ onOpenBookingModal }) => {
                 <button
                   onClick={() => openLoginModal('STAFF')}
                   className="btn-outline nav-btn-compact"
-                  style={{ padding: '6px 10px', fontSize: '0.78rem', borderColor: '#10b981', color: '#10b981' }}
+                  style={{ padding: '7px 12px', fontSize: '0.8rem', borderColor: 'var(--accent-emerald)', color: 'var(--accent-emerald)' }}
                   title="Staff Concierge Login"
                 >
-                  <KeyRound size={14} /> <span className="hide-on-mobile">Staff</span>
+                  <KeyRound size={14} /> <span className="hide-on-mobile">Staff Portal</span>
                 </button>
 
                 {/* Owner / Admin Login Button */}
                 <button
                   onClick={() => openLoginModal('ADMIN')}
                   className="btn-outline nav-btn-compact"
-                  style={{ padding: '6px 10px', fontSize: '0.78rem' }}
+                  style={{ padding: '7px 12px', fontSize: '0.8rem' }}
                   title="Owner / Admin Login"
                 >
-                  <ShieldCheck size={14} /> <span className="hide-on-mobile">Owner</span>
+                  <ShieldCheck size={14} /> <span className="hide-on-mobile">Owner Admin</span>
                 </button>
               </>
             )}
@@ -134,7 +136,7 @@ export const Navbar = ({ onOpenBookingModal }) => {
             <button
               onClick={() => onOpenBookingModal(null)}
               className="btn-gold"
-              style={{ padding: '8px 14px', fontSize: '0.8rem' }}
+              style={{ padding: '9px 18px', fontSize: '0.85rem' }}
             >
               <CalendarCheck size={16} /> Book Villa
             </button>
@@ -145,14 +147,14 @@ export const Navbar = ({ onOpenBookingModal }) => {
               style={{
                 background: 'transparent',
                 border: 'none',
-                color: 'var(--text-main)',
+                color: 'var(--text-dark)',
                 cursor: 'pointer',
                 display: 'none',
                 padding: '4px'
               }}
               className="mobile-toggle"
             >
-              {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              {mobileMenuOpen ? <X size={26} /> : <Menu size={26} />}
             </button>
           </div>
         </div>
@@ -162,16 +164,17 @@ export const Navbar = ({ onOpenBookingModal }) => {
       {mobileMenuOpen && (
         <div style={{
           position: 'fixed',
-          top: '70px',
+          top: '74px',
           left: 0,
           right: 0,
-          background: 'var(--bg-surface-elevated)',
-          borderBottom: '1px solid var(--border-glass)',
-          padding: '20px 16px',
+          background: '#ffffff',
+          borderBottom: '2px solid var(--border-glass)',
+          padding: '24px 20px',
           zIndex: 899,
           display: 'flex',
           flexDirection: 'column',
-          gap: '12px'
+          gap: '14px',
+          boxShadow: 'var(--shadow-elevated)'
         }}>
           <a href="#home" onClick={() => setMobileMenuOpen(false)} style={mobileNavLinkStyle}>Home</a>
           <a href="#villas" onClick={() => setMobileMenuOpen(false)} style={mobileNavLinkStyle}>Pool Villas & Suites</a>
@@ -201,16 +204,16 @@ export const Navbar = ({ onOpenBookingModal }) => {
 const navLinkStyle = {
   color: 'var(--text-main)',
   textDecoration: 'none',
-  fontSize: '0.88rem',
+  fontSize: '0.9rem',
   fontWeight: 600,
   transition: 'color 0.2s ease',
 };
 
 const mobileNavLinkStyle = {
-  color: '#fff',
+  color: 'var(--text-dark)',
   textDecoration: 'none',
-  fontSize: '1rem',
-  fontWeight: 600,
-  padding: '6px 0',
+  fontSize: '1.05rem',
+  fontWeight: 700,
+  padding: '8px 0',
   borderBottom: '1px solid var(--border-subtle)'
 };

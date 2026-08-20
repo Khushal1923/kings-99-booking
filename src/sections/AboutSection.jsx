@@ -1,19 +1,12 @@
 import React from 'react';
 import { useResort } from '../context/ResortContext';
-import { ShieldCheck, Anchor, Compass, Award, HeartHandshake, Sparkles } from 'lucide-react';
+import { ShieldCheck, Award, Heart, Sparkles } from 'lucide-react';
 
 export const AboutSection = () => {
   const { cms } = useResort();
 
-  const highlights = [
-    { icon: <Anchor size={28} color="var(--accent-gold)" />, title: "Private Peninsula", desc: "100+ acres of untouched tropical coastline with secluded white sand beaches." },
-    { icon: <Award size={28} color="var(--accent-gold)" />, title: "Personal Butler", desc: "Each villa features a dedicated 24/7 butler trained to fulfill every request." },
-    { icon: <Compass size={28} color="var(--accent-gold)" />, title: "Helicopter Transfers", desc: "Seamless private air arrivals directly to our cliffside helipad." },
-    { icon: <HeartHandshake size={28} color="var(--accent-gold)" />, title: "World-Class Wellness", desc: "Holistic ocean spa treatments, sunset yoga, and hydrotherapy pools." }
-  ];
-
   return (
-    <section id="about" className="section-padding" style={{ background: 'var(--bg-surface)' }}>
+    <section id="about" className="section-padding" style={{ background: '#ffffff' }}>
       <div className="container">
         <div style={{
           display: 'grid',
@@ -21,56 +14,87 @@ export const AboutSection = () => {
           gap: '50px',
           alignItems: 'center'
         }}>
-          {/* Text Content */}
+          {/* Left Text Content */}
           <div>
-            <span className="badge-gold">Our Philosophy</span>
-            <h2 className="font-serif text-gold-gradient" style={{ fontSize: '2.5rem', marginTop: '10px', color: '#fff', marginBottom: '20px' }}>
-              Where Unrivaled Luxury Meets Coastal Tranquility
+            <span className="badge-gold">About Kings 99 Nashik</span>
+            <h2 className="font-serif" style={{ fontSize: '2.5rem', marginTop: '10px', color: 'var(--text-dark)', fontWeight: 800, lineHeight: 1.2 }}>
+              A Royal Escape in the Heart of Nashik, Maharashtra
             </h2>
-            <p style={{ color: 'var(--text-muted)', fontSize: '1.05rem', lineHeight: 1.7, marginBottom: '24px' }}>
+            <p style={{ color: 'var(--text-muted)', fontSize: '1.05rem', margin: '20px 0 30px', lineHeight: 1.7 }}>
               {cms.aboutStory}
             </p>
 
-            {/* Highlights list */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
-              {highlights.map((h, i) => (
-                <div key={i} style={{ display: 'flex', gap: '12px' }}>
-                  <div style={{ shrink: 0 }}>{h.icon}</div>
-                  <div>
-                    <h4 style={{ fontSize: '0.95rem', color: '#fff', fontWeight: 700 }}>{h.title}</h4>
-                    <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '2px' }}>{h.desc}</p>
-                  </div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '30px' }}>
+              <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
+                <div style={iconBoxStyle}>
+                  <ShieldCheck size={20} color="var(--accent-gold-dark)" />
                 </div>
-              ))}
+                <div>
+                  <h4 style={{ fontSize: '1rem', color: 'var(--text-dark)', fontWeight: 700 }}>100% Private Pools</h4>
+                  <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>Complete privacy for families & couples.</p>
+                </div>
+              </div>
+
+              <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
+                <div style={iconBoxStyle}>
+                  <Award size={20} color="var(--accent-gold-dark)" />
+                </div>
+                <div>
+                  <h4 style={{ fontSize: '1rem', color: 'var(--text-dark)', fontWeight: 700 }}>Gourmet Dining</h4>
+                  <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>Fresh North Indian & Tandoori specialties.</p>
+                </div>
+              </div>
+
+              <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
+                <div style={iconBoxStyle}>
+                  <Sparkles size={20} color="var(--accent-gold-dark)" />
+                </div>
+                <div>
+                  <h4 style={{ fontSize: '1rem', color: 'var(--text-dark)', fontWeight: 700 }}>Grand Lawns</h4>
+                  <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>Perfect for birthdays & anniversaries.</p>
+                </div>
+              </div>
+
+              <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
+                <div style={iconBoxStyle}>
+                  <Heart size={20} color="var(--accent-gold-dark)" />
+                </div>
+                <div>
+                  <h4 style={{ fontSize: '1rem', color: 'var(--text-dark)', fontWeight: 700 }}>Warm Hospitality</h4>
+                  <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>24/7 dedicated room service & staff.</p>
+                </div>
+              </div>
             </div>
           </div>
 
-          {/* Visual Grid */}
+          {/* Right Image Feature */}
           <div style={{ position: 'relative' }}>
-            <div className="glass-card" style={{ padding: '12px', borderRadius: 'var(--radius-lg)' }}>
-              <img
-                src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1000&q=80"
-                alt="Resort Experience"
-                style={{ width: '100%', height: '400px', objectFit: 'cover', borderRadius: '16px' }}
-              />
-            </div>
             <div style={{
-              position: 'absolute',
-              bottom: '-20px',
-              left: '-20px',
-              background: 'var(--bg-surface-elevated)',
-              border: '1px solid var(--border-glass)',
-              padding: '20px',
-              borderRadius: '16px',
-              boxShadow: 'var(--shadow-gold)',
-              maxWidth: '240px'
+              borderRadius: 'var(--radius-lg)',
+              overflow: 'hidden',
+              boxShadow: 'var(--shadow-elevated)',
+              border: '2px solid var(--border-glass)'
             }}>
-              <span className="font-serif" style={{ fontSize: '2rem', color: 'var(--accent-gold)', fontWeight: 800 }}>#1</span>
-              <p style={{ fontSize: '0.85rem', color: '#fff', fontWeight: 600 }}>Rated Luxury Coastal Resort & Ocean Villas</p>
+              <img
+                src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1200&q=80"
+                alt="Kings 99 Resort Lawn"
+                style={{ width: '100%', height: '440px', objectFit: 'cover' }}
+              />
             </div>
           </div>
         </div>
       </div>
     </section>
   );
+};
+
+const iconBoxStyle = {
+  width: '40px',
+  height: '40px',
+  borderRadius: '50%',
+  background: 'rgba(197, 160, 89, 0.15)',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  flexShrink: 0
 };

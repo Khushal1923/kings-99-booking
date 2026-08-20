@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useResort } from '../context/ResortContext';
 import { ImageUploader } from '../components/ImageUploader';
-import { Check, Video, Music, Upload } from 'lucide-react';
+import { Check, Video, Music } from 'lucide-react';
 
 export const CmsEditorTab = () => {
   const { cms, updateCMS } = useResort();
@@ -47,7 +47,7 @@ export const CmsEditorTab = () => {
   return (
     <div>
       <div style={{ marginBottom: '24px' }}>
-        <h3 className="font-serif" style={{ fontSize: '1.5rem', color: '#fff' }}>
+        <h3 className="font-serif" style={{ fontSize: '1.5rem', color: 'var(--text-dark)', fontWeight: 800 }}>
           🌐 Live Website CMS, Video & Background Music Editor
         </h3>
         <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
@@ -57,22 +57,23 @@ export const CmsEditorTab = () => {
 
       {savedSuccess && (
         <div style={{
-          background: 'rgba(16, 185, 129, 0.15)',
-          border: '1px solid #10b981',
-          color: '#10b981',
+          background: 'rgba(13, 92, 70, 0.12)',
+          border: '1px solid #0d5c46',
+          color: '#0d5c46',
           padding: '12px 16px',
           borderRadius: '8px',
           marginBottom: '20px',
           display: 'flex',
           alignItems: 'center',
-          gap: '8px'
+          gap: '8px',
+          fontWeight: 700
         }}>
           <Check size={18} /> Website video, music & CMS content updated live!
         </div>
       )}
 
       <form onSubmit={handleSubmit} className="glass-card" style={{ padding: '24px', borderRadius: '16px' }}>
-        <h4 className="font-serif" style={{ fontSize: '1.2rem', color: '#fff', marginBottom: '16px' }}>
+        <h4 className="font-serif" style={{ fontSize: '1.2rem', color: 'var(--text-dark)', marginBottom: '16px', fontWeight: 700 }}>
           General Branding & Text
         </h4>
 
@@ -123,7 +124,7 @@ export const CmsEditorTab = () => {
 
         {/* Hero Video & Background Music Config */}
         <div style={{ borderTop: '1px solid var(--border-subtle)', paddingTop: '20px', marginBottom: '24px' }}>
-          <h4 className="font-serif" style={{ fontSize: '1.2rem', color: 'var(--accent-gold)', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <h4 className="font-serif" style={{ fontSize: '1.2rem', color: 'var(--accent-gold-dark)', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 700 }}>
             <Video size={20} /> Hero Section Background Video Loop
           </h4>
 
@@ -158,7 +159,7 @@ export const CmsEditorTab = () => {
 
         {/* Background Resort Ambiance Music Config */}
         <div style={{ borderTop: '1px solid var(--border-subtle)', paddingTop: '20px', marginBottom: '24px' }}>
-          <h4 className="font-serif" style={{ fontSize: '1.2rem', color: '#10b981', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <h4 className="font-serif" style={{ fontSize: '1.2rem', color: '#0d5c46', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 700 }}>
             <Music size={20} /> Resort Ambiance Background Music
           </h4>
 
@@ -199,7 +200,7 @@ export const CmsEditorTab = () => {
 
         {/* Contact Details */}
         <div style={{ borderTop: '1px solid var(--border-subtle)', paddingTop: '20px', marginBottom: '24px' }}>
-          <h4 className="font-serif" style={{ fontSize: '1.2rem', color: '#fff', marginBottom: '16px' }}>
+          <h4 className="font-serif" style={{ fontSize: '1.2rem', color: 'var(--text-dark)', marginBottom: '16px', fontWeight: 700 }}>
             Resort Contact Details
           </h4>
 

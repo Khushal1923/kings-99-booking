@@ -1,48 +1,48 @@
 import React, { useState } from 'react';
 import { useResort } from '../context/ResortContext';
-import { Star, Users, BedDouble, CalendarCheck, Eye } from 'lucide-react';
+import { Star, Users, Bed, Eye, CalendarCheck, Check } from 'lucide-react';
 
 export const VillasSection = ({ onSelectVillaDetail, onOpenBookingModal }) => {
   const { villas } = useResort();
-  const [filterTag, setFilterTag] = useState('ALL');
 
-  const activeVillas = villas.filter(v => v.isActive);
+  const [activeFilter, setActiveFilter] = useState('ALL');
 
-  const tags = ['ALL', 'Most Popular', 'Family Special', 'Romantic Getaway'];
-
-  const filteredVillas = filterTag === 'ALL'
-    ? activeVillas
-    : activeVillas.filter(v => v.tag === filterTag);
+  const filteredVillas = villas.filter(v => {
+    if (!v.isActive) return false;
+    if (activeFilter === 'COUPLES') return v.maxGuests <= 2;
+    if (activeFilter === 'FAMILY') return v.maxGuests > 2 && v.maxGuests <= 6;
+    if (activeFilter === 'LARGE_GROUPS') return v.maxGuests > 6;
+    return true;
+  });
 
   return (
     <section id="villas" className="section-padding" style={{ background: 'var(--bg-primary)' }}>
       <div className="container">
-        {/* Header */}
-        <div style={{ textAlign: 'center', maxWidth: '700px', margin: '0 auto 50px' }}>
-          <span className="badge-gold">Kings 99 Staycations</span>
-          <h2 className="font-serif text-gold-gradient" style={{ fontSize: '2.5rem', marginTop: '10px', color: '#fff' }}>
-            Private Pool Villas & Suites in Nashik
+        {/* Section Header */}
+        <div style={{ textAlign: 'center', maxWidth: '750px', margin: '0 auto 50px' }}>
+          <span className="badge-gold">Royal Accommodations Nashik</span>
+          <h2 className="font-serif" style={{ fontSize: '2.5rem', marginTop: '10px', color: 'var(--text-dark)', fontWeight: 800 }}>
+            Luxury Private Pool Villas & Suites
           </h2>
-          <p style={{ color: 'var(--text-muted)', fontSize: '1rem', marginTop: '8px' }}>
-            Designed for royal comfort, private pool parties, family weekend getaways, and romantic stays in Nashik.
+          <p style={{ color: 'var(--text-muted)', fontSize: '1rem', marginTop: '10px' }}>
+            Escape into ultimate serenity with personal swimming pools, lush garden lawns, and 24/7 room service in Nashik, India.
           </p>
 
-          {/* Filter Tabs */}
-          <div style={{
-            display: 'flex',
-            justifyContent: 'center',
-            gap: '10px',
-            flexWrap: 'wrap',
-            marginTop: '30px'
-          }}>
-            {tags.map(t => (
+          {/* Villa Filter Pills */}
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', marginTop: '24px', flexWrap: 'wrap' }}>
+            {[
+              { id: 'ALL', label: 'All Private Villas' },
+              { id: 'COUPLES', label: 'Couple Pool Villas (2 Guests)' },
+              { id: 'FAMILY', label: 'Family Suites (4-6 Guests)' },
+              { id: 'LARGE_GROUPS', label: 'Grand Celebration Villas (8+ Guests)' }
+            ].map(f => (
               <button
-                key={t}
-                onClick={() => setFilterTag(t)}
-                className={filterTag === t ? 'btn-gold' : 'btn-outline'}
-                style={{ padding: '8px 18px', fontSize: '0.85rem' }}
+                key={f.id}
+                onClick={() => setActiveFilter(f.id)}
+                className={activeFilter === f.id ? 'btn-gold' : 'btn-outline'}
+                style={{ padding: '8px 18px', fontSize: '0.82rem' }}
               >
-                {t}
+                {f.label}
               </button>
             ))}
           </div>
@@ -51,93 +51,140 @@ export const VillasSection = ({ onSelectVillaDetail, onOpenBookingModal }) => {
         {/* Villas Cards Grid */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-          gap: '32px'
+          gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))',
+          gap: '30px'
         }}>
-          {filteredVillas.map(v => (
-            <div key={v.id} className="glass-card" style={{ display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-              {/* Photo Container */}
+          {filteredVillas.map(villa => (
+            <div
+              key={villa.id}
+              className="glass-card"
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                overflow: 'hidden',
+                borderRadius: 'var(--radius-lg)'
+              }}
+            >
+              {/* Cover Image Header */}
               <div style={{ position: 'relative', height: '240px', overflow: 'hidden' }}>
                 <img
-                  src={v.coverImage}
-                  alt={v.name}
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s ease' }}
-                  onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.08)'}
+                  src={villa.coverImage}
+                  alt={villa.name}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    transition: 'transform 0.5s ease'
+                  }}
+                  onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.06)'}
                   onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
                 />
-                <span className="badge-gold" style={{ position: 'absolute', top: '16px', left: '16px', zIndex: 2 }}>
-                  {v.tag}
-                </span>
 
+                {/* Tag Badge */}
+                {villa.tag && (
+                  <span className="badge-gold" style={{
+                    position: 'absolute',
+                    top: '16px',
+                    left: '16px',
+                    background: '#ffffff',
+                    color: 'var(--accent-gold-dark)',
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+                  }}>
+                    {villa.tag}
+                  </span>
+                )}
+
+                {/* Rating Pill */}
                 <div style={{
                   position: 'absolute',
-                  bottom: '12px',
-                  right: '12px',
-                  background: 'rgba(11,19,16,0.85)',
-                  backdropFilter: 'blur(6px)',
-                  padding: '4px 10px',
+                  bottom: '16px',
+                  right: '16px',
+                  background: 'rgba(255, 255, 255, 0.95)',
+                  padding: '4px 12px',
                   borderRadius: 'var(--radius-full)',
-                  color: 'var(--accent-gold)',
-                  fontSize: '0.8rem',
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '4px'
+                  gap: '4px',
+                  fontSize: '0.8rem',
+                  fontWeight: 700,
+                  color: 'var(--text-dark)',
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
                 }}>
-                  <Star size={14} fill="var(--accent-gold)" />
-                  <strong>{v.rating}</strong> ({v.reviewsCount})
+                  <Star size={14} color="#f59e0b" fill="#f59e0b" />
+                  <span>{villa.rating} ({villa.reviewsCount})</span>
                 </div>
               </div>
 
-              {/* Body Content */}
-              <div style={{ padding: '24px', display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
-                <h3 className="font-serif" style={{ fontSize: '1.4rem', color: '#fff', marginBottom: '8px' }}>
-                  {v.name}
+              {/* Card Body */}
+              <div style={{ padding: '24px', flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+                <h3 className="font-serif" style={{ fontSize: '1.35rem', color: 'var(--text-dark)', marginBottom: '8px', fontWeight: 700 }}>
+                  {villa.name}
                 </h3>
-                <p style={{ color: 'var(--text-muted)', fontSize: '0.88rem', marginBottom: '20px', flexGrow: 1, lineClamp: 2 }}>
-                  {v.tagline}
+
+                <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', marginBottom: '20px', lineHeight: 1.5 }}>
+                  {villa.tagline}
                 </p>
 
-                {/* Specs Pill */}
+                {/* Specs Pill List */}
                 <div style={{
                   display: 'flex',
                   gap: '16px',
+                  fontSize: '0.82rem',
+                  color: 'var(--text-muted)',
                   borderTop: '1px solid var(--border-subtle)',
-                  paddingTop: '16px',
-                  marginBottom: '20px',
-                  fontSize: '0.85rem',
-                  color: 'var(--text-muted)'
+                  borderBottom: '1px solid var(--border-subtle)',
+                  padding: '12px 0',
+                  marginBottom: '20px'
                 }}>
-                  <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <Users size={16} color="var(--accent-gold)" /> {v.maxGuests} Guests
-                  </span>
-                  <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <BedDouble size={16} color="var(--accent-gold)" /> {v.bedrooms} Bed
-                  </span>
-                  <span>{v.sqm} m²</span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <Users size={16} color="var(--accent-gold-dark)" />
+                    <span>Up to {villa.maxGuests} Guests</span>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <Bed size={16} color="var(--accent-gold-dark)" />
+                    <span>{villa.bedrooms} Bedrooms</span>
+                  </div>
                 </div>
 
-                {/* Price & Action Footer in ₹ */}
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 'auto' }}>
+                {/* Amenities checklist snippet */}
+                <div style={{ marginBottom: '24px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                  {villa.amenities.slice(0, 3).map((amenity, idx) => (
+                    <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.82rem', color: 'var(--text-main)' }}>
+                      <Check size={14} color="var(--accent-emerald)" />
+                      <span>{amenity}</span>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Tariff Price & Action CTAs */}
+                <div style={{
+                  marginTop: 'auto',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  gap: '12px'
+                }}>
                   <div>
-                    <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'block' }}>Nightly Tariff</span>
-                    <strong style={{ fontSize: '1.4rem', color: 'var(--accent-gold)' }}>
-                      ₹{v.price.toLocaleString('en-IN')}
-                    </strong>
+                    <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'block', textTransform: 'uppercase' }}>Starting Tariff</span>
+                    <div style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--accent-gold-dark)' }}>
+                      ₹{villa.price.toLocaleString('en-IN')} <span style={{ fontSize: '0.8rem', fontWeight: 500, color: 'var(--text-muted)' }}>/ night</span>
+                    </div>
                   </div>
 
                   <div style={{ display: 'flex', gap: '8px' }}>
                     <button
-                      onClick={() => onSelectVillaDetail(v)}
+                      onClick={() => onSelectVillaDetail(villa)}
                       className="btn-outline"
                       style={{ padding: '8px 12px' }}
-                      title="View Gallery & Specs"
+                      title="View Photos & Specifications"
                     >
                       <Eye size={16} />
                     </button>
+
                     <button
-                      onClick={() => onOpenBookingModal(v)}
+                      onClick={() => onOpenBookingModal(villa)}
                       className="btn-gold"
-                      style={{ padding: '8px 18px', fontSize: '0.85rem' }}
+                      style={{ padding: '8px 16px', fontSize: '0.82rem' }}
                     >
                       <CalendarCheck size={16} /> Book
                     </button>

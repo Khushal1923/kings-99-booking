@@ -1,37 +1,38 @@
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
 
 :root {
-  /* Luxury Dark Emerald & Rich Gold Palette */
-  --bg-primary: #0b1310;
-  --bg-surface: #121e1a;
-  --bg-surface-elevated: #1a2a25;
-  --bg-glass: rgba(18, 30, 26, 0.85);
+  /* Ultra-Premium Bright Luxury Palette (Royal Palace & 5-Star Resort) */
+  --bg-primary: #f8f6f0;           /* Soft Ivory Cream / Warm Marble */
+  --bg-surface: #ffffff;           /* Pure Crisp White Surface */
+  --bg-surface-elevated: #ffffff;  /* Floating White Card Surface */
+  --bg-glass: rgba(255, 255, 255, 0.92);
 
-  --accent-gold: #d4af37;
-  --accent-gold-light: #f3e5ab;
-  --accent-gold-dark: #aa8620;
-  --accent-emerald: #10b981;
+  --accent-gold: #c5a059;          /* Royal Polished Gold */
+  --accent-gold-light: #e5d2a3;    /* Bright Champagne Gold */
+  --accent-gold-dark: #9a7632;     /* Rich Antique Bronze/Gold */
+  --accent-emerald: #0d5c46;       /* Deep Royal Emerald */
 
-  --text-main: #f3f4f6;
-  --text-muted: #9ca3af;
-  --text-dark: #1f2937;
+  --text-main: #1f2925;            /* Deep Royal Charcoal for ultra crisp contrast */
+  --text-muted: #5c6864;           /* Warm Slate Gray */
+  --text-dark: #0f1715;            /* Deepest Ebony Title Color */
 
-  --status-pending: #f59e0b;
-  --status-confirmed: #10b981;
-  --status-rejected: #ef4444;
+  --status-pending: #d97706;
+  --status-confirmed: #0d5c46;
+  --status-rejected: #dc2626;
 
-  --border-glass: rgba(212, 175, 55, 0.25);
-  --border-subtle: rgba(255, 255, 255, 0.1);
+  --border-glass: rgba(197, 160, 89, 0.35);
+  --border-subtle: rgba(197, 160, 89, 0.18);
 
   --font-serif: 'Cinzel', serif;
   --font-sans: 'Plus Jakarta Sans', sans-serif;
-  --radius-sm: 8px;
-  --radius-md: 16px;
-  --radius-lg: 24px;
+  --radius-sm: 10px;
+  --radius-md: 18px;
+  --radius-lg: 26px;
   --radius-full: 9999px;
 
-  --shadow-gold: 0 10px 30px -10px rgba(212, 175, 55, 0.3);
-  --shadow-card: 0 20px 40px rgba(0, 0, 0, 0.4);
+  --shadow-gold: 0 12px 32px -8px rgba(197, 160, 89, 0.4);
+  --shadow-card: 0 16px 40px rgba(0, 0, 0, 0.05), 0 2px 8px rgba(197, 160, 89, 0.08);
+  --shadow-elevated: 0 25px 60px rgba(0, 0, 0, 0.12);
 }
 
 * {
@@ -50,21 +51,21 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Custom Scrollbar */
+/* Custom Gold Scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 7px;
+  height: 7px;
 }
 ::-webkit-scrollbar-track {
   background: var(--bg-primary);
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--bg-surface-elevated);
+  background: var(--accent-gold-light);
   border-radius: 4px;
   border: 1px solid var(--border-glass);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--accent-gold-dark);
+  background: var(--accent-gold);
 }
 
 /* Typography Helpers */
@@ -73,21 +74,21 @@ body {
 }
 
 .text-gold {
-  color: var(--accent-gold);
+  color: var(--accent-gold-dark);
 }
 
 .text-gold-gradient {
-  background: linear-gradient(135deg, #fff 0%, #f3e5ab 40%, #d4af37 100%);
+  background: linear-gradient(135deg, #0f1715 0%, #3a3324 40%, #8c6a23 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 /* Buttons */
 .btn-gold {
-  background: linear-gradient(135deg, #d4af37 0%, #aa8620 100%);
-  color: #0b1310;
+  background: linear-gradient(135deg, #c5a059 0%, #9a7632 100%);
+  color: #ffffff;
   font-weight: 700;
-  padding: 12px 24px;
+  padding: 12px 26px;
   border-radius: var(--radius-full);
   border: none;
   cursor: pointer;
@@ -103,15 +104,16 @@ body {
 
 .btn-gold:hover {
   transform: translateY(-2px);
-  box-shadow: 0 15px 35px -5px rgba(212, 175, 55, 0.5);
-  background: linear-gradient(135deg, #f3e5ab 0%, #d4af37 100%);
+  box-shadow: 0 16px 36px -4px rgba(197, 160, 89, 0.6);
+  background: linear-gradient(135deg, #dfc88b 0%, #c5a059 100%);
+  color: #0f1715;
 }
 
 .btn-outline {
-  background: transparent;
-  color: var(--text-main);
-  border: 1px solid var(--border-glass);
-  padding: 10px 20px;
+  background: #ffffff;
+  color: var(--text-dark);
+  border: 1.5px solid var(--accent-gold);
+  padding: 10px 22px;
   border-radius: var(--radius-full);
   font-weight: 600;
   cursor: pointer;
@@ -120,49 +122,52 @@ body {
   gap: 8px;
   transition: all 0.3s ease;
   font-size: 0.88rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
 }
 
 .btn-outline:hover {
-  border-color: var(--accent-gold);
-  color: var(--accent-gold);
-  background: rgba(212, 175, 55, 0.05);
+  border-color: var(--accent-gold-dark);
+  color: #ffffff;
+  background: var(--accent-gold);
+  box-shadow: var(--shadow-gold);
 }
 
 .btn-danger {
-  background: rgba(239, 68, 68, 0.15);
-  color: #ef4444;
-  border: 1px solid rgba(239, 68, 68, 0.3);
+  background: rgba(220, 38, 38, 0.08);
+  color: #dc2626;
+  border: 1px solid rgba(220, 38, 38, 0.25);
   padding: 8px 16px;
   border-radius: var(--radius-sm);
   cursor: pointer;
+  font-weight: 600;
   transition: all 0.2s ease;
 }
 
 .btn-danger:hover {
-  background: #ef4444;
-  color: #fff;
+  background: #dc2626;
+  color: #ffffff;
 }
 
 /* Glass Cards */
 .glass-card {
   background: var(--bg-surface);
   border: 1px solid var(--border-glass);
-  backdrop-filter: blur(16px);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-card);
-  transition: transform 0.3s ease, border-color 0.3s ease;
+  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .glass-card:hover {
-  border-color: rgba(212, 175, 55, 0.4);
+  border-color: var(--accent-gold);
+  box-shadow: 0 20px 48px rgba(197, 160, 89, 0.15);
 }
 
 /* Badges */
 .badge-gold {
-  background: rgba(212, 175, 55, 0.15);
-  color: var(--accent-gold);
+  background: rgba(197, 160, 89, 0.14);
+  color: var(--accent-gold-dark);
   border: 1px solid var(--border-glass);
-  padding: 4px 12px;
+  padding: 5px 14px;
   border-radius: var(--radius-full);
   font-size: 0.75rem;
   font-weight: 700;
@@ -172,7 +177,7 @@ body {
 
 /* Status Badges */
 .status-badge {
-  padding: 4px 12px;
+  padding: 4px 14px;
   border-radius: var(--radius-full);
   font-size: 0.75rem;
   font-weight: 700;
@@ -183,21 +188,21 @@ body {
 }
 
 .status-pending {
-  background: rgba(245, 158, 11, 0.15);
-  color: #f59e0b;
-  border: 1px solid rgba(245, 158, 11, 0.3);
+  background: rgba(217, 119, 6, 0.12);
+  color: #b45309;
+  border: 1px solid rgba(217, 119, 6, 0.3);
 }
 
 .status-confirmed {
-  background: rgba(16, 185, 129, 0.15);
-  color: #10b981;
-  border: 1px solid rgba(16, 185, 129, 0.3);
+  background: rgba(13, 92, 70, 0.12);
+  color: #0d5c46;
+  border: 1px solid rgba(13, 92, 70, 0.3);
 }
 
 .status-rejected {
-  background: rgba(239, 68, 68, 0.15);
-  color: #ef4444;
-  border: 1px solid rgba(239, 68, 68, 0.3);
+  background: rgba(220, 38, 38, 0.12);
+  color: #dc2626;
+  border: 1px solid rgba(220, 38, 38, 0.3);
 }
 
 /* Modal Overlay */
@@ -207,8 +212,8 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(5, 10, 8, 0.85);
-  backdrop-filter: blur(12px);
+  background: rgba(15, 23, 21, 0.6);
+  backdrop-filter: blur(10px);
   z-index: 1000;
   display: flex;
   align-items: center;
@@ -218,16 +223,17 @@ body {
 }
 
 .modal-content {
-  background: var(--bg-surface-elevated);
+  background: #ffffff;
   border: 1px solid var(--border-glass);
   border-radius: var(--radius-lg);
   max-width: 750px;
   width: 100%;
   max-height: 90vh;
   overflow-y: auto;
-  padding: 28px;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+  padding: 32px;
+  box-shadow: var(--shadow-elevated);
   position: relative;
+  color: var(--text-main);
 }
 
 /* Animations */
@@ -248,32 +254,32 @@ body {
 }
 
 .section-padding {
-  padding: 80px 0;
+  padding: 90px 0;
 }
 
 /* Inputs */
 .form-input {
   width: 100%;
-  background: var(--bg-primary);
-  border: 1px solid var(--border-subtle);
-  color: var(--text-main);
+  background: #ffffff;
+  border: 1.5px solid rgba(197, 160, 89, 0.3);
+  color: var(--text-dark);
   padding: 12px 16px;
   border-radius: var(--radius-sm);
   font-family: var(--font-sans);
   font-size: 16px; /* 16px prevents iOS auto-zoom on input focus */
-  transition: border-color 0.3s ease;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .form-input:focus {
   outline: none;
-  border-color: var(--accent-gold);
-  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15);
+  border-color: var(--accent-gold-dark);
+  box-shadow: 0 0 0 4px rgba(197, 160, 89, 0.15);
 }
 
 .form-label {
   display: block;
   font-size: 0.8rem;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--text-muted);
   margin-bottom: 6px;
   text-transform: uppercase;
@@ -294,12 +300,12 @@ body {
   }
 
   .section-padding {
-    padding: 50px 0;
+    padding: 55px 0;
   }
 
   .modal-content {
-    padding: 20px 16px;
-    border-radius: 16px;
+    padding: 24px 18px;
+    border-radius: 18px;
     max-height: 94vh;
   }
 

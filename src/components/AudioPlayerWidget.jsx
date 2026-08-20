@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { useResort } from '../context/ResortContext';
-import { Music, Volume2, VolumeX, Play, Pause } from 'lucide-react';
+import { Volume2, VolumeX, Play, Pause } from 'lucide-react';
 
 export const AudioPlayerWidget = () => {
   const { cms } = useResort();
@@ -36,11 +36,11 @@ export const AudioPlayerWidget = () => {
       bottom: '24px',
       right: '24px',
       zIndex: 990,
-      background: 'rgba(18, 30, 26, 0.9)',
+      background: 'rgba(255, 255, 255, 0.94)',
       backdropFilter: 'blur(16px)',
-      border: '1px solid var(--border-glass)',
+      border: '1.5px solid var(--border-glass)',
       borderRadius: 'var(--radius-full)',
-      padding: '8px 16px',
+      padding: '8px 18px',
       display: 'flex',
       alignItems: 'center',
       gap: '12px',
@@ -63,28 +63,28 @@ export const AudioPlayerWidget = () => {
         <div style={{
           width: '3px',
           height: isPlaying ? '14px' : '6px',
-          background: 'var(--accent-gold)',
+          background: 'var(--accent-gold-dark)',
           borderRadius: '2px',
           transition: 'height 0.3s ease'
         }}></div>
         <div style={{
           width: '3px',
           height: isPlaying ? '18px' : '10px',
-          background: 'var(--accent-gold)',
+          background: 'var(--accent-gold-dark)',
           borderRadius: '2px',
           transition: 'height 0.2s ease'
         }}></div>
         <div style={{
           width: '3px',
           height: isPlaying ? '10px' : '4px',
-          background: 'var(--accent-gold)',
+          background: 'var(--accent-gold-dark)',
           borderRadius: '2px',
           transition: 'height 0.3s ease'
         }}></div>
       </div>
 
       {/* Title */}
-      <div style={{ fontSize: '0.8rem', color: '#fff', fontWeight: 600, display: 'none' }} className="music-title">
+      <div style={{ fontSize: '0.82rem', color: 'var(--text-dark)', fontWeight: 700, display: 'none' }} className="music-title">
         {cms.bgMusicTitle || "Kings 99 Music"}
       </div>
 
@@ -92,8 +92,8 @@ export const AudioPlayerWidget = () => {
       <button
         onClick={togglePlay}
         style={{
-          background: 'linear-gradient(135deg, #d4af37, #aa8620)',
-          color: '#0b1310',
+          background: 'linear-gradient(135deg, #c5a059, #9a7632)',
+          color: '#ffffff',
           border: 'none',
           borderRadius: '50%',
           width: '32px',
@@ -101,7 +101,8 @@ export const AudioPlayerWidget = () => {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          cursor: 'pointer'
+          cursor: 'pointer',
+          boxShadow: '0 4px 12px rgba(197, 160, 89, 0.4)'
         }}
         title={isPlaying ? "Pause Resort Ambiance Music" : "Play Resort Ambiance Music"}
       >
@@ -120,7 +121,7 @@ export const AudioPlayerWidget = () => {
           }}
           title={isMuted ? "Unmute Sound" : "Mute Sound"}
         >
-          {isMuted ? <VolumeX size={16} color="#ef4444" /> : <Volume2 size={16} color="var(--accent-gold)" />}
+          {isMuted ? <VolumeX size={16} color="#dc2626" /> : <Volume2 size={16} color="var(--accent-gold-dark)" />}
         </button>
       )}
 

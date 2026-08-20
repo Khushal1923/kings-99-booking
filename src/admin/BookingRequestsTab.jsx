@@ -52,7 +52,7 @@ export const BookingRequestsTab = () => {
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px', marginBottom: '24px' }}>
         <div>
-          <h3 className="font-serif" style={{ fontSize: '1.5rem', color: '#fff' }}>
+          <h3 className="font-serif" style={{ fontSize: '1.5rem', color: 'var(--text-dark)', fontWeight: 800 }}>
             📋 Customer Booking Requests
           </h3>
           <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
@@ -65,7 +65,7 @@ export const BookingRequestsTab = () => {
           <button
             onClick={handleExportExcel}
             className="btn-gold"
-            style={{ padding: '8px 14px', fontSize: '0.8rem', background: '#10b981', color: '#fff' }}
+            style={{ padding: '8px 14px', fontSize: '0.8rem', background: 'var(--accent-emerald)', color: '#fff' }}
             title="Download Excel Spreadsheet"
           >
             <FileSpreadsheet size={16} /> Excel Export
@@ -102,29 +102,29 @@ export const BookingRequestsTab = () => {
       <div className="glass-card" style={{ overflowX: 'auto', borderRadius: '12px' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.9rem' }}>
           <thead>
-            <tr style={{ background: 'var(--bg-surface-elevated)', borderBottom: '1px solid var(--border-glass)' }}>
-              <th style={{ padding: '14px 16px', color: 'var(--text-muted)' }}>Ref ID</th>
-              <th style={{ padding: '14px 16px', color: 'var(--text-muted)' }}>Guest Name</th>
-              <th style={{ padding: '14px 16px', color: 'var(--text-muted)' }}>Villa Name</th>
-              <th style={{ padding: '14px 16px', color: 'var(--text-muted)' }}>Dates (In → Out)</th>
-              <th style={{ padding: '14px 16px', color: 'var(--text-muted)' }}>Guests</th>
-              <th style={{ padding: '14px 16px', color: 'var(--text-muted)' }}>Total Tariff</th>
-              <th style={{ padding: '14px 16px', color: 'var(--text-muted)' }}>Status</th>
-              <th style={{ padding: '14px 16px', color: 'var(--text-muted)', textAlign: 'right' }}>Actions</th>
+            <tr style={{ background: 'var(--bg-primary)', borderBottom: '2px solid var(--border-glass)' }}>
+              <th style={{ padding: '14px 16px', color: 'var(--text-dark)', fontWeight: 700 }}>Ref ID</th>
+              <th style={{ padding: '14px 16px', color: 'var(--text-dark)', fontWeight: 700 }}>Guest Name</th>
+              <th style={{ padding: '14px 16px', color: 'var(--text-dark)', fontWeight: 700 }}>Villa Name</th>
+              <th style={{ padding: '14px 16px', color: 'var(--text-dark)', fontWeight: 700 }}>Dates (In → Out)</th>
+              <th style={{ padding: '14px 16px', color: 'var(--text-dark)', fontWeight: 700 }}>Guests</th>
+              <th style={{ padding: '14px 16px', color: 'var(--text-dark)', fontWeight: 700 }}>Total Tariff</th>
+              <th style={{ padding: '14px 16px', color: 'var(--text-dark)', fontWeight: 700 }}>Status</th>
+              <th style={{ padding: '14px 16px', color: 'var(--text-dark)', fontWeight: 700, textAlign: 'right' }}>Actions</th>
             </tr>
           </thead>
           <tbody>
             {filteredBookings.length > 0 ? (
               filteredBookings.map(b => (
-                <tr key={b.id} style={{ borderBottom: '1px solid var(--border-subtle)', transition: 'background 0.2s ease' }}>
-                  <td style={{ padding: '14px 16px', fontWeight: 700, color: 'var(--accent-gold)' }}>
+                <tr key={b.id} style={{ borderBottom: '1px solid var(--border-subtle)' }}>
+                  <td style={{ padding: '14px 16px', fontWeight: 800, color: 'var(--accent-gold-dark)' }}>
                     {b.id}
                   </td>
                   <td style={{ padding: '14px 16px' }}>
-                    <strong style={{ color: '#fff', display: 'block' }}>{b.customerName}</strong>
+                    <strong style={{ color: 'var(--text-dark)', display: 'block' }}>{b.customerName}</strong>
                     <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{b.phone}</span>
                   </td>
-                  <td style={{ padding: '14px 16px', color: '#fff' }}>
+                  <td style={{ padding: '14px 16px', color: 'var(--text-dark)', fontWeight: 600 }}>
                     {b.villaName}
                   </td>
                   <td style={{ padding: '14px 16px', fontSize: '0.85rem' }}>
@@ -134,7 +134,7 @@ export const BookingRequestsTab = () => {
                   <td style={{ padding: '14px 16px' }}>
                     {b.guests} Guests
                   </td>
-                  <td style={{ padding: '14px 16px', fontWeight: 700, color: 'var(--accent-gold)' }}>
+                  <td style={{ padding: '14px 16px', fontWeight: 800, color: 'var(--accent-gold-dark)' }}>
                     ₹{b.totalPrice.toLocaleString('en-IN')}
                   </td>
                   <td style={{ padding: '14px 16px' }}>
@@ -157,7 +157,7 @@ export const BookingRequestsTab = () => {
                         <button
                           onClick={() => updateBookingStatus(b.id, 'CONFIRMED')}
                           className="btn-gold"
-                          style={{ padding: '4px 10px', fontSize: '0.75rem', background: '#10b981', color: '#fff' }}
+                          style={{ padding: '4px 10px', fontSize: '0.75rem', background: 'var(--accent-emerald)', color: '#fff' }}
                           title="Confirm Booking"
                         >
                           <CheckCircle2 size={14} /> Confirm
@@ -180,7 +180,7 @@ export const BookingRequestsTab = () => {
                         target="_blank"
                         rel="noreferrer"
                         className="btn-outline"
-                        style={{ padding: '4px 10px', fontSize: '0.75rem', borderColor: '#10b981', color: '#10b981' }}
+                        style={{ padding: '4px 10px', fontSize: '0.75rem', borderColor: 'var(--accent-emerald)', color: 'var(--accent-emerald)' }}
                         title="Dispatch WhatsApp Alert"
                       >
                         <MessageSquare size={14} /> WhatsApp
@@ -204,18 +204,18 @@ export const BookingRequestsTab = () => {
       {selectedBooking && (
         <div className="modal-overlay" onClick={() => setSelectedBooking(null)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '500px' }}>
-            <h3 className="font-serif" style={{ fontSize: '1.4rem', color: '#fff', marginBottom: '16px' }}>
+            <h3 className="font-serif" style={{ fontSize: '1.4rem', color: 'var(--text-dark)', marginBottom: '16px', fontWeight: 800 }}>
               Guest Reservation Details (Ref: {selectedBooking.id})
             </h3>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', fontSize: '0.9rem' }}>
               <div>
                 <span className="form-label">Guest Full Name</span>
-                <strong style={{ color: '#fff', fontSize: '1.05rem' }}>{selectedBooking.customerName}</strong>
+                <strong style={{ color: 'var(--text-dark)', fontSize: '1.05rem' }}>{selectedBooking.customerName}</strong>
               </div>
               <div>
                 <span className="form-label">Mobile / WhatsApp Number</span>
-                <a href={`tel:${selectedBooking.phone}`} style={{ color: 'var(--accent-gold)' }}>{selectedBooking.phone}</a>
+                <a href={`tel:${selectedBooking.phone}`} style={{ color: 'var(--accent-gold-dark)', fontWeight: 700 }}>{selectedBooking.phone}</a>
               </div>
               <div>
                 <span className="form-label">Email Address</span>
@@ -223,7 +223,7 @@ export const BookingRequestsTab = () => {
               </div>
               <div>
                 <span className="form-label">Reserved Villa</span>
-                <strong style={{ color: '#fff' }}>{selectedBooking.villaName}</strong>
+                <strong style={{ color: 'var(--text-dark)' }}>{selectedBooking.villaName}</strong>
               </div>
               <div>
                 <span className="form-label">Check-In → Check-Out</span>
@@ -231,7 +231,7 @@ export const BookingRequestsTab = () => {
               </div>
               <div>
                 <span className="form-label">Total Tariff</span>
-                <strong style={{ color: 'var(--accent-gold)', fontSize: '1.2rem' }}>₹{selectedBooking.totalPrice.toLocaleString('en-IN')}</strong>
+                <strong style={{ color: 'var(--accent-gold-dark)', fontSize: '1.2rem' }}>₹{selectedBooking.totalPrice.toLocaleString('en-IN')}</strong>
               </div>
               <div>
                 <span className="form-label">Special Requests</span>

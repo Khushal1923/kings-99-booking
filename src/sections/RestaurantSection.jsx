@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useResort } from '../context/ResortContext';
-import { Utensils, X, Check, MessageSquare, CheckCircle2 } from 'lucide-react';
+import { Utensils, X, MessageSquare, CheckCircle2 } from 'lucide-react';
 
 export const RestaurantSection = () => {
   const { restaurant, addDiningBooking, cms } = useResort();
@@ -46,12 +46,12 @@ export const RestaurantSection = () => {
   };
 
   return (
-    <section id="dining" className="section-padding" style={{ background: 'var(--bg-surface)' }}>
+    <section id="dining" className="section-padding" style={{ background: '#ffffff' }}>
       <div className="container">
         {/* Restaurant Header */}
-        <div style={{ textAlign: 'center', maxWidth: '750px', margin: '0 auto 60px' }}>
+        <div style={{ textAlign: 'center', maxWidth: '750px', margin: '0 auto 50px' }}>
           <span className="badge-gold">Kings 99 Nashik Dining</span>
-          <h2 className="font-serif text-gold-gradient" style={{ fontSize: '2.5rem', marginTop: '10px', color: '#fff' }}>
+          <h2 className="font-serif" style={{ fontSize: '2.5rem', marginTop: '10px', color: 'var(--text-dark)', fontWeight: 800 }}>
             {restaurant.name}
           </h2>
           <p style={{ color: 'var(--text-muted)', fontSize: '1rem', marginTop: '10px' }}>
@@ -68,7 +68,7 @@ export const RestaurantSection = () => {
         </div>
 
         {/* Ambiance Showcase Banner */}
-        <div className="glass-card" style={{ padding: '16px', borderRadius: 'var(--radius-lg)', marginBottom: '60px' }}>
+        <div className="glass-card" style={{ padding: '20px', borderRadius: 'var(--radius-lg)', marginBottom: '60px', background: 'var(--bg-primary)' }}>
           <div style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
@@ -100,7 +100,7 @@ export const RestaurantSection = () => {
 
         {/* Digital Menu Categories Tabs */}
         <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-          <h3 className="font-serif" style={{ fontSize: '1.75rem', color: '#fff', marginBottom: '20px' }}>
+          <h3 className="font-serif" style={{ fontSize: '1.85rem', color: 'var(--text-dark)', marginBottom: '20px', fontWeight: 800 }}>
             Kings Special Culinary Menu
           </h3>
 
@@ -126,18 +126,18 @@ export const RestaurantSection = () => {
             gap: '24px'
           }}>
             {currentCategory.dishes.map(dish => (
-              <div key={dish.id} className="glass-card" style={{ display: 'flex', gap: '16px', padding: '16px', alignItems: 'center' }}>
+              <div key={dish.id} className="glass-card" style={{ display: 'flex', gap: '16px', padding: '18px', alignItems: 'center' }}>
                 <img
                   src={dish.image}
                   alt={dish.name}
-                  style={{ width: '110px', height: '110px', borderRadius: '12px', objectFit: 'cover', shrink: 0 }}
+                  style={{ width: '110px', height: '110px', borderRadius: '14px', objectFit: 'cover', shrink: 0 }}
                 />
                 <div style={{ flexGrow: 1 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                    <h4 style={{ fontSize: '1.05rem', color: '#fff', fontWeight: 700 }}>
+                    <h4 style={{ fontSize: '1.05rem', color: 'var(--text-dark)', fontWeight: 700 }}>
                       {dish.name}
                     </h4>
-                    <span style={{ fontSize: '1.2rem', fontWeight: 800, color: 'var(--accent-gold)' }}>
+                    <span style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--accent-gold-dark)' }}>
                       ₹{dish.price}
                     </span>
                   </div>
@@ -145,12 +145,13 @@ export const RestaurantSection = () => {
                   {dish.tag && (
                     <span style={{
                       fontSize: '0.7rem',
-                      color: 'var(--accent-gold-light)',
-                      background: 'rgba(212,175,55,0.12)',
+                      color: 'var(--accent-gold-dark)',
+                      background: 'rgba(197,160,89,0.12)',
                       padding: '2px 8px',
                       borderRadius: '4px',
                       display: 'inline-block',
-                      margin: '4px 0 8px'
+                      margin: '4px 0 8px',
+                      fontWeight: 700
                     }}>
                       {dish.tag}
                     </span>
@@ -173,7 +174,7 @@ export const RestaurantSection = () => {
             <img src={lightboxPhoto} alt="Zoom" style={{ maxWidth: '100%', maxHeight: '85vh', borderRadius: '12px' }} />
             <button
               onClick={() => setLightboxPhoto(null)}
-              style={{ position: 'absolute', top: '-15px', right: '-15px', background: '#ef4444', color: '#fff', border: 'none', borderRadius: '50%', width: '36px', height: '36px', cursor: 'pointer' }}
+              style={{ position: 'absolute', top: '-15px', right: '-15px', background: '#dc2626', color: '#fff', border: 'none', borderRadius: '50%', width: '36px', height: '36px', cursor: 'pointer' }}
             >
               <X size={20} />
             </button>
@@ -195,7 +196,7 @@ export const RestaurantSection = () => {
             {!createdTableBooking ? (
               <form onSubmit={handleTableSubmit}>
                 <span className="badge-gold">Kings 99 Nashik</span>
-                <h3 className="font-serif" style={{ fontSize: '1.75rem', color: '#fff', margin: '8px 0 16px' }}>
+                <h3 className="font-serif" style={{ fontSize: '1.75rem', color: 'var(--text-dark)', margin: '8px 0 16px', fontWeight: 800 }}>
                   Reserve Dining Table
                 </h3>
 
@@ -284,11 +285,11 @@ export const RestaurantSection = () => {
                   Reference: {createdTableBooking.id}
                 </span>
 
-                <h3 className="font-serif" style={{ fontSize: '1.75rem', color: '#fff', margin: '12px 0 8px' }}>
+                <h3 className="font-serif" style={{ fontSize: '1.75rem', color: 'var(--text-dark)', margin: '12px 0 8px', fontWeight: 800 }}>
                   Table Reservation Received!
                 </h3>
                 <p style={{ color: 'var(--text-muted)', marginBottom: '20px' }}>
-                  Thank you <strong style={{ color: '#fff' }}>{createdTableBooking.customerName}</strong>. Your table request for {createdTableBooking.guests} guests on {createdTableBooking.date} at {createdTableBooking.time} has been saved.
+                  Thank you <strong style={{ color: 'var(--text-dark)' }}>{createdTableBooking.customerName}</strong>. Your table request for {createdTableBooking.guests} guests on {createdTableBooking.date} at {createdTableBooking.time} has been saved.
                 </p>
 
                 <a
@@ -298,7 +299,7 @@ export const RestaurantSection = () => {
                   target="_blank"
                   rel="noreferrer"
                   className="btn-gold"
-                  style={{ width: '100%', justifyContent: 'center', background: '#10b981', color: '#fff' }}
+                  style={{ width: '100%', justifyContent: 'center', background: '#0d5c46', color: '#fff' }}
                 >
                   <MessageSquare size={18} /> Send WhatsApp Alert to Kings 99
                 </a>

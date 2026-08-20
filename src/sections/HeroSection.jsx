@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useResort } from '../context/ResortContext';
-import { Search, Sparkles, MapPin, Play } from 'lucide-react';
+import { Search, Sparkles, MapPin } from 'lucide-react';
 
 export const HeroSection = ({ onOpenBookingModal }) => {
   const { cms, villas } = useResort();
@@ -16,8 +16,8 @@ export const HeroSection = ({ onOpenBookingModal }) => {
   };
 
   return (
-    <section id="home" style={{ position: 'relative', minHeight: '90vh', display: 'flex', alignItems: 'center', overflow: 'hidden' }}>
-      {/* Background Video element if configured, or background image */}
+    <section id="home" style={{ position: 'relative', minHeight: '88vh', display: 'flex', alignItems: 'center', overflow: 'hidden' }}>
+      {/* Background Video element or background image */}
       {cms.heroVideo ? (
         <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, zIndex: 1, overflow: 'hidden' }}>
           <video
@@ -30,14 +30,14 @@ export const HeroSection = ({ onOpenBookingModal }) => {
           >
             <source src={cms.heroVideo} type="video/mp4" />
           </video>
-          {/* Gradient Overlay for high text contrast */}
+          {/* Subtle Ambient Vignette Overlay */}
           <div style={{
             position: 'absolute',
             top: 0,
             left: 0,
             right: 0,
             bottom: 0,
-            background: 'linear-gradient(180deg, rgba(11, 19, 16, 0.5) 0%, rgba(11, 19, 16, 0.85) 75%, #0b1310 100%)'
+            background: 'linear-gradient(180deg, rgba(15, 23, 21, 0.4) 0%, rgba(15, 23, 21, 0.65) 60%, var(--bg-primary) 100%)'
           }}></div>
         </div>
       ) : (
@@ -47,51 +47,65 @@ export const HeroSection = ({ onOpenBookingModal }) => {
           left: 0,
           right: 0,
           bottom: 0,
-          backgroundImage: `linear-gradient(180deg, rgba(11, 19, 16, 0.4) 0%, rgba(11, 19, 16, 0.85) 70%, #0b1310 100%), url(${cms.heroImage})`,
+          backgroundImage: `linear-gradient(180deg, rgba(15, 23, 21, 0.35) 0%, rgba(15, 23, 21, 0.65) 60%, var(--bg-primary) 100%), url(${cms.heroImage})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           zIndex: 1
         }}></div>
       )}
 
-      <div className="container" style={{ position: 'relative', zIndex: 2, padding: '120px 24px 80px' }}>
-        <div style={{ maxWidth: '800px', margin: '0 auto', textAlign: 'center' }}>
-          <span className="badge-gold" style={{ marginBottom: '16px', display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
-            <Sparkles size={14} /> Luxury Private Pool Resort Nashik
+      <div className="container" style={{ position: 'relative', zIndex: 2, padding: '100px 20px 70px' }}>
+        <div style={{ maxWidth: '820px', margin: '0 auto', textAlign: 'center' }}>
+          <span className="badge-gold" style={{
+            marginBottom: '18px',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '8px',
+            background: 'rgba(255, 255, 255, 0.9)',
+            borderColor: 'var(--accent-gold)',
+            color: 'var(--accent-gold-dark)',
+            boxShadow: '0 4px 14px rgba(0,0,0,0.1)'
+          }}>
+            <Sparkles size={14} /> Luxury Private Pool Resort • Nashik
           </span>
 
-          <h1 className="font-serif text-gold-gradient" style={{
-            fontSize: 'clamp(2.5rem, 5vw, 4.2rem)',
+          <h1 className="font-serif" style={{
+            fontSize: 'clamp(2.4rem, 5vw, 4.2rem)',
             fontWeight: 800,
             lineHeight: 1.15,
             marginBottom: '20px',
-            textShadow: '0 10px 30px rgba(0,0,0,0.6)'
+            color: '#ffffff',
+            textShadow: '0 4px 20px rgba(0,0,0,0.5)'
           }}>
             {cms.tagline}
           </h1>
 
           <p style={{
-            fontSize: 'clamp(1rem, 2vw, 1.25rem)',
-            color: 'rgba(255,255,255,0.85)',
-            marginBottom: '40px',
+            fontSize: 'clamp(1rem, 2vw, 1.2rem)',
+            color: 'rgba(255, 255, 255, 0.95)',
+            marginBottom: '36px',
             lineHeight: 1.6,
-            fontWeight: 400
+            fontWeight: 500,
+            textShadow: '0 2px 10px rgba(0,0,0,0.4)'
           }}>
             {cms.heroSubtitle}
           </p>
 
-          {/* Quick Date Availability Search Widget */}
+          {/* Quick Date Availability Search Widget in Bright White Card */}
           <form onSubmit={handleQuickSearch} className="glass-card" style={{
             padding: '24px',
             borderRadius: 'var(--radius-lg)',
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(190px, 1fr))',
             gap: '16px',
             alignItems: 'end',
-            textAlign: 'left'
+            textAlign: 'left',
+            background: '#ffffff',
+            boxShadow: 'var(--shadow-elevated)',
+            border: '2px solid var(--border-glass)'
           }}>
             <div>
-              <label className="form-label" style={{ color: 'var(--accent-gold-light)' }}>Villa Type</label>
+              <label className="form-label" style={{ color: 'var(--accent-gold-dark)' }}>Villa Type</label>
               <select
                 className="form-input"
                 value={selectedVillaId}
@@ -105,7 +119,7 @@ export const HeroSection = ({ onOpenBookingModal }) => {
             </div>
 
             <div>
-              <label className="form-label" style={{ color: 'var(--accent-gold-light)' }}>Check-In Date</label>
+              <label className="form-label" style={{ color: 'var(--accent-gold-dark)' }}>Check-In Date</label>
               <input
                 type="date"
                 className="form-input"
@@ -115,7 +129,7 @@ export const HeroSection = ({ onOpenBookingModal }) => {
             </div>
 
             <div>
-              <label className="form-label" style={{ color: 'var(--accent-gold-light)' }}>Check-Out Date</label>
+              <label className="form-label" style={{ color: 'var(--accent-gold-dark)' }}>Check-Out Date</label>
               <input
                 type="date"
                 className="form-input"
@@ -136,11 +150,13 @@ export const HeroSection = ({ onOpenBookingModal }) => {
             display: 'inline-flex',
             alignItems: 'center',
             gap: '8px',
-            color: 'var(--text-muted)',
-            fontSize: '0.85rem',
-            marginTop: '24px'
+            color: 'rgba(255, 255, 255, 0.9)',
+            fontSize: '0.88rem',
+            marginTop: '24px',
+            fontWeight: 600,
+            textShadow: '0 2px 8px rgba(0,0,0,0.5)'
           }}>
-            <MapPin size={16} color="var(--accent-gold)" />
+            <MapPin size={16} color="var(--accent-gold-light)" />
             <span>{cms.address}</span>
           </div>
         </div>

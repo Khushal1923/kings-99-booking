@@ -60,19 +60,20 @@ export const AdminDashboard = () => {
     <div style={{ minHeight: '100vh', background: 'var(--bg-primary)', color: 'var(--text-main)', paddingBottom: '60px' }}>
       {/* Top Header Bar */}
       <header style={{
-        background: 'var(--bg-surface-elevated)',
-        borderBottom: '1px solid var(--border-glass)',
+        background: '#ffffff',
+        borderBottom: '2px solid var(--border-glass)',
         padding: '16px 24px',
         position: 'sticky',
         top: 0,
-        zIndex: 950
+        zIndex: 950,
+        boxShadow: '0 4px 20px rgba(0,0,0,0.04)'
       }}>
         <div style={{ maxWidth: '1400px', margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <span className={role === 'ADMIN' ? 'badge-gold' : 'status-badge status-confirmed'}>
               {role === 'ADMIN' ? '👑 Owner Admin Portal' : '🔑 Staff Reception Desk'}
             </span>
-            <h2 className="font-serif" style={{ fontSize: '1.25rem', color: '#fff', margin: 0 }}>
+            <h2 className="font-serif" style={{ fontSize: '1.25rem', color: 'var(--text-dark)', margin: 0, fontWeight: 800 }}>
               Kings 99 Nashik ({userSession ? userSession.username : 'User'})
             </h2>
           </div>
@@ -81,7 +82,7 @@ export const AdminDashboard = () => {
           <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', alignItems: 'center' }}>
             {role === 'ADMIN' && (
               <div style={statBoxStyle}>
-                <span style={{ color: 'var(--accent-gold)', fontWeight: 800, fontSize: '1.1rem' }}>₹</span>
+                <span style={{ color: 'var(--accent-gold-dark)', fontWeight: 800, fontSize: '1.1rem' }}>₹</span>
                 <div>
                   <span style={statLabelStyle}>Confirmed Revenue</span>
                   <strong style={statValStyle}>₹{totalRevenue.toLocaleString('en-IN')}</strong>
@@ -90,20 +91,20 @@ export const AdminDashboard = () => {
             )}
 
             <div style={statBoxStyle}>
-              <Clock size={16} color="#f59e0b" />
+              <Clock size={16} color="#d97706" />
               <div>
                 <span style={statLabelStyle}>Pending Requests</span>
-                <strong style={{ ...statValStyle, color: '#f59e0b' }}>
+                <strong style={{ ...statValStyle, color: '#d97706' }}>
                   {pendingVillaCount + pendingTableCount} ({pendingVillaCount} Villa / {pendingTableCount} Table)
                 </strong>
               </div>
             </div>
 
             <div style={statBoxStyle}>
-              <Home size={16} color="#10b981" />
+              <Home size={16} color="#0d5c46" />
               <div>
                 <span style={statLabelStyle}>Active Villas</span>
-                <strong style={{ ...statValStyle, color: '#10b981' }}>{villas.length}</strong>
+                <strong style={{ ...statValStyle, color: '#0d5c46' }}>{villas.length}</strong>
               </div>
             </div>
 
@@ -140,22 +141,19 @@ export const AdminDashboard = () => {
                 padding: '10px 18px',
                 fontSize: '0.88rem',
                 whiteSpace: 'nowrap',
-                position: 'relative',
-                background: activeTab === t.id && role === 'STAFF' ? '#10b981' : undefined,
-                borderColor: activeTab === t.id && role === 'STAFF' ? '#10b981' : undefined,
-                color: activeTab === t.id && role === 'STAFF' ? '#fff' : undefined
+                position: 'relative'
               }}
             >
               {t.icon}
               <span>{t.label}</span>
               {t.badge > 0 && (
                 <span style={{
-                  background: '#ef4444',
+                  background: '#dc2626',
                   color: '#fff',
                   fontSize: '0.7rem',
                   fontWeight: 800,
                   borderRadius: 'var(--radius-full)',
-                  padding: '2px 6px',
+                  padding: '2px 7px',
                   marginLeft: '4px'
                 }}>
                   {t.badge}
@@ -184,22 +182,25 @@ export const AdminDashboard = () => {
 };
 
 const statBoxStyle = {
-  background: 'var(--bg-primary)',
-  border: '1px solid var(--border-glass)',
-  borderRadius: '8px',
+  background: '#ffffff',
+  border: '1.5px solid var(--border-glass)',
+  borderRadius: '10px',
   padding: '6px 14px',
   display: 'flex',
   alignItems: 'center',
-  gap: '8px'
+  gap: '8px',
+  boxShadow: '0 2px 8px rgba(0,0,0,0.03)'
 };
 
 const statLabelStyle = {
   fontSize: '0.7rem',
   color: 'var(--text-muted)',
-  display: 'block'
+  display: 'block',
+  fontWeight: 600
 };
 
 const statValStyle = {
   fontSize: '0.95rem',
-  color: 'var(--accent-gold)'
+  color: 'var(--accent-gold-dark)',
+  fontWeight: 800
 };

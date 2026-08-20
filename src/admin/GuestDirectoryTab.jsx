@@ -51,7 +51,7 @@ export const GuestDirectoryTab = () => {
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', flexWrap: 'wrap', gap: '16px' }}>
         <div>
-          <h3 className="font-serif" style={{ fontSize: '1.5rem', color: '#fff' }}>
+          <h3 className="font-serif" style={{ fontSize: '1.5rem', color: 'var(--text-dark)', fontWeight: 800 }}>
             👤 Customer Directory & Guest Records (Nashik, India)
           </h3>
           <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
@@ -63,7 +63,7 @@ export const GuestDirectoryTab = () => {
           <button
             onClick={handleExportDirectoryExcel}
             className="btn-gold"
-            style={{ padding: '8px 14px', fontSize: '0.8rem', background: '#10b981', color: '#fff' }}
+            style={{ padding: '8px 14px', fontSize: '0.8rem', background: 'var(--accent-emerald)', color: '#fff' }}
             title="Download Guest Directory Excel"
           >
             <FileSpreadsheet size={16} /> Excel Export
@@ -86,24 +86,24 @@ export const GuestDirectoryTab = () => {
       <div className="glass-card" style={{ overflowX: 'auto', borderRadius: '12px' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.9rem' }}>
           <thead>
-            <tr style={{ background: 'var(--bg-surface-elevated)', borderBottom: '1px solid var(--border-glass)' }}>
-              <th style={{ padding: '14px 16px', color: 'var(--text-muted)' }}>Guest Name</th>
-              <th style={{ padding: '14px 16px', color: 'var(--text-muted)' }}>Mobile / WhatsApp</th>
-              <th style={{ padding: '14px 16px', color: 'var(--text-muted)' }}>Email Address</th>
-              <th style={{ padding: '14px 16px', color: 'var(--text-muted)' }}>Total Stays</th>
-              <th style={{ padding: '14px 16px', color: 'var(--text-muted)' }}>Confirmed Spend</th>
-              <th style={{ padding: '14px 16px', color: 'var(--text-muted)', textAlign: 'right' }}>Quick Contact</th>
+            <tr style={{ background: 'var(--bg-primary)', borderBottom: '2px solid var(--border-glass)' }}>
+              <th style={{ padding: '14px 16px', color: 'var(--text-dark)', fontWeight: 700 }}>Guest Name</th>
+              <th style={{ padding: '14px 16px', color: 'var(--text-dark)', fontWeight: 700 }}>Mobile / WhatsApp</th>
+              <th style={{ padding: '14px 16px', color: 'var(--text-dark)', fontWeight: 700 }}>Email Address</th>
+              <th style={{ padding: '14px 16px', color: 'var(--text-dark)', fontWeight: 700 }}>Total Stays</th>
+              <th style={{ padding: '14px 16px', color: 'var(--text-dark)', fontWeight: 700 }}>Confirmed Spend</th>
+              <th style={{ padding: '14px 16px', color: 'var(--text-dark)', fontWeight: 700, textAlign: 'right' }}>Quick Contact</th>
             </tr>
           </thead>
           <tbody>
             {guestList.length > 0 ? (
               guestList.map((g, idx) => (
                 <tr key={idx} style={{ borderBottom: '1px solid var(--border-subtle)' }}>
-                  <td style={{ padding: '14px 16px', fontWeight: 700, color: '#fff' }}>
+                  <td style={{ padding: '14px 16px', fontWeight: 700, color: 'var(--text-dark)' }}>
                     {g.name}
                   </td>
                   <td style={{ padding: '14px 16px' }}>
-                    <a href={`tel:${g.phone}`} style={{ color: 'var(--accent-gold)', textDecoration: 'none' }}>
+                    <a href={`tel:${g.phone}`} style={{ color: 'var(--accent-gold-dark)', textDecoration: 'none', fontWeight: 600 }}>
                       {g.phone}
                     </a>
                   </td>
@@ -113,7 +113,7 @@ export const GuestDirectoryTab = () => {
                   <td style={{ padding: '14px 16px' }}>
                     <span className="badge-gold">{g.totalBookings} Stays</span>
                   </td>
-                  <td style={{ padding: '14px 16px', fontWeight: 700, color: '#10b981' }}>
+                  <td style={{ padding: '14px 16px', fontWeight: 800, color: 'var(--accent-emerald)' }}>
                     ₹{g.totalSpent.toLocaleString('en-IN')}
                   </td>
                   <td style={{ padding: '14px 16px', textAlign: 'right' }}>
@@ -122,7 +122,7 @@ export const GuestDirectoryTab = () => {
                       target="_blank"
                       rel="noreferrer"
                       className="btn-outline"
-                      style={{ padding: '4px 12px', fontSize: '0.75rem', borderColor: '#10b981', color: '#10b981' }}
+                      style={{ padding: '4px 12px', fontSize: '0.75rem', borderColor: 'var(--accent-emerald)', color: 'var(--accent-emerald)' }}
                     >
                       <MessageSquare size={14} /> WhatsApp
                     </a>
