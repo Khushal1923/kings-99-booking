@@ -15,12 +15,36 @@ import { ContactSection } from './sections/ContactSection';
 import { AdminDashboard } from './admin/AdminDashboard';
 
 const MainApp = () => {
-  const { userSession, loginModalOpen, setLoginModalOpen } = useResort();
+  const { userSession, loginModalOpen, setLoginModalOpen, openLoginModal } = useResort();
 
   const [bookingModalOpen, setBookingModalOpen] = useState(false);
   const [selectedBookingVilla, setSelectedBookingVilla] = useState(null);
-
   const [detailModalVilla, setDetailModalVilla] = useState(null);
+
+  // Dedicated route listener for hidden staff and admin login
+  useEffect(() => {
+    const checkRoute = () => {
+      const hash = window.location.hash.toLowerCase();
+      const path = window.location.pathname.toLowerCase();
+
+      if (hash === '#admin' || path.endsWith('/admin')) {
+        openLoginModal('ADMIN');
+      } else if (hash === '#staff' || path.endsWith('/staff')) {
+        openLoginModal('STAFF');
+      } else if (hash === '#login' || path.endsWith('/login')) {
+        openLoginModal('STAFF');
+      }
+    };
+
+    checkRoute();
+    window.addEventListener('hashchange', checkRoute);
+    window.addEventListener('popstate', checkRoute);
+
+    return () => {
+      window.removeEventListener('hashchange', checkRoute);
+      window.removeEventListener('popstate', checkRoute);
+    };
+  }, [openLoginModal]);
 
   const handleOpenBookingModal = (villa = null) => {
     setSelectedBookingVilla(villa);

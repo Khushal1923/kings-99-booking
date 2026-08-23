@@ -105,9 +105,9 @@ export const Navbar = ({ onOpenBookingModal }) => {
             <a href="#contact" style={navLinkStyle}>Location</a>
           </nav>
 
-          {/* Right Action Area (Reference Image Style: Teal Pill CTA + Phone Circle Icon + Portals) */}
+          {/* Right Action Area */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            {userSession ? (
+            {userSession && (
               <button
                 onClick={logout}
                 className="btn-outline"
@@ -115,28 +115,6 @@ export const Navbar = ({ onOpenBookingModal }) => {
               >
                 Logout ({userSession.username})
               </button>
-            ) : (
-              <>
-                {/* Staff Login Button */}
-                <button
-                  onClick={() => openLoginModal('STAFF')}
-                  style={portalButtonStyle}
-                  title="Staff Concierge Login"
-                  className="hide-on-mobile"
-                >
-                  <KeyRound size={13} color="#10b981" /> Staff
-                </button>
-
-                {/* Owner / Admin Login Button */}
-                <button
-                  onClick={() => openLoginModal('ADMIN')}
-                  style={portalButtonStyle}
-                  title="Owner / Admin Login"
-                  className="hide-on-mobile"
-                >
-                  <ShieldCheck size={13} color="#d4af37" /> Owner
-                </button>
-              </>
             )}
 
             {/* Reference Image Style Teal Pill CTA Button */}
@@ -225,24 +203,6 @@ export const Navbar = ({ onOpenBookingModal }) => {
           <a href="#gallery" onClick={() => setMobileMenuOpen(false)} style={mobileNavLinkStyle}>Resort Gallery</a>
           <a href="#about" onClick={() => setMobileMenuOpen(false)} style={mobileNavLinkStyle}>About Kings 99</a>
           <a href="#contact" onClick={() => setMobileMenuOpen(false)} style={mobileNavLinkStyle}>Location & Contact</a>
-
-          {/* Staff & Admin logins inside mobile menu */}
-          <div style={{ display: 'flex', gap: '10px', marginTop: '10px', paddingTop: '10px', borderTop: '1px solid var(--border-subtle)' }}>
-            <button
-              onClick={() => { setMobileMenuOpen(false); openLoginModal('STAFF'); }}
-              className="btn-outline"
-              style={{ flex: 1, justifyContent: 'center', borderColor: '#10b981', color: '#10b981', padding: '8px' }}
-            >
-              <KeyRound size={14} /> Staff Portal
-            </button>
-            <button
-              onClick={() => { setMobileMenuOpen(false); openLoginModal('ADMIN'); }}
-              className="btn-outline"
-              style={{ flex: 1, justifyContent: 'center', borderColor: '#d4af37', color: '#d4af37', padding: '8px' }}
-            >
-              <ShieldCheck size={14} /> Owner Admin
-            </button>
-          </div>
         </div>
       )}
 

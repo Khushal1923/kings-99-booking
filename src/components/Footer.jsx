@@ -1,9 +1,9 @@
 import React from 'react';
 import { useResort } from '../context/ResortContext';
-import { Compass, ShieldCheck, KeyRound } from 'lucide-react';
+import { Compass, KeyRound } from 'lucide-react';
 
 export const Footer = () => {
-  const { cms, openLoginModal } = useResort();
+  const { cms } = useResort();
 
   return (
     <footer style={{
@@ -60,29 +60,19 @@ export const Footer = () => {
             </div>
           </div>
 
-          {/* Portals Access */}
+          {/* Contact Inquiries */}
           <div>
             <h4 className="font-serif" style={{ fontSize: '1.1rem', color: 'var(--text-dark)', marginBottom: '16px', fontWeight: 700 }}>
-              Staff & Management Portals
+              Inquiries & Reservations
             </h4>
-            <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '16px' }}>
-              Protected portal login for receptionist staff and owner administration.
+            <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: 1.6, marginBottom: '12px' }}>
+              For staycations, pool villa bookings, celebration lawn events, or garden table reservations:
             </p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              <button
-                onClick={() => openLoginModal('STAFF')}
-                className="btn-outline"
-                style={{ padding: '8px 14px', fontSize: '0.8rem', borderColor: 'var(--accent-emerald)', color: 'var(--accent-emerald)' }}
-              >
-                <KeyRound size={14} /> Staff Concierge Desk Login
-              </button>
-              <button
-                onClick={() => openLoginModal('ADMIN')}
-                className="btn-outline"
-                style={{ padding: '8px 14px', fontSize: '0.8rem' }}
-              >
-                <ShieldCheck size={14} /> Owner & Admin Dashboard
-              </button>
+            <div style={{ fontSize: '0.9rem', fontWeight: 700, color: 'var(--accent-emerald)' }}>
+              📞 {cms.phone}
+            </div>
+            <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginTop: '4px' }}>
+              ✉️ {cms.email}
             </div>
           </div>
         </div>
@@ -102,9 +92,13 @@ export const Footer = () => {
           <div>
             © {new Date().getFullYear()} {cms.resortName}. All rights reserved. Nashik, Maharashtra.
           </div>
-          <div style={{ display: 'flex', gap: '16px' }}>
+          <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
             <a href={cms.googleLink} target="_blank" rel="noreferrer" style={{ color: 'var(--text-muted)', textDecoration: 'none' }}>Google Business</a>
             <a href={cms.instagramLink} target="_blank" rel="noreferrer" style={{ color: 'var(--text-muted)', textDecoration: 'none' }}>Instagram Profile</a>
+            {/* Discrete Portal Shortcut Link */}
+            <a href="#login" style={{ color: 'rgba(0,0,0,0.15)', textDecoration: 'none' }} title="Staff / Admin Portal Access">
+              <KeyRound size={12} />
+            </a>
           </div>
         </div>
       </div>
