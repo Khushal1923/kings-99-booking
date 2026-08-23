@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ResortProvider, useResort } from './context/ResortContext';
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
@@ -21,28 +21,66 @@ const MainApp = () => {
   const [selectedBookingVilla, setSelectedBookingVilla] = useState(null);
   const [detailModalVilla, setDetailModalVilla] = useState(null);
 
-  // Dedicated route listener for hidden staff and admin login
+  // Fail-safe Route & Secret Access Detector (URL Hash, Path Rewrites, Keyboard Shortcuts & Logo Taps)
   useEffect(() => {
-    const checkRoute = () => {
+    const checkRouteAndParams = () => {
       const hash = window.location.hash.toLowerCase();
       const path = window.location.pathname.toLowerCase();
+      const search = window.location.search.toLowerCase();
 
-      if (hash === '#admin' || path.endsWith('/admin')) {
+      // Check URL Hash, Path, or GitHub Pages SPA query param redirect
+      if (
+        hash === '#admin' ||
+        path.endsWith('/admin') ||
+        search.includes('/admin') ||
+        search.includes('admin')
+      ) {
         openLoginModal('ADMIN');
-      } else if (hash === '#staff' || path.endsWith('/staff')) {
+      } else if (
+        hash === '#staff' ||
+        path.endsWith('/staff') ||
+        search.includes('/staff') ||
+        search.includes('staff')
+      ) {
         openLoginModal('STAFF');
-      } else if (hash === '#login' || path.endsWith('/login')) {
+      } else if (
+        hash === '#login' ||
+        path.endsWith('/login') ||
+        search.includes('/login')
+      ) {
         openLoginModal('STAFF');
       }
     };
 
-    checkRoute();
-    window.addEventListener('hashchange', checkRoute);
-    window.addEventListener('popstate', checkRoute);
+    checkRouteAndParams();
+    window.addEventListener('hashchange', checkRouteAndParams);
+    window.addEventListener('popstate', checkRouteAndParams);
+
+    // Keyboard Shortcuts for Staff/Admin (Alt + A = Admin, Alt + S = Staff)
+    const handleKeyDown = (e) => {
+      if (e.altKey && (e.key === 'a' || e.key === 'A')) {
+        e.preventDefault();
+        openLoginModal('ADMIN');
+      } else if (e.altKey && (e.key === 's' || e.key === 'S')) {
+        e.preventDefault();
+        openLoginModal('STAFF');
+      }
+    };
+
+    // Custom Event for Secret Logo 3x Tap / Footer Secret Link
+    const handleCustomPortalEvent = (e) => {
+      const role = e.detail?.role || 'STAFF';
+      openLoginModal(role);
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('open-portal-login', handleCustomPortalEvent);
 
     return () => {
-      window.removeEventListener('hashchange', checkRoute);
-      window.removeEventListener('popstate', checkRoute);
+      window.removeEventListener('hashchange', checkRouteAndParams);
+      window.removeEventListener('popstate', checkRouteAndParams);
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('open-portal-login', handleCustomPortalEvent);
     };
   }, [openLoginModal]);
 
@@ -62,7 +100,7 @@ const MainApp = () => {
 
   return (
     <div style={{ position: 'relative', minHeight: '100vh', background: 'var(--bg-primary)' }}>
-      {/* Navbar */}
+      {/* Navbar (Clean Customer Front-End with Secret 3x Logo Tap Access) */}
       <Navbar onOpenBookingModal={handleOpenBookingModal} />
 
       {/* Main Page Sections */}

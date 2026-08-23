@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useResort } from '../context/ResortContext';
-import { Compass, ShieldCheck, Menu, X, Calendar, Phone, Sparkles, KeyRound } from 'lucide-react';
+import { Compass, Menu, X, Calendar, Phone, Sparkles, LogOut } from 'lucide-react';
 
 export const Navbar = ({ onOpenBookingModal }) => {
-  const { cms, userSession, logout, openLoginModal } = useResort();
+  const { cms, userSession, logout } = useResort();
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [logoClickCount, setLogoClickCount] = useState(0);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -14,6 +15,20 @@ export const Navbar = ({ onOpenBookingModal }) => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Secret 3x Logo Tap Handler for Staff/Admin Access
+  const handleLogoClick = (e) => {
+    setLogoClickCount((prev) => {
+      const next = prev + 1;
+      if (next >= 3) {
+        e.preventDefault();
+        window.dispatchEvent(new CustomEvent('open-portal-login', { detail: { role: 'STAFF' } }));
+        return 0;
+      }
+      setTimeout(() => setLogoClickCount(0), 1200);
+      return next;
+    });
+  };
 
   return (
     <>
@@ -37,7 +52,7 @@ export const Navbar = ({ onOpenBookingModal }) => {
         </div>
       )}
 
-      {/* Main Reference Style Navbar */}
+      {/* Main Clean Customer Navbar */}
       <header style={{
         position: 'sticky',
         top: 0,
@@ -54,8 +69,13 @@ export const Navbar = ({ onOpenBookingModal }) => {
           justifyContent: 'space-between',
           height: '72px'
         }}>
-          {/* Logo & Brand (Reference Image Style: Icon Pill + Serif Name + Gold Subtitle) */}
-          <a href="#" style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none' }}>
+          {/* Logo & Brand (With Secret 3x Tap Trigger) */}
+          <a
+            href="#"
+            onClick={handleLogoClick}
+            style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none', userSelect: 'none' }}
+            title="Kings 99 Restaurant & Villa"
+          >
             <div style={{
               width: '40px',
               height: '40px',
@@ -95,7 +115,7 @@ export const Navbar = ({ onOpenBookingModal }) => {
             </div>
           </a>
 
-          {/* Center Nav Links (Reference Image Style: Clean White Text Nav) */}
+          {/* Center Nav Links */}
           <nav style={{ display: 'none', gap: '26px', alignItems: 'center' }} className="desktop-nav">
             <a href="#home" style={navLinkStyle}>Home</a>
             <a href="#villas" style={navLinkStyle}>Pool Villas</a>
@@ -113,11 +133,11 @@ export const Navbar = ({ onOpenBookingModal }) => {
                 className="btn-outline"
                 style={{ padding: '6px 12px', fontSize: '0.78rem', borderColor: '#ef4444', color: '#ef4444', background: 'transparent' }}
               >
-                Logout ({userSession.username})
+                <LogOut size={13} /> Logout ({userSession.username})
               </button>
             )}
 
-            {/* Reference Image Style Teal Pill CTA Button */}
+            {/* Reference Style Teal Pill CTA Button */}
             <button
               onClick={() => onOpenBookingModal(null)}
               style={{
@@ -140,7 +160,7 @@ export const Navbar = ({ onOpenBookingModal }) => {
               <Calendar size={15} /> BOOK VILLA
             </button>
 
-            {/* Reference Image Style Circular Phone Icon Button */}
+            {/* Circular Phone Icon Button */}
             <a
               href={`tel:${cms.phone}`}
               style={{
@@ -213,9 +233,6 @@ export const Navbar = ({ onOpenBookingModal }) => {
         @media (max-width: 991px) {
           .mobile-toggle { display: block !important; }
         }
-        @media (max-width: 650px) {
-          .hide-on-mobile { display: none !important; }
-        }
       `}</style>
     </>
   );
@@ -237,18 +254,4 @@ const mobileNavLinkStyle = {
   fontWeight: 700,
   padding: '8px 0',
   borderBottom: '1px solid var(--border-subtle)'
-};
-
-const portalButtonStyle = {
-  background: 'rgba(255, 255, 255, 0.08)',
-  border: '1px solid rgba(255, 255, 255, 0.15)',
-  color: '#ffffff',
-  borderRadius: 'var(--radius-full)',
-  padding: '6px 12px',
-  fontSize: '0.78rem',
-  fontWeight: 600,
-  cursor: 'pointer',
-  display: 'inline-flex',
-  alignItems: 'center',
-  gap: '6px'
 };
