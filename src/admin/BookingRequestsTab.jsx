@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useResort } from '../context/ResortContext';
 import { exportToCSV } from '../utils/exportUtils';
-import { CheckCircle2, XCircle, Search, MessageSquare, FileSpreadsheet } from 'lucide-react';
+import { OfflineBookingModal } from './OfflineBookingModal';
+import { CheckCircle2, XCircle, Search, MessageSquare, FileSpreadsheet, UserPlus } from 'lucide-react';
 
 export const BookingRequestsTab = () => {
   const { bookings, updateBookingStatus, cms } = useResort();
@@ -9,6 +10,7 @@ export const BookingRequestsTab = () => {
   const [statusFilter, setStatusFilter] = useState('ALL');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedBooking, setSelectedBooking] = useState(null);
+  const [showOfflineModal, setShowOfflineModal] = useState(false);
 
   const filteredBookings = bookings.filter(b => {
     const matchesStatus = statusFilter === 'ALL' || b.status === statusFilter;
@@ -32,7 +34,10 @@ export const BookingRequestsTab = () => {
       'Guests': b.guests,
       'Total Tariff (₹)': b.totalPrice,
       'Status': b.status,
-      'Special Requests': b.specialRequests || 'None'
+      'Booking Type': b.bookingType || 'ONLINE',
+      'Payment Mode': b.paymentMode || 'Online',
+      'Payment Status': b.paymentStatus || 'Pending',
+      'Special Requests / Notes': b.specialRequests || 'None'
     }));
     exportToCSV(data, `kings_99_booking_requests_${new Date().toISOString().split('T')[0]}.csv`);
   };
@@ -56,16 +61,25 @@ export const BookingRequestsTab = () => {
             📋 Customer Booking Requests
           </h3>
           <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-            Manage guest reservation requests, confirm stays, and dispatch WhatsApp alerts.
+            Manage guest reservation requests, register walk-in offline bookings, and dispatch WhatsApp alerts.
           </p>
         </div>
 
         {/* Actions & Search */}
         <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
+          {/* New Offline / Walk-in Booking Button */}
+          <button
+            onClick={() => setShowOfflineModal(true)}
+            className="btn-gold"
+            style={{ padding: '8px 16px', fontSize: '0.85rem', background: 'var(--accent-emerald)', color: '#fff', boxShadow: '0 4px 12px rgba(13, 92, 70, 0.3)' }}
+          >
+            <UserPlus size={16} /> New Walk-In Booking
+          </button>
+
           <button
             onClick={handleExportExcel}
-            className="btn-gold"
-            style={{ padding: '8px 14px', fontSize: '0.8rem', background: 'var(--accent-emerald)', color: '#fff' }}
+            className="btn-outline"
+            style={{ padding: '8px 14px', fontSize: '0.8rem' }}
             title="Download Excel Spreadsheet"
           >
             <FileSpreadsheet size={16} /> Excel Export
@@ -109,6 +123,7 @@ export const BookingRequestsTab = () => {
               <th style={{ padding: '14px 16px', color: 'var(--text-dark)', fontWeight: 700 }}>Dates (In → Out)</th>
               <th style={{ padding: '14px 16px', color: 'var(--text-dark)', fontWeight: 700 }}>Guests</th>
               <th style={{ padding: '14px 16px', color: 'var(--text-dark)', fontWeight: 700 }}>Total Tariff</th>
+              <th style={{ padding: '14px 16px', color: 'var(--text-dark)', fontWeight: 700 }}>Type & Payment</th>
               <th style={{ padding: '14px 16px', color: 'var(--text-dark)', fontWeight: 700 }}>Status</th>
               <th style={{ padding: '14px 16px', color: 'var(--text-dark)', fontWeight: 700, textAlign: 'right' }}>Actions</th>
             </tr>
@@ -136,6 +151,20 @@ export const BookingRequestsTab = () => {
                   </td>
                   <td style={{ padding: '14px 16px', fontWeight: 800, color: 'var(--accent-gold-dark)' }}>
                     ₹{b.totalPrice.toLocaleString('en-IN')}
+                  </td>
+                  <td style={{ padding: '14px 16px', fontSize: '0.8rem' }}>
+                    {b.bookingType === 'WALK_IN_OFFLINE' ? (
+                      <span style={{ background: 'rgba(13, 92, 70, 0.12)', color: 'var(--accent-emerald)', padding: '2px 8px', borderRadius: '4px', fontWeight: 700, display: 'inline-block', marginBottom: '4px' }}>
+                        🏨 Walk-In Offline
+                      </span>
+                    ) : (
+                      <span style={{ background: 'rgba(197, 160, 89, 0.12)', color: 'var(--accent-gold-dark)', padding: '2px 8px', borderRadius: '4px', fontWeight: 700, display: 'inline-block', marginBottom: '4px' }}>
+                        🌐 Online Direct
+                      </span>
+                    )}
+                    <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>
+                      {b.paymentMode || 'Pending'} • {b.paymentStatus || 'Pending'}
+                    </div>
                   </td>
                   <td style={{ padding: '14px 16px' }}>
                     <span className={`status-badge status-${b.status.toLowerCase()}`}>
@@ -191,7 +220,7 @@ export const BookingRequestsTab = () => {
               ))
             ) : (
               <tr>
-                <td colSpan="8" style={{ padding: '40px', textAlign: 'center', color: 'var(--text-muted)' }}>
+                <td colSpan="9" style={{ padding: '40px', textAlign: 'center', color: 'var(--text-muted)' }}>
                   No booking requests match your search criteria.
                 </td>
               </tr>
@@ -200,15 +229,27 @@ export const BookingRequestsTab = () => {
         </table>
       </div>
 
+      {/* Offline Walk-in Booking Modal */}
+      {showOfflineModal && (
+        <OfflineBookingModal onClose={() => setShowOfflineModal(false)} />
+      )}
+
       {/* Detail Popover Modal */}
       {selectedBooking && (
         <div className="modal-overlay" onClick={() => setSelectedBooking(null)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '500px' }}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '520px' }}>
             <h3 className="font-serif" style={{ fontSize: '1.4rem', color: 'var(--text-dark)', marginBottom: '16px', fontWeight: 800 }}>
               Guest Reservation Details (Ref: {selectedBooking.id})
             </h3>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', fontSize: '0.9rem' }}>
+              <div>
+                <span className="form-label">Booking Source</span>
+                <strong style={{ color: 'var(--accent-emerald)' }}>
+                  {selectedBooking.bookingType === 'WALK_IN_OFFLINE' ? '🏨 Reception Desk Walk-In' : '🌐 Online Website Request'}
+                </strong>
+              </div>
+
               <div>
                 <span className="form-label">Guest Full Name</span>
                 <strong style={{ color: 'var(--text-dark)', fontSize: '1.05rem' }}>{selectedBooking.customerName}</strong>
@@ -230,11 +271,15 @@ export const BookingRequestsTab = () => {
                 <span>{selectedBooking.checkIn} to {selectedBooking.checkOut} ({selectedBooking.guests} Guests)</span>
               </div>
               <div>
+                <span className="form-label">Payment Details</span>
+                <span>Mode: <strong>{selectedBooking.paymentMode || 'Pending'}</strong> • Status: <strong>{selectedBooking.paymentStatus || 'Pending'}</strong></span>
+              </div>
+              <div>
                 <span className="form-label">Total Tariff</span>
                 <strong style={{ color: 'var(--accent-gold-dark)', fontSize: '1.2rem' }}>₹{selectedBooking.totalPrice.toLocaleString('en-IN')}</strong>
               </div>
               <div>
-                <span className="form-label">Special Requests</span>
+                <span className="form-label">Notes & Requests</span>
                 <div style={{ background: 'var(--bg-primary)', padding: '10px', borderRadius: '6px', fontSize: '0.85rem' }}>
                   {selectedBooking.specialRequests || "No special requests mentioned."}
                 </div>
