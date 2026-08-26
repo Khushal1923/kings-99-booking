@@ -395,39 +395,45 @@ export const ResortProvider = ({ children }) => {
 
     if (isSupabaseConfigured && supabase) {
       const email = input.includes('@') ? input : `${input}@kings99official.com`;
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password
-      });
+      try {
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email,
+          password
+        });
 
-      if (error) {
-        return { success: false, error: error.message || "Invalid credentials." };
+        if (!error && data?.user) {
+          let role = data.user.app_metadata?.role || data.user.user_metadata?.role || (input.toLowerCase().includes('admin') ? 'ADMIN' : 'STAFF');
+
+          const { data: roleData } = await supabase
+            .from('user_roles')
+            .select('role')
+            .eq('id', data.user.id)
+            .maybeSingle();
+
+          if (roleData && roleData.role) {
+            role = roleData.role.toUpperCase();
+          }
+
+          const activeSession = {
+            role: role.toUpperCase(),
+            username: data.user.email,
+            email: data.user.email,
+            user: data.user,
+            expiresAt: data.session?.expires_at ? data.session.expires_at * 1000 : Date.now() + 3600 * 1000
+          };
+
+          setUserSession(activeSession);
+          safeSetItem(STORAGE_KEYS.SESSION, JSON.stringify(activeSession));
+          setLoginModalOpen(false);
+          return { success: true, role: role.toUpperCase() };
+        }
+
+        if (error && !error.message.includes('fetch')) {
+          return { success: false, error: error.message || "Invalid credentials." };
+        }
+      } catch (err) {
+        console.warn("Supabase login connection error, enabling local fallback:", err);
       }
-
-      let role = data.user.app_metadata?.role || data.user.user_metadata?.role || (input.toLowerCase().includes('admin') ? 'ADMIN' : 'STAFF');
-
-      const { data: roleData } = await supabase
-        .from('user_roles')
-        .select('role')
-        .eq('id', data.user.id)
-        .maybeSingle();
-
-      if (roleData && roleData.role) {
-        role = roleData.role.toUpperCase();
-      }
-
-      const activeSession = {
-        role: role.toUpperCase(),
-        username: data.user.email,
-        email: data.user.email,
-        user: data.user,
-        expiresAt: data.session?.expires_at ? data.session.expires_at * 1000 : Date.now() + 3600 * 1000
-      };
-
-      setUserSession(activeSession);
-      safeSetItem(STORAGE_KEYS.SESSION, JSON.stringify(activeSession));
-      setLoginModalOpen(false);
-      return { success: true, role: role.toUpperCase() };
     }
 
     // Local Fallback mode
