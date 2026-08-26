@@ -26,27 +26,26 @@ const MainApp = () => {
     const checkRouteAndParams = () => {
       const hash = window.location.hash.toLowerCase();
       const path = window.location.pathname.toLowerCase();
-      const search = window.location.search.toLowerCase();
+      const searchParams = new URLSearchParams(window.location.search);
+      const portalParam = searchParams.get('portal')?.toLowerCase();
 
-      // Check URL Hash, Path, or GitHub Pages SPA query param redirect
+      // Check URL Hash, Path, or exact portal query parameter (?portal=admin / ?portal=staff)
       if (
         hash === '#admin' ||
         path.endsWith('/admin') ||
-        search.includes('/admin') ||
-        search.includes('admin')
+        portalParam === 'admin'
       ) {
         openLoginModal('ADMIN');
       } else if (
         hash === '#staff' ||
         path.endsWith('/staff') ||
-        search.includes('/staff') ||
-        search.includes('staff')
+        portalParam === 'staff'
       ) {
         openLoginModal('STAFF');
       } else if (
         hash === '#login' ||
         path.endsWith('/login') ||
-        search.includes('/login')
+        portalParam === 'login'
       ) {
         openLoginModal('STAFF');
       }

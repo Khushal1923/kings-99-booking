@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useResort } from '../context/ResortContext';
 import { Compass, Menu, X, Calendar, Phone, Sparkles, LogOut } from 'lucide-react';
 
@@ -6,7 +6,8 @@ export const Navbar = ({ onOpenBookingModal }) => {
   const { cms, userSession, logout } = useResort();
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [logoClickCount, setLogoClickCount] = useState(0);
+  const logoClickRef = useRef(0);
+  const timerRef = useRef(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -18,16 +19,18 @@ export const Navbar = ({ onOpenBookingModal }) => {
 
   // Secret 3x Logo Tap Handler for Staff/Admin Access
   const handleLogoClick = (e) => {
-    setLogoClickCount((prev) => {
-      const next = prev + 1;
-      if (next >= 3) {
-        e.preventDefault();
-        window.dispatchEvent(new CustomEvent('open-portal-login', { detail: { role: 'STAFF' } }));
-        return 0;
-      }
-      setTimeout(() => setLogoClickCount(0), 1200);
-      return next;
-    });
+    logoClickRef.current += 1;
+    if (logoClickRef.current >= 3) {
+      e.preventDefault();
+      window.dispatchEvent(new CustomEvent('open-portal-login', { detail: { role: 'STAFF' } }));
+      logoClickRef.current = 0;
+      if (timerRef.current) clearTimeout(timerRef.current);
+      return;
+    }
+    if (timerRef.current) clearTimeout(timerRef.current);
+    timerRef.current = setTimeout(() => {
+      logoClickRef.current = 0;
+    }, 1200);
   };
 
   return (

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useResort } from '../context/ResortContext';
 import { BookingRequestsTab } from './BookingRequestsTab';
 import { DiningBookingsTab } from './DiningBookingsTab';
@@ -23,14 +23,49 @@ import {
   LogOut,
   Clock,
   KeyRound,
-  UtensilsCrossed
+  UtensilsCrossed,
+  AlertTriangle,
+  RefreshCw
 } from 'lucide-react';
 
 export const AdminDashboard = () => {
-  const { logout, userSession, bookings, diningBookings, villas } = useResort();
-  const [activeTab, setActiveTab] = useState('REQUESTS');
-
+  const { logout, userSession, bookings, diningBookings, villas, isUsingDefaultCredentials, extendSession } = useResort();
   const role = userSession ? userSession.role : 'STAFF';
+
+  const usingDefaultCreds = isUsingDefaultCredentials(role);
+  const [activeTab, setActiveTab] = useState(usingDefaultCreds ? 'SECURITY' : 'REQUESTS');
+
+  const [timeLeft, setTimeLeft] = useState(0);
+
+  // Force SECURITY tab if using default credentials
+  useEffect(() => {
+    if (usingDefaultCreds) {
+      setActiveTab('SECURITY');
+    }
+  }, [usingDefaultCreds]);
+
+  // Session timer calculation & countdown
+  useEffect(() => {
+    if (!userSession || !userSession.expiresAt) return;
+
+    const updateTimer = () => {
+      const remaining = Math.max(0, Math.floor((userSession.expiresAt - Date.now()) / 1000));
+      setTimeLeft(remaining);
+      if (remaining === 0) {
+        logout();
+      }
+    };
+
+    updateTimer();
+    const interval = setInterval(updateTimer, 1000);
+    return () => clearInterval(interval);
+  }, [userSession, logout]);
+
+  const formatTime = (secs) => {
+    const m = Math.floor(secs / 60);
+    const s = secs % 60;
+    return `${m}:${s < 10 ? '0' : ''}${s}`;
+  };
 
   // Stats calculation
   const pendingVillaCount = bookings.filter(b => b.status === 'PENDING').length;
@@ -50,7 +85,7 @@ export const AdminDashboard = () => {
     { id: 'RESTAURANT', label: 'Restaurant & Photos', icon: <Utensils size={18} />, roles: ['ADMIN'] },
     { id: 'AVAILABILITY', label: 'Date Blocker', icon: <Lock size={18} />, roles: ['ADMIN'] },
     { id: 'CMS', label: 'Website CMS', icon: <Globe size={18} />, roles: ['ADMIN'] },
-    { id: 'SECURITY', label: 'Password Security', icon: <KeyRound size={18} />, roles: ['ADMIN'] },
+    { id: 'SECURITY', label: 'Password Security', icon: <KeyRound size={18} />, roles: ['STAFF', 'ADMIN'] },
     { id: 'BACKUP', label: 'Data Backup / Restore', icon: <Database size={18} />, roles: ['ADMIN'] }
   ];
 
@@ -58,6 +93,64 @@ export const AdminDashboard = () => {
 
   return (
     <div style={{ minHeight: '100vh', background: 'var(--bg-primary)', color: 'var(--text-main)', paddingBottom: '60px' }}>
+      {/* Forced Default Password Warning Banner */}
+      {usingDefaultCreds && (
+        <div style={{
+          background: '#dc2626',
+          color: '#ffffff',
+          padding: '12px 24px',
+          textAlign: 'center',
+          fontWeight: 800,
+          fontSize: '0.95rem',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '10px',
+          boxShadow: '0 4px 12px rgba(220, 38, 38, 0.3)'
+        }}>
+          <AlertTriangle size={20} />
+          <span>You're using the default password. Set a new one to continue. Navigation to other tabs is disabled until updated.</span>
+        </div>
+      )}
+
+      {/* Session Expiring Warning Prompt (at <= 5 mins / 300 secs) */}
+      {!usingDefaultCreds && timeLeft > 0 && timeLeft <= 300 && (
+        <div style={{
+          background: '#d97706',
+          color: '#ffffff',
+          padding: '10px 24px',
+          textAlign: 'center',
+          fontWeight: 700,
+          fontSize: '0.9rem',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '12px',
+          boxShadow: '0 4px 12px rgba(217, 119, 6, 0.3)'
+        }}>
+          <Clock size={18} />
+          <span>Still there? Your session will expire in {formatTime(timeLeft)}.</span>
+          <button
+            onClick={extendSession}
+            style={{
+              background: '#ffffff',
+              color: '#d97706',
+              border: 'none',
+              borderRadius: '6px',
+              padding: '4px 12px',
+              fontSize: '0.8rem',
+              fontWeight: 800,
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '4px'
+            }}
+          >
+            <RefreshCw size={14} /> Extend Session
+          </button>
+        </div>
+      )}
+
       {/* Top Header Bar */}
       <header style={{
         background: '#ffffff',
@@ -78,8 +171,19 @@ export const AdminDashboard = () => {
             </h2>
           </div>
 
-          {/* Quick Metrics Bar */}
+          {/* Quick Metrics Bar & Session Countdown */}
           <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', alignItems: 'center' }}>
+            {/* Session Timer Badge */}
+            <div style={statBoxStyle} title="Session Expires In">
+              <Clock size={16} color="var(--accent-gold-dark)" />
+              <div>
+                <span style={statLabelStyle}>Session Timer</span>
+                <strong style={{ ...statValStyle, color: timeLeft <= 300 ? '#dc2626' : 'var(--text-dark)' }}>
+                  {formatTime(timeLeft)}
+                </strong>
+              </div>
+            </div>
+
             {role === 'ADMIN' && (
               <div style={statBoxStyle}>
                 <span style={{ color: 'var(--accent-gold-dark)', fontWeight: 800, fontSize: '1.1rem' }}>₹</span>
@@ -135,13 +239,16 @@ export const AdminDashboard = () => {
           {tabs.map(t => (
             <button
               key={t.id}
-              onClick={() => setActiveTab(t.id)}
+              disabled={usingDefaultCreds && t.id !== 'SECURITY'}
+              onClick={() => !usingDefaultCreds && setActiveTab(t.id)}
               className={activeTab === t.id ? 'btn-gold' : 'btn-outline'}
               style={{
                 padding: '10px 18px',
                 fontSize: '0.88rem',
                 whiteSpace: 'nowrap',
-                position: 'relative'
+                position: 'relative',
+                opacity: usingDefaultCreds && t.id !== 'SECURITY' ? 0.4 : 1,
+                cursor: usingDefaultCreds && t.id !== 'SECURITY' ? 'not-allowed' : 'pointer'
               }}
             >
               {t.icon}
@@ -165,16 +272,16 @@ export const AdminDashboard = () => {
 
         {/* Tab View Render */}
         <div className="animate-fade-in">
-          {activeTab === 'REQUESTS' && <BookingRequestsTab />}
-          {activeTab === 'TABLES' && <DiningBookingsTab />}
-          {activeTab === 'CALENDAR' && <BookingCalendarTab />}
-          {activeTab === 'GUESTS' && <GuestDirectoryTab />}
-          {role === 'ADMIN' && activeTab === 'VILLAS' && <VillaManagementTab />}
-          {role === 'ADMIN' && activeTab === 'RESTAURANT' && <RestaurantManagementTab />}
-          {role === 'ADMIN' && activeTab === 'AVAILABILITY' && <AvailabilityManagerTab />}
-          {role === 'ADMIN' && activeTab === 'CMS' && <CmsEditorTab />}
-          {role === 'ADMIN' && activeTab === 'SECURITY' && <CredentialsTab />}
-          {role === 'ADMIN' && activeTab === 'BACKUP' && <BackupRestoreTab />}
+          {(activeTab === 'SECURITY' || usingDefaultCreds) && <CredentialsTab />}
+          {!usingDefaultCreds && activeTab === 'REQUESTS' && <BookingRequestsTab />}
+          {!usingDefaultCreds && activeTab === 'TABLES' && <DiningBookingsTab />}
+          {!usingDefaultCreds && activeTab === 'CALENDAR' && <BookingCalendarTab />}
+          {!usingDefaultCreds && activeTab === 'GUESTS' && <GuestDirectoryTab />}
+          {!usingDefaultCreds && role === 'ADMIN' && activeTab === 'VILLAS' && <VillaManagementTab />}
+          {!usingDefaultCreds && role === 'ADMIN' && activeTab === 'RESTAURANT' && <RestaurantManagementTab />}
+          {!usingDefaultCreds && role === 'ADMIN' && activeTab === 'AVAILABILITY' && <AvailabilityManagerTab />}
+          {!usingDefaultCreds && role === 'ADMIN' && activeTab === 'CMS' && <CmsEditorTab />}
+          {!usingDefaultCreds && role === 'ADMIN' && activeTab === 'BACKUP' && <BackupRestoreTab />}
         </div>
       </div>
     </div>

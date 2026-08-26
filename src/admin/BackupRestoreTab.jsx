@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { useResort } from '../context/ResortContext';
 import { exportToCSV, generatePDFReport } from '../utils/exportUtils';
-import { Download, Upload, RotateCcw, FileSpreadsheet, FileText, FileJson } from 'lucide-react';
+import { Download, Upload, RotateCcw, FileSpreadsheet, FileText, FileJson, AlertTriangle, X } from 'lucide-react';
 
 export const BackupRestoreTab = () => {
   const { cms, bookings, villas, exportDataJSON, importDataJSON, resetToDefaults } = useResort();
 
   const [importStatus, setImportStatus] = useState('');
+  const [showWipeModal, setShowWipeModal] = useState(false);
+  const [wipeInputText, setWipeInputText] = useState('');
 
   const handleFileImport = (e) => {
     const file = e.target.files[0];
@@ -46,6 +48,14 @@ export const BackupRestoreTab = () => {
     generatePDFReport(cms, bookings, villas);
   };
 
+  const handleExecuteWipe = () => {
+    if (wipeInputText !== 'DELETE') return;
+    resetToDefaults();
+    setShowWipeModal(false);
+    setWipeInputText('');
+    setImportStatus("✅ All system data reset to initial defaults.");
+  };
+
   return (
     <div>
       <div style={{ marginBottom: '24px' }}>
@@ -53,7 +63,7 @@ export const BackupRestoreTab = () => {
           💾 Data Export, Backup & PDF Reports
         </h3>
         <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-          Download customer reservations in Excel (.csv) format, print PDF executive reports, or export JSON system backups.
+          Download customer reservations in Excel (.csv) format, print PDF executive reports, or export JSON system backups. Note: Portal credentials are excluded from backups for security.
         </p>
       </div>
 
@@ -149,7 +159,7 @@ export const BackupRestoreTab = () => {
             System JSON Backup & Restore
           </h4>
           <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '20px', lineHeight: 1.5 }}>
-            Download complete system backup (villas, photos, CMS text, passwords) or restore from file.
+            Download system backup (villas, photos, CMS text, bookings). Note: Credentials are excluded from backups for security.
           </p>
 
           <div style={{ display: 'flex', gap: '8px' }}>
@@ -187,12 +197,7 @@ export const BackupRestoreTab = () => {
           </p>
 
           <button
-            onClick={() => {
-              if (confirm("Are you sure you want to reset all data to initial defaults?")) {
-                resetToDefaults();
-                alert("Data reset to defaults!");
-              }
-            }}
+            onClick={() => { setWipeInputText(''); setShowWipeModal(true); }}
             className="btn-danger"
             style={{ width: '100%', padding: '12px' }}
           >
@@ -200,6 +205,61 @@ export const BackupRestoreTab = () => {
           </button>
         </div>
       </div>
+
+      {/* Strong Confirmation Wipe Modal */}
+      {showWipeModal && (
+        <div className="modal-overlay" onClick={() => setShowWipeModal(false)} style={{ zIndex: 1100 }}>
+          <div className="modal-content glass-card" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '480px', padding: '28px', borderRadius: '20px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#dc2626' }}>
+                <AlertTriangle size={24} />
+                <h3 className="font-serif" style={{ fontSize: '1.3rem', fontWeight: 800, margin: 0 }}>
+                  Confirm Full Data Reset
+                </h3>
+              </div>
+              <button onClick={() => setShowWipeModal(false)} className="btn-outline" style={{ padding: '4px', borderRadius: '50%' }}>
+                <X size={18} />
+              </button>
+            </div>
+
+            <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', lineHeight: 1.6, marginBottom: '16px' }}>
+              This action will <strong>permanently delete every booking, custom villa, menu item, date block, and photo</strong> from your browser storage with <strong>NO UNDO</strong>.
+            </p>
+
+            <div style={{ marginBottom: '20px' }}>
+              <label className="form-label" style={{ fontWeight: 700, color: 'var(--text-dark)' }}>
+                Type <strong style={{ color: '#dc2626' }}>DELETE</strong> to enable confirmation:
+              </label>
+              <input
+                type="text"
+                className="form-input"
+                placeholder="Type DELETE"
+                value={wipeInputText}
+                onChange={(e) => setWipeInputText(e.target.value)}
+                style={{ borderColor: wipeInputText === 'DELETE' ? '#dc2626' : undefined }}
+              />
+            </div>
+
+            <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
+              <button onClick={() => setShowWipeModal(false)} className="btn-outline">
+                Cancel
+              </button>
+              <button
+                disabled={wipeInputText !== 'DELETE'}
+                onClick={handleExecuteWipe}
+                className="btn-danger"
+                style={{
+                  padding: '10px 18px',
+                  opacity: wipeInputText === 'DELETE' ? 1 : 0.4,
+                  cursor: wipeInputText === 'DELETE' ? 'pointer' : 'not-allowed'
+                }}
+              >
+                Permanently Delete All Data
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -103,38 +103,7 @@ export const initialVillas = [
   }
 ];
 
-export const initialBookings = [
-  {
-    id: "K99-2026-101",
-    villaId: "villa-k1",
-    villaName: "Kings 99 Royal Private Pool Villa",
-    customerName: "Rahul Sharma",
-    phone: "+91 98230 12345",
-    email: "rahul.sharma@example.com",
-    checkIn: "2026-08-25",
-    checkOut: "2026-08-27",
-    guests: 4,
-    totalPrice: 9000,
-    status: "CONFIRMED",
-    specialRequests: "Family weekend stay. Need poolside lunch arrangement.",
-    createdAt: "2026-08-18T10:30:00Z"
-  },
-  {
-    id: "K99-2026-102",
-    villaId: "villa-k2",
-    villaName: "Kings 99 Executive Family Suite",
-    customerName: "Ananya Deshmukh",
-    phone: "+91 99701 67890",
-    email: "ananya.d@gmail.com",
-    checkIn: "2026-09-02",
-    checkOut: "2026-09-04",
-    guests: 6,
-    totalPrice: 13000,
-    status: "PENDING",
-    specialRequests: "Birthday celebration in evening. Need cake and lawn decoration.",
-    createdAt: "2026-08-19T14:15:00Z"
-  }
-];
+export const initialBookings = [];
 
 export const initialBlockedDates = [
   {

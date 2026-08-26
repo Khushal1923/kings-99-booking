@@ -1,30 +1,38 @@
 import React, { useState } from 'react';
 import { useResort } from '../context/ResortContext';
-import { X, Lock, User, ShieldCheck, Eye, EyeOff, KeyRound, Sparkles } from 'lucide-react';
+import { X, Lock, User, ShieldCheck, Eye, EyeOff, KeyRound } from 'lucide-react';
 
 export const LoginModal = ({ onClose }) => {
   const { login, targetRole } = useResort();
 
   const [role, setRole] = useState(targetRole || 'STAFF'); // 'STAFF' | 'ADMIN'
-  const [username, setUsername] = useState(role === 'STAFF' ? 'staff' : 'admin');
-  const [password, setPassword] = useState(role === 'STAFF' ? 'staff123' : 'admin123');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleRoleSwitch = (newRole) => {
     setRole(newRole);
-    setUsername(newRole === 'STAFF' ? 'staff' : 'admin');
-    setPassword(newRole === 'STAFF' ? 'staff123' : 'admin123');
+    setUsername('');
+    setPassword('');
     setError('');
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setLoading(true);
 
-    const res = login(username, password);
-    if (!res.success) {
-      setError(res.error);
+    try {
+      const res = await login(username, password);
+      if (!res.success) {
+        setError(res.error);
+      }
+    } catch (err) {
+      setError(err.message || "An authentication error occurred.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -185,39 +193,20 @@ export const LoginModal = ({ onClose }) => {
 
           <button
             type="submit"
+            disabled={loading}
             className="btn-gold"
             style={{
               width: '100%',
               justifyContent: 'center',
               padding: '12px',
               background: role === 'STAFF' ? '#10b981' : undefined,
-              color: '#fff'
+              color: '#fff',
+              opacity: loading ? 0.7 : 1
             }}
           >
-            <KeyRound size={18} /> Authenticate & Access Portal
+            <KeyRound size={18} /> {loading ? 'Authenticating...' : 'Authenticate & Access Portal'}
           </button>
         </form>
-
-        {/* Demo Credentials Hint */}
-        <div style={{
-          marginTop: '20px',
-          padding: '12px',
-          background: 'var(--bg-primary)',
-          borderRadius: '8px',
-          border: '1px dashed var(--border-subtle)',
-          fontSize: '0.78rem',
-          color: 'var(--text-muted)',
-          textAlign: 'center'
-        }}>
-          <strong>💡 Default Credentials for Testing:</strong>
-          <div style={{ marginTop: '4px' }}>
-            {role === 'STAFF' ? (
-              <span>Staff Login: Username <strong style={{ color: '#10b981' }}>staff</strong> | Password <strong style={{ color: '#10b981' }}>staff123</strong></span>
-            ) : (
-              <span>Admin Login: Username <strong style={{ color: 'var(--accent-gold)' }}>admin</strong> | Password <strong style={{ color: 'var(--accent-gold)' }}>admin123</strong></span>
-            )}
-          </div>
-        </div>
       </div>
     </div>
   );

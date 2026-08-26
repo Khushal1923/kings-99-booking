@@ -1,158 +1,190 @@
 import React, { useState } from 'react';
 import { useResort } from '../context/ResortContext';
-import { KeyRound, ShieldCheck, Check, User, Lock, AlertCircle } from 'lucide-react';
+import { KeyRound, ShieldCheck, Check, Lock, Sparkles } from 'lucide-react';
+import { supabase, isSupabaseConfigured } from '../lib/supabaseClient';
 
 export const CredentialsTab = () => {
-  const { credentials, updateCredentials } = useResort();
+  const { userSession, updateCredentials } = useResort();
 
-  const [staffUsername, setStaffUsername] = useState(credentials.staff.username);
-  const [staffPassword, setStaffPassword] = useState(credentials.staff.password);
-  const [staffStatus, setStaffStatus] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [statusMessage, setStatusMessage] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const [adminUsername, setAdminUsername] = useState(credentials.admin.username);
-  const [adminPassword, setAdminPassword] = useState(credentials.admin.password);
-  const [adminStatus, setAdminStatus] = useState('');
-
-  const handleUpdateStaff = (e) => {
+  const handlePasswordUpdate = async (e) => {
     e.preventDefault();
-    if (!staffUsername.trim() || !staffPassword.trim()) return;
-    updateCredentials('STAFF', staffUsername, staffPassword);
-    setStaffStatus("✅ Staff login credentials updated!");
-    setTimeout(() => setStaffStatus(''), 3000);
+    setStatusMessage('');
+
+    if (newPassword.length < 6) {
+      setStatusMessage("❌ New password must be at least 6 characters long.");
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      setStatusMessage("❌ New passwords do not match.");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      if (isSupabaseConfigured && supabase) {
+        const { error } = await supabase.auth.updateUser({
+          password: newPassword
+        });
+        if (error) throw error;
+      } else {
+        await updateCredentials(userSession?.role || 'STAFF', userSession?.username || 'user', newPassword);
+      }
+
+      setNewPassword('');
+      setConfirmPassword('');
+      setStatusMessage("✅ Account password successfully updated!");
+    } catch (err) {
+      console.error("Password update error:", err);
+      setStatusMessage(`❌ Error: ${err.message || "Could not update password."}`);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleUpdateAdmin = (e) => {
-    e.preventDefault();
-    if (!adminUsername.trim() || !adminPassword.trim()) return;
-    updateCredentials('ADMIN', adminUsername, adminPassword);
-    setAdminStatus("✅ Admin/Owner login credentials updated!");
-    setTimeout(() => setAdminStatus(''), 3000);
-  };
+  const roleLabel = userSession?.role === 'ADMIN' ? '👑 Owner / Admin Account' : '🔑 Staff Concierge Account';
 
   return (
     <div>
       <div style={{ marginBottom: '24px' }}>
-        <h3 className="font-serif" style={{ fontSize: '1.5rem', color: '#fff' }}>
-          🔐 Password & Portal Security Management
+        <h3 className="font-serif" style={{ fontSize: '1.5rem', color: 'var(--text-dark)', fontWeight: 800 }}>
+          🔐 Supabase Auth & Password Security
         </h3>
         <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-          Update login usernames and passwords for both Staff and Admin/Owner portals.
+          Manage your account credentials. Authenticated via Supabase Postgres Auth with Row Level Security (RLS).
         </p>
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '32px' }}>
-        {/* Staff Credentials Card */}
+        {/* Active User Account Info */}
         <div className="glass-card" style={{ padding: '24px', borderRadius: '16px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
             <div style={{
-              width: '40px',
-              height: '40px',
+              width: '44px',
+              height: '44px',
               borderRadius: '50%',
-              background: 'rgba(16, 185, 129, 0.15)',
-              color: '#10b981',
+              background: userSession?.role === 'ADMIN' ? 'rgba(212,175,55,0.15)' : 'rgba(16, 185, 129, 0.15)',
+              color: userSession?.role === 'ADMIN' ? 'var(--accent-gold-dark)' : '#10b981',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center'
             }}>
-              <KeyRound size={20} />
+              {userSession?.role === 'ADMIN' ? <ShieldCheck size={22} /> : <KeyRound size={22} />}
             </div>
             <div>
-              <h4 className="font-serif" style={{ fontSize: '1.2rem', color: '#fff' }}>
-                Staff Concierge Portal Credentials
+              <h4 className="font-serif" style={{ fontSize: '1.2rem', color: 'var(--text-dark)', fontWeight: 700 }}>
+                {roleLabel}
               </h4>
-              <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>For receptionists & front desk team</span>
+              <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+                {userSession?.email || userSession?.username || 'Authenticated User'}
+              </span>
             </div>
           </div>
 
-          {staffStatus && (
-            <div style={{ background: 'rgba(16, 185, 129, 0.15)', border: '1px solid #10b981', color: '#10b981', padding: '10px', borderRadius: '8px', marginBottom: '16px', fontSize: '0.85rem' }}>
-              {staffStatus}
+          <div style={{
+            background: 'var(--bg-primary)',
+            padding: '16px',
+            borderRadius: '10px',
+            border: '1px solid var(--border-subtle)',
+            fontSize: '0.85rem',
+            marginBottom: '20px'
+          }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
+              <span style={{ color: 'var(--text-muted)' }}>Access Role:</span>
+              <strong style={{ color: userSession?.role === 'ADMIN' ? 'var(--accent-gold-dark)' : '#10b981' }}>
+                {userSession?.role || 'STAFF'}
+              </strong>
             </div>
-          )}
-
-          <form onSubmit={handleUpdateStaff}>
-            <div style={{ marginBottom: '16px' }}>
-              <label className="form-label">Staff Username</label>
-              <input
-                type="text"
-                className="form-input"
-                value={staffUsername}
-                onChange={(e) => setStaffUsername(e.target.value)}
-                required
-              />
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
+              <span style={{ color: 'var(--text-muted)' }}>Authentication Provider:</span>
+              <strong>{isSupabaseConfigured ? 'Supabase Auth (Postgres RLS)' : 'Local Storage Mode'}</strong>
             </div>
-
-            <div style={{ marginBottom: '20px' }}>
-              <label className="form-label">Staff Password</label>
-              <input
-                type="text"
-                className="form-input"
-                value={staffPassword}
-                onChange={(e) => setStaffPassword(e.target.value)}
-                required
-              />
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <span style={{ color: 'var(--text-muted)' }}>Active Username/Email:</span>
+              <strong style={{ wordBreak: 'break-all' }}>{userSession?.email || userSession?.username}</strong>
             </div>
+          </div>
 
-            <button type="submit" className="btn-gold" style={{ background: '#10b981', color: '#fff', width: '100%', justifyContent: 'center' }}>
-              <Check size={18} /> Save Staff Credentials
-            </button>
-          </form>
+          <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', lineHeight: 1.5 }}>
+            <Sparkles size={14} style={{ display: 'inline', marginRight: '6px', color: 'var(--accent-gold-dark)' }} />
+            Supabase Auth handles secure salted password hashing, JWT token refresh, and Row Level Security on all database queries.
+          </div>
         </div>
 
-        {/* Admin Credentials Card */}
+        {/* Change Password Form */}
         <div className="glass-card" style={{ padding: '24px', borderRadius: '16px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
             <div style={{
               width: '40px',
               height: '40px',
               borderRadius: '50%',
-              background: 'rgba(212,175,55,0.15)',
-              color: 'var(--accent-gold)',
+              background: 'rgba(59, 130, 246, 0.12)',
+              color: '#2563eb',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center'
             }}>
-              <ShieldCheck size={20} />
+              <Lock size={20} />
             </div>
             <div>
-              <h4 className="font-serif" style={{ fontSize: '1.2rem', color: '#fff' }}>
-                Owner / Admin Portal Credentials
+              <h4 className="font-serif" style={{ fontSize: '1.2rem', color: 'var(--text-dark)', fontWeight: 700 }}>
+                Update Account Password
               </h4>
-              <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Full administrative access</span>
+              <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Set a new secure password for your portal login</span>
             </div>
           </div>
 
-          {adminStatus && (
-            <div style={{ background: 'rgba(16, 185, 129, 0.15)', border: '1px solid #10b981', color: '#10b981', padding: '10px', borderRadius: '8px', marginBottom: '16px', fontSize: '0.85rem' }}>
-              {adminStatus}
+          {statusMessage && (
+            <div style={{
+              background: statusMessage.includes('✅') ? 'rgba(16, 185, 129, 0.15)' : 'rgba(239, 68, 68, 0.15)',
+              border: `1px solid ${statusMessage.includes('✅') ? '#10b981' : '#ef4444'}`,
+              color: statusMessage.includes('✅') ? '#10b981' : '#ef4444',
+              padding: '10px 14px',
+              borderRadius: '8px',
+              marginBottom: '16px',
+              fontSize: '0.85rem'
+            }}>
+              {statusMessage}
             </div>
           )}
 
-          <form onSubmit={handleUpdateAdmin}>
+          <form onSubmit={handlePasswordUpdate}>
             <div style={{ marginBottom: '16px' }}>
-              <label className="form-label">Admin Username</label>
+              <label className="form-label">New Password</label>
               <input
-                type="text"
+                type="password"
                 className="form-input"
-                value={adminUsername}
-                onChange={(e) => setAdminUsername(e.target.value)}
+                placeholder="Minimum 6 characters"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
                 required
               />
             </div>
 
             <div style={{ marginBottom: '20px' }}>
-              <label className="form-label">Admin Password</label>
+              <label className="form-label">Confirm New Password</label>
               <input
-                type="text"
+                type="password"
                 className="form-input"
-                value={adminPassword}
-                onChange={(e) => setAdminPassword(e.target.value)}
+                placeholder="Re-type new password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
                 required
               />
             </div>
 
-            <button type="submit" className="btn-gold" style={{ width: '100%', justifyContent: 'center' }}>
-              <Check size={18} /> Save Admin Credentials
+            <button
+              type="submit"
+              disabled={loading}
+              className="btn-gold"
+              style={{ width: '100%', justifyContent: 'center', opacity: loading ? 0.7 : 1 }}
+            >
+              <Check size={18} /> {loading ? 'Updating Password...' : 'Save New Password'}
             </button>
           </form>
         </div>
