@@ -222,7 +222,21 @@ export const ResortProvider = ({ children }) => {
 
   const [userSession, setUserSession] = useState(() => {
     const saved = localStorage.getItem(STORAGE_KEYS.SESSION);
-    return saved ? JSON.parse(saved) : null;
+    if (!saved) return null;
+    try {
+      const parsed = JSON.parse(saved);
+      if (parsed) {
+        if (typeof parsed.email === 'string') {
+          parsed.email = parsed.email.replace(/(@kings99official\.com)+$/i, '@kings99official.com');
+        }
+        if (typeof parsed.username === 'string') {
+          parsed.username = parsed.username.replace(/(@kings99official\.com)+$/i, '@kings99official.com');
+        }
+      }
+      return parsed;
+    } catch {
+      return null;
+    }
   });
 
   const [loginModalOpen, setLoginModalOpen] = useState(false);
@@ -418,10 +432,11 @@ export const ResortProvider = ({ children }) => {
 
     // Local Fallback mode
     const roleUpper = input.toLowerCase().includes('admin') ? 'ADMIN' : 'STAFF';
+    const userEmail = input.includes('@') ? input : `${input}@kings99official.com`;
     const activeSession = {
       role: roleUpper,
       username: input,
-      email: `${input}@kings99official.com`,
+      email: userEmail,
       expiresAt: Date.now() + 3600 * 1000
     };
     setUserSession(activeSession);
