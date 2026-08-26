@@ -418,8 +418,7 @@ export const ResortProvider = ({ children }) => {
             role: role.toUpperCase(),
             username: data.user.email,
             email: data.user.email,
-            user: data.user,
-            expiresAt: data.session?.expires_at ? data.session.expires_at * 1000 : Date.now() + 3600 * 1000
+            user: data.user
           };
 
           setUserSession(activeSession);
@@ -442,8 +441,7 @@ export const ResortProvider = ({ children }) => {
     const activeSession = {
       role: roleUpper,
       username: input,
-      email: userEmail,
-      expiresAt: Date.now() + 3600 * 1000
+      email: userEmail
     };
     setUserSession(activeSession);
     safeSetItem(STORAGE_KEYS.SESSION, JSON.stringify(activeSession));

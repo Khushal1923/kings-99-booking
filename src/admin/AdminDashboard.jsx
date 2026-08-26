@@ -24,18 +24,15 @@ import {
   Clock,
   KeyRound,
   UtensilsCrossed,
-  AlertTriangle,
-  RefreshCw
+  AlertTriangle
 } from 'lucide-react';
 
 export const AdminDashboard = () => {
-  const { logout, userSession, bookings, diningBookings, villas, isUsingDefaultCredentials, extendSession } = useResort();
+  const { logout, userSession, bookings, diningBookings, villas, isUsingDefaultCredentials } = useResort();
   const role = userSession ? userSession.role : 'STAFF';
 
   const usingDefaultCreds = isUsingDefaultCredentials(role);
   const [activeTab, setActiveTab] = useState(usingDefaultCreds ? 'SECURITY' : 'REQUESTS');
-
-  const [timeLeft, setTimeLeft] = useState(0);
 
   // Force SECURITY tab if using default credentials
   useEffect(() => {
@@ -43,29 +40,6 @@ export const AdminDashboard = () => {
       setActiveTab('SECURITY');
     }
   }, [usingDefaultCreds]);
-
-  // Session timer calculation & countdown
-  useEffect(() => {
-    if (!userSession || !userSession.expiresAt) return;
-
-    const updateTimer = () => {
-      const remaining = Math.max(0, Math.floor((userSession.expiresAt - Date.now()) / 1000));
-      setTimeLeft(remaining);
-      if (remaining === 0) {
-        logout();
-      }
-    };
-
-    updateTimer();
-    const interval = setInterval(updateTimer, 1000);
-    return () => clearInterval(interval);
-  }, [userSession, logout]);
-
-  const formatTime = (secs) => {
-    const m = Math.floor(secs / 60);
-    const s = secs % 60;
-    return `${m}:${s < 10 ? '0' : ''}${s}`;
-  };
 
   // Stats calculation
   const pendingVillaCount = bookings.filter(b => b.status === 'PENDING').length;
@@ -113,44 +87,6 @@ export const AdminDashboard = () => {
         </div>
       )}
 
-      {/* Session Expiring Warning Prompt (at <= 5 mins / 300 secs) */}
-      {!usingDefaultCreds && timeLeft > 0 && timeLeft <= 300 && (
-        <div style={{
-          background: '#d97706',
-          color: '#ffffff',
-          padding: '10px 24px',
-          textAlign: 'center',
-          fontWeight: 700,
-          fontSize: '0.9rem',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          gap: '12px',
-          boxShadow: '0 4px 12px rgba(217, 119, 6, 0.3)'
-        }}>
-          <Clock size={18} />
-          <span>Still there? Your session will expire in {formatTime(timeLeft)}.</span>
-          <button
-            onClick={extendSession}
-            style={{
-              background: '#ffffff',
-              color: '#d97706',
-              border: 'none',
-              borderRadius: '6px',
-              padding: '4px 12px',
-              fontSize: '0.8rem',
-              fontWeight: 800,
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '4px'
-            }}
-          >
-            <RefreshCw size={14} /> Extend Session
-          </button>
-        </div>
-      )}
-
       {/* Top Header Bar */}
       <header style={{
         background: '#ffffff',
@@ -171,19 +107,8 @@ export const AdminDashboard = () => {
             </h2>
           </div>
 
-          {/* Quick Metrics Bar & Session Countdown */}
+          {/* Quick Metrics Bar */}
           <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', alignItems: 'center' }}>
-            {/* Session Timer Badge */}
-            <div style={statBoxStyle} title="Session Expires In">
-              <Clock size={16} color="var(--accent-gold-dark)" />
-              <div>
-                <span style={statLabelStyle}>Session Timer</span>
-                <strong style={{ ...statValStyle, color: timeLeft <= 300 ? '#dc2626' : 'var(--text-dark)' }}>
-                  {formatTime(timeLeft)}
-                </strong>
-              </div>
-            </div>
-
             {role === 'ADMIN' && (
               <div style={statBoxStyle}>
                 <span style={{ color: 'var(--accent-gold-dark)', fontWeight: 800, fontSize: '1.1rem' }}>₹</span>
