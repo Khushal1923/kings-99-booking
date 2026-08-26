@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useResort } from '../context/ResortContext';
-import { Calendar as CalendarIcon, ChevronLeft, ChevronRight, Info } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 export const BookingCalendarTab = () => {
   const { bookings, villas, blockedDates } = useResort();

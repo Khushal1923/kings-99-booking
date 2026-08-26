@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useResort } from '../context/ResortContext';
-import { X, Calendar, User, Phone, Mail, CheckCircle2, AlertCircle, Sparkles, MessageSquare } from 'lucide-react';
+import { X, User, CheckCircle2, AlertCircle, Sparkles, MessageSquare } from 'lucide-react';
 
 export const BookingModal = ({ selectedVilla, onClose }) => {
   const { villas, checkAvailability, addBooking, cms } = useResort();

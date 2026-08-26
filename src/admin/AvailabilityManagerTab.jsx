@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useResort } from '../context/ResortContext';
-import { Calendar, Lock, Unlock, Plus, Trash2 } from 'lucide-react';
+import { Lock, Unlock } from 'lucide-react';
 
 export const AvailabilityManagerTab = () => {
   const { villas, blockedDates, addBlockedDate, removeBlockedDate } = useResort();
