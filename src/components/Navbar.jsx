@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useResort } from '../context/ResortContext';
-import { Compass, Menu, X, UtensilsCrossed, Phone, Sparkles, LogOut } from 'lucide-react';
+import { Compass, Menu, X, UtensilsCrossed, Phone, LogOut } from 'lucide-react';
 
 export const Navbar = ({ onOpenBookingModal }) => {
   const { cms, userSession, logout } = useResort();
@@ -44,26 +44,6 @@ export const Navbar = ({ onOpenBookingModal }) => {
 
   return (
     <>
-      {/* Announcement Bar */}
-      {cms.announcementText && (
-        <div style={{
-          background: 'linear-gradient(90deg, #aa8620 0%, #d4af37 50%, #aa8620 100%)',
-          color: '#0b1310',
-          padding: '6px 14px',
-          textAlign: 'center',
-          fontSize: '0.78rem',
-          fontWeight: 700,
-          letterSpacing: '0.5px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          gap: '6px'
-        }}>
-          <Sparkles size={14} />
-          <span>{cms.announcementText}</span>
-        </div>
-      )}
-
       {/* Main Clean Customer Navbar */}
       <header style={{
         position: 'sticky',
