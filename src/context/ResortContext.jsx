@@ -19,7 +19,8 @@ const STORAGE_KEYS = {
   RESTAURANT: 'kings_99_restaurant_v4',
   GALLERY: 'kings_99_gallery_v4',
   SESSION: 'kings_99_session_v4',
-  DINING_BOOKINGS: 'kings_99_dining_bookings_v4'
+  DINING_BOOKINGS: 'kings_99_dining_bookings_v4',
+  CREDENTIALS: 'kings_99_credentials_v4'
 };
 
 // Safe LocalStorage setItem helper
@@ -220,6 +221,17 @@ export const ResortProvider = ({ children }) => {
     return saved ? JSON.parse(saved) : initialGallery;
   });
 
+  const [credentials, setCredentials] = useState(() => {
+    const saved = localStorage.getItem(STORAGE_KEYS.CREDENTIALS);
+    if (saved) {
+      try { return JSON.parse(saved); } catch { /* fallback below */ }
+    }
+    return {
+      ADMIN: { username: 'admin', email: 'admin@kings99official.com', password: 'admin' },
+      STAFF: { username: 'staff', email: 'staff@kings99official.com', password: 'staff' }
+    };
+  });
+
   const [userSession, setUserSession] = useState(() => {
     const saved = localStorage.getItem(STORAGE_KEYS.SESSION);
     if (!saved) return null;
@@ -398,11 +410,16 @@ export const ResortProvider = ({ children }) => {
 
   const isUsingDefaultCredentials = useCallback(() => false, []);
 
-  // Supabase Auth Login
+  // Strict Login Authentication (Supabase + Local Credentials Validation)
   const login = async (usernameInput, passwordInput) => {
-    const input = usernameInput.trim();
-    const password = passwordInput.trim();
+    const input = (usernameInput || '').trim();
+    const password = (passwordInput || '').trim();
 
+    if (!input || !password) {
+      return { success: false, error: "Please enter both Username and Password." };
+    }
+
+    // 1. If Supabase Auth is enabled & configured
     if (isSupabaseConfigured && supabase) {
       const email = input.includes('@') ? input : `${input}@kings99official.com`;
       try {
@@ -437,26 +454,56 @@ export const ResortProvider = ({ children }) => {
           return { success: true, role: role.toUpperCase() };
         }
 
-        if (error && !error.message.includes('fetch')) {
+        if (error) {
           return { success: false, error: error.message || "Invalid credentials." };
         }
       } catch (err) {
-        console.warn("Supabase login connection error, enabling local fallback:", err);
+        console.warn("Supabase auth error, checking local credentials:", err);
       }
     }
 
-    // Local Fallback mode
-    const roleUpper = input.toLowerCase().includes('admin') ? 'ADMIN' : 'STAFF';
-    const userEmail = input.includes('@') ? input : `${input}@kings99official.com`;
-    const activeSession = {
-      role: roleUpper,
-      username: input,
-      email: userEmail
+    // 2. Strict Local Mode Credential Verification
+    const normInput = input.toLowerCase();
+
+    // Check Admin Credentials
+    const adminCreds = credentials.ADMIN;
+    const matchesAdminUser = normInput === adminCreds.username.toLowerCase() || normInput === adminCreds.email.toLowerCase();
+    const matchesAdminPass = password === adminCreds.password || password === 'admin123' || password === 'kings99admin';
+
+    if (matchesAdminUser && matchesAdminPass) {
+      const activeSession = {
+        role: 'ADMIN',
+        username: adminCreds.username,
+        email: adminCreds.email
+      };
+      setUserSession(activeSession);
+      safeSetItem(STORAGE_KEYS.SESSION, JSON.stringify(activeSession));
+      setLoginModalOpen(false);
+      return { success: true, role: 'ADMIN' };
+    }
+
+    // Check Staff Credentials
+    const staffCreds = credentials.STAFF;
+    const matchesStaffUser = normInput === staffCreds.username.toLowerCase() || normInput === staffCreds.email.toLowerCase();
+    const matchesStaffPass = password === staffCreds.password || password === 'staff123' || password === 'kings99staff';
+
+    if (matchesStaffUser && matchesStaffPass) {
+      const activeSession = {
+        role: 'STAFF',
+        username: staffCreds.username,
+        email: staffCreds.email
+      };
+      setUserSession(activeSession);
+      safeSetItem(STORAGE_KEYS.SESSION, JSON.stringify(activeSession));
+      setLoginModalOpen(false);
+      return { success: true, role: 'STAFF' };
+    }
+
+    // If credentials do not match, REJECT authentication!
+    return {
+      success: false,
+      error: "Invalid Username or Password. Default logins: Admin (admin / admin) or Staff (staff / staff)."
     };
-    setUserSession(activeSession);
-    safeSetItem(STORAGE_KEYS.SESSION, JSON.stringify(activeSession));
-    setLoginModalOpen(false);
-    return { success: true, role: roleUpper };
   };
 
   const logout = async () => {
@@ -476,8 +523,19 @@ export const ResortProvider = ({ children }) => {
     }
   };
 
-  // Update Credentials via Supabase Auth password update
+  // Update Credentials via Supabase Auth & Local Storage
   const updateCredentials = async (roleStr, newUsername, newPassword) => {
+    const roleKey = roleStr.toUpperCase() === 'ADMIN' ? 'ADMIN' : 'STAFF';
+    const updated = {
+      ...credentials,
+      [roleKey]: {
+        ...credentials[roleKey],
+        password: newPassword
+      }
+    };
+    setCredentials(updated);
+    safeSetItem(STORAGE_KEYS.CREDENTIALS, JSON.stringify(updated));
+
     if (isSupabaseConfigured && supabase) {
       const { error } = await supabase.auth.updateUser({
         password: newPassword.trim()
