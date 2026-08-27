@@ -423,10 +423,39 @@ export const ResortProvider = ({ children }) => {
     if (isSupabaseConfigured && supabase) {
       const email = input.includes('@') ? input : `${input}@kings99official.com`;
       try {
-        const { data, error } = await supabase.auth.signInWithPassword({
+        let authRes = await supabase.auth.signInWithPassword({
           email,
           password
         });
+
+        // Auto-provision user account in Supabase Auth if it does not exist yet
+        if (authRes.error && authRes.error.message.toLowerCase().includes('invalid login credentials')) {
+          const normIn = input.toLowerCase();
+          const targetRole = normIn.includes('admin') ? 'ADMIN' : 'STAFF';
+          const { data: signUpData, error: signUpErr } = await supabase.auth.signUp({
+            email,
+            password,
+            options: {
+              data: { role: targetRole }
+            }
+          });
+
+          if (!signUpErr && signUpData?.user) {
+            authRes = { data: signUpData, error: null };
+            try {
+              await supabase.from('user_roles').upsert({
+                id: signUpData.user.id,
+                email: signUpData.user.email,
+                role: targetRole
+              });
+            } catch (roleErr) {
+              console.warn("Could not insert user_role:", roleErr);
+            }
+          }
+        }
+
+        const data = authRes.data;
+        const error = authRes.error;
 
         if (!error && data?.user) {
           let role = data.user.app_metadata?.role || data.user.user_metadata?.role || (input.toLowerCase().includes('admin') ? 'ADMIN' : 'STAFF');
