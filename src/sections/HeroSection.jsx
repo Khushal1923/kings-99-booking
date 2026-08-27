@@ -116,7 +116,7 @@ export const HeroSection = ({ onOpenBookingModal }) => {
             {cms.heroSubtitle || "Experience Nashik's premier culinary sanctuary. Enjoy rich Indian gravies, charcoal Tandoori kebabs, open-air garden dining & luxury private pool villa stays on Trimbak Road."}
           </p>
 
-          {/* 3 Main Action Pill Buttons */}
+          {/* 3 Premium Theme Action Pill Buttons */}
           <div style={{
             display: 'flex',
             gap: '14px',
@@ -124,16 +124,17 @@ export const HeroSection = ({ onOpenBookingModal }) => {
             flexWrap: 'wrap',
             marginBottom: '32px'
           }}>
-            {/* Button 1: Warm Gold Pill */}
+            {/* Button 1: Rich Champagne Gold Pill */}
             <button
               onClick={handleScrollToDining}
+              className="btn-hero-primary"
               style={{
-                background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+                background: 'linear-gradient(135deg, #d4af37 0%, #aa8620 100%)',
                 color: '#0b1310',
                 fontWeight: 800,
-                padding: '12px 24px',
+                padding: '13px 26px',
                 borderRadius: 'var(--radius-full)',
-                border: '1px solid rgba(255, 255, 255, 0.3)',
+                border: '1px solid rgba(255, 255, 255, 0.4)',
                 cursor: 'pointer',
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -141,22 +142,23 @@ export const HeroSection = ({ onOpenBookingModal }) => {
                 fontSize: '0.85rem',
                 letterSpacing: '0.8px',
                 textTransform: 'uppercase',
-                boxShadow: '0 6px 20px rgba(245, 158, 11, 0.4)'
+                boxShadow: '0 6px 20px rgba(212, 175, 55, 0.4)'
               }}
             >
-              <UtensilsCrossed size={16} /> EXPLORE MENU
+              <UtensilsCrossed size={17} color="#0b1310" /> EXPLORE MENU
             </button>
 
-            {/* Button 2: Emerald Teal Pill */}
+            {/* Button 2: Deep Emerald Forest Pill */}
             <button
               onClick={() => onOpenBookingModal(null)}
+              className="btn-hero-secondary"
               style={{
-                background: 'linear-gradient(135deg, #14b8a6 0%, #0d9488 100%)',
+                background: 'linear-gradient(135deg, #1b5e4d 0%, #0f3d32 100%)',
                 color: '#ffffff',
                 fontWeight: 800,
-                padding: '12px 24px',
+                padding: '13px 26px',
                 borderRadius: 'var(--radius-full)',
-                border: '1px solid rgba(255, 255, 255, 0.3)',
+                border: '1.5px solid rgba(212, 175, 55, 0.45)',
                 cursor: 'pointer',
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -164,34 +166,36 @@ export const HeroSection = ({ onOpenBookingModal }) => {
                 fontSize: '0.85rem',
                 letterSpacing: '0.8px',
                 textTransform: 'uppercase',
-                boxShadow: '0 6px 20px rgba(20, 184, 166, 0.4)'
+                boxShadow: '0 6px 20px rgba(27, 94, 77, 0.5)'
               }}
             >
-              <Calendar size={16} /> BOOK VILLA / TABLE
+              <Calendar size={17} color="#d4af37" /> BOOK VILLA / TABLE
             </button>
 
-            {/* Button 3: Instagram Magenta Gradient Pill */}
+            {/* Button 3: Frosted Luxury Glass Pill */}
             <a
               href={cms.instagramLink || "https://www.instagram.com/kings99official/"}
               target="_blank"
               rel="noopener noreferrer"
+              className="btn-hero-glass"
               style={{
-                background: 'linear-gradient(135deg, #ec4899 0%, #c026d3 100%)',
+                background: 'rgba(15, 23, 21, 0.65)',
                 color: '#ffffff',
                 fontWeight: 800,
-                padding: '12px 24px',
+                padding: '13px 26px',
                 borderRadius: 'var(--radius-full)',
-                border: '1px solid rgba(255, 255, 255, 0.3)',
+                border: '1.5px solid rgba(212, 175, 55, 0.45)',
+                backdropFilter: 'blur(12px)',
                 textDecoration: 'none',
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '8px',
                 fontSize: '0.85rem',
                 letterSpacing: '0.8px',
-                boxShadow: '0 6px 20px rgba(236, 72, 153, 0.4)'
+                boxShadow: '0 6px 20px rgba(0,0,0,0.35)'
               }}
             >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#eab308" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
                 <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
                 <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
@@ -216,6 +220,32 @@ export const HeroSection = ({ onOpenBookingModal }) => {
           </div>
         </div>
       </div>
+
+      <style>{`
+        .btn-hero-primary {
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        }
+        .btn-hero-primary:hover {
+          transform: translateY(-3px) !important;
+          box-shadow: 0 10px 25px rgba(212, 175, 55, 0.55) !important;
+        }
+        .btn-hero-secondary {
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        }
+        .btn-hero-secondary:hover {
+          transform: translateY(-3px) !important;
+          box-shadow: 0 10px 25px rgba(27, 94, 77, 0.7) !important;
+        }
+        .btn-hero-glass {
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        }
+        .btn-hero-glass:hover {
+          transform: translateY(-3px) !important;
+          background: rgba(212, 175, 55, 0.15) !important;
+          border-color: rgba(212, 175, 55, 0.8) !important;
+          box-shadow: 0 10px 25px rgba(212, 175, 55, 0.25) !important;
+        }
+      `}</style>
     </section>
   );
 };
