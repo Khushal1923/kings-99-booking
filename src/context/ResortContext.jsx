@@ -261,14 +261,24 @@ export const ResortProvider = ({ children }) => {
 
       // 3. Fetch Bookings
       const { data: bookingData } = await supabase.from('bookings').select('*').order('created_at', { ascending: false });
-      if (bookingData) {
-        setBookings(bookingData.map(mapBookingFromDB));
+      if (bookingData && bookingData.length > 0) {
+        const dbBookings = bookingData.map(mapBookingFromDB);
+        setBookings(prev => {
+          const dbIds = new Set(dbBookings.map(b => b.id));
+          const localOnly = prev.filter(b => !dbIds.has(b.id));
+          return [...dbBookings, ...localOnly];
+        });
       }
 
       // 4. Fetch Dining Bookings
       const { data: diningData } = await supabase.from('dining_bookings').select('*').order('created_at', { ascending: false });
-      if (diningData) {
-        setDiningBookings(diningData.map(mapDiningFromDB));
+      if (diningData && diningData.length > 0) {
+        const dbDining = diningData.map(mapDiningFromDB);
+        setDiningBookings(prev => {
+          const dbIds = new Set(dbDining.map(d => d.id));
+          const localOnly = prev.filter(d => !dbIds.has(d.id));
+          return [...dbDining, ...localOnly];
+        });
       }
 
       // 5. Fetch Blocked Dates
@@ -550,7 +560,11 @@ export const ResortProvider = ({ children }) => {
       createdAt: new Date().toISOString()
     };
 
-    setBookings(prev => [newBooking, ...prev]);
+    setBookings(prev => {
+      const updated = [newBooking, ...prev];
+      safeSetItem(STORAGE_KEYS.BOOKINGS, JSON.stringify(updated));
+      return updated;
+    });
 
     if (isSupabaseConfigured && supabase) {
       const { error } = await supabase.from('bookings').insert(mapBookingToDB(newBooking));
@@ -584,7 +598,11 @@ export const ResortProvider = ({ children }) => {
       createdAt: new Date().toISOString()
     };
 
-    setDiningBookings(prev => [newTableBooking, ...prev]);
+    setDiningBookings(prev => {
+      const updated = [newTableBooking, ...prev];
+      safeSetItem(STORAGE_KEYS.DINING_BOOKINGS, JSON.stringify(updated));
+      return updated;
+    });
 
     if (isSupabaseConfigured && supabase) {
       const { error } = await supabase.from('dining_bookings').insert(mapDiningToDB(newTableBooking));

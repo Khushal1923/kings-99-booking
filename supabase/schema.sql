@@ -118,11 +118,13 @@ ALTER TABLE public.user_roles ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Public Read Villas" ON public.villas FOR SELECT USING (true);
 CREATE POLICY "Admin Write Villas" ON public.villas FOR ALL TO authenticated USING (true) WITH CHECK (true);
 
--- BOOKINGS Policies: Everyone (Anon + Auth) can INSERT (Customers creating reservations), only Authenticated users can SELECT/UPDATE/DELETE
+-- BOOKINGS Policies: Everyone can Read & Insert, Authenticated users can Manage
+CREATE POLICY "Public Read Bookings" ON public.bookings FOR SELECT USING (true);
 CREATE POLICY "Public Insert Bookings" ON public.bookings FOR INSERT WITH CHECK (true);
 CREATE POLICY "Auth Manage Bookings" ON public.bookings FOR ALL TO authenticated USING (true) WITH CHECK (true);
 
--- DINING BOOKINGS Policies: Everyone can INSERT, only Authenticated users can SELECT/UPDATE/DELETE
+-- DINING BOOKINGS Policies: Everyone can Read & Insert, Authenticated users can Manage
+CREATE POLICY "Public Read Dining Bookings" ON public.dining_bookings FOR SELECT USING (true);
 CREATE POLICY "Public Insert Dining Bookings" ON public.dining_bookings FOR INSERT WITH CHECK (true);
 CREATE POLICY "Auth Manage Dining Bookings" ON public.dining_bookings FOR ALL TO authenticated USING (true) WITH CHECK (true);
 
