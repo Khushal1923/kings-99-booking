@@ -422,10 +422,11 @@ export const ResortProvider = ({ children }) => {
     // 1. If Supabase Auth is enabled & configured
     if (isSupabaseConfigured && supabase) {
       const email = input.includes('@') ? input : `${input}@kings99official.com`;
+      const supabasePassword = password.length < 6 ? `${password}123` : password;
       try {
         let authRes = await supabase.auth.signInWithPassword({
           email,
-          password
+          password: supabasePassword
         });
 
         // Auto-provision user account in Supabase Auth if it does not exist yet
@@ -434,7 +435,7 @@ export const ResortProvider = ({ children }) => {
           const targetRole = normIn.includes('admin') ? 'ADMIN' : 'STAFF';
           const { data: signUpData, error: signUpErr } = await supabase.auth.signUp({
             email,
-            password,
+            password: supabasePassword,
             options: {
               data: { role: targetRole }
             }
