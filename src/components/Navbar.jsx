@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useResort } from '../context/ResortContext';
-import { Compass, Menu, X, Calendar, Phone, Sparkles, LogOut } from 'lucide-react';
+import { Compass, Menu, X, UtensilsCrossed, Phone, Sparkles, LogOut } from 'lucide-react';
 
 export const Navbar = ({ onOpenBookingModal }) => {
   const { cms, userSession, logout } = useResort();
@@ -31,6 +31,15 @@ export const Navbar = ({ onOpenBookingModal }) => {
     timerRef.current = setTimeout(() => {
       logoClickRef.current = 0;
     }, 1200);
+  };
+
+  const handleTableReservationClick = () => {
+    const element = document.getElementById('dining');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      onOpenBookingModal(null);
+    }
   };
 
   return (
@@ -77,7 +86,7 @@ export const Navbar = ({ onOpenBookingModal }) => {
             href="#"
             onClick={handleLogoClick}
             style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none', userSelect: 'none' }}
-            title="Kings 99 Restaurant & Villa"
+            title="Kings 99 Multicuisine Restaurant & Villa"
           >
             <div style={{
               width: '40px',
@@ -118,11 +127,11 @@ export const Navbar = ({ onOpenBookingModal }) => {
             </div>
           </a>
 
-          {/* Center Nav Links */}
+          {/* Center Nav Links (RESTAURANT & MENU FIRST) */}
           <nav style={{ display: 'none', gap: '26px', alignItems: 'center' }} className="desktop-nav">
             <a href="#home" style={navLinkStyle}>Home</a>
-            <a href="#villas" style={navLinkStyle}>Pool Villas</a>
-            <a href="#dining" style={navLinkStyle}>Menu</a>
+            <a href="#dining" style={navLinkStyle}>Restaurant & Menu</a>
+            <a href="#villas" style={navLinkStyle}>Private Pool Villas</a>
             <a href="#gallery" style={navLinkStyle}>Gallery</a>
             <a href="#about" style={navLinkStyle}>About Us</a>
             <a href="#contact" style={navLinkStyle}>Location</a>
@@ -140,12 +149,12 @@ export const Navbar = ({ onOpenBookingModal }) => {
               </button>
             )}
 
-            {/* Reference Style Teal Pill CTA Button */}
+            {/* Restaurant Focus Primary CTA Button */}
             <button
-              onClick={() => onOpenBookingModal(null)}
+              onClick={handleTableReservationClick}
               style={{
-                background: 'linear-gradient(135deg, #1b5e4d 0%, #166534 100%)',
-                color: '#ffffff',
+                background: 'linear-gradient(135deg, #d4af37 0%, #aa8620 100%)',
+                color: '#0b1310',
                 fontWeight: 800,
                 padding: '9px 18px',
                 borderRadius: 'var(--radius-full)',
@@ -157,10 +166,10 @@ export const Navbar = ({ onOpenBookingModal }) => {
                 fontSize: '0.8rem',
                 letterSpacing: '0.8px',
                 textTransform: 'uppercase',
-                boxShadow: '0 4px 14px rgba(27, 94, 77, 0.4)'
+                boxShadow: 'var(--shadow-gold)'
               }}
             >
-              <Calendar size={15} /> BOOK VILLA
+              <UtensilsCrossed size={15} /> RESERVE TABLE
             </button>
 
             {/* Circular Phone Icon Button */}
@@ -180,7 +189,7 @@ export const Navbar = ({ onOpenBookingModal }) => {
                 transition: 'background 0.2s ease',
                 shrink: 0
               }}
-              title="Call Resort Inquiries"
+              title="Call Restaurant Inquiries"
             >
               <Phone size={16} />
             </a>
@@ -221,8 +230,8 @@ export const Navbar = ({ onOpenBookingModal }) => {
           backdropFilter: 'blur(20px)'
         }}>
           <a href="#home" onClick={() => setMobileMenuOpen(false)} style={mobileNavLinkStyle}>Home</a>
-          <a href="#villas" onClick={() => setMobileMenuOpen(false)} style={mobileNavLinkStyle}>Pool Villas & Suites</a>
-          <a href="#dining" onClick={() => setMobileMenuOpen(false)} style={mobileNavLinkStyle}>Kings Restaurant & Dining</a>
+          <a href="#dining" onClick={() => setMobileMenuOpen(false)} style={mobileNavLinkStyle}>Kings Multicuisine Restaurant & Lawn</a>
+          <a href="#villas" onClick={() => setMobileMenuOpen(false)} style={mobileNavLinkStyle}>Private Pool Villas & Staycations</a>
           <a href="#gallery" onClick={() => setMobileMenuOpen(false)} style={mobileNavLinkStyle}>Resort Gallery</a>
           <a href="#about" onClick={() => setMobileMenuOpen(false)} style={mobileNavLinkStyle}>About Kings 99</a>
           <a href="#contact" onClick={() => setMobileMenuOpen(false)} style={mobileNavLinkStyle}>Location & Contact</a>

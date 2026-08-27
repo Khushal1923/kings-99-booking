@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useResort } from '../context/ResortContext';
-import { Search, Sparkles, MapPin } from 'lucide-react';
+import { Search, Sparkles, MapPin, UtensilsCrossed, Calendar } from 'lucide-react';
 
 export const HeroSection = ({ onOpenBookingModal }) => {
   const { cms, villas } = useResort();
@@ -13,6 +13,13 @@ export const HeroSection = ({ onOpenBookingModal }) => {
     e.preventDefault();
     const matchedVilla = villas.find(v => v.id === selectedVillaId);
     onOpenBookingModal(matchedVilla || null);
+  };
+
+  const handleScrollToDining = () => {
+    const element = document.getElementById('dining');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   return (
@@ -30,7 +37,7 @@ export const HeroSection = ({ onOpenBookingModal }) => {
           >
             <source src={cms.heroVideo} type="video/mp4" />
           </video>
-          {/* Subtle Ambient Vignette & Gradient Overlay */}
+          {/* Ambient Overlay */}
           <div style={{
             position: 'absolute',
             top: 0,
@@ -68,7 +75,7 @@ export const HeroSection = ({ onOpenBookingModal }) => {
             fontWeight: 700,
             letterSpacing: '1px'
           }}>
-            <Sparkles size={14} /> Luxury Private Pool Resort • Nashik
+            <Sparkles size={14} /> Pure Gourmet Multicuisine Dining & Celebration Lawn • Nashik
           </span>
 
           <h1 className="font-serif" style={{
@@ -86,7 +93,7 @@ export const HeroSection = ({ onOpenBookingModal }) => {
           <p style={{
             fontSize: 'clamp(1rem, 2.2vw, 1.25rem)',
             color: 'rgba(255, 255, 255, 0.95)',
-            marginBottom: '42px',
+            marginBottom: '36px',
             lineHeight: 1.6,
             fontWeight: 500,
             textShadow: '0 2px 12px rgba(0,0,0,0.5)',
@@ -97,25 +104,68 @@ export const HeroSection = ({ onOpenBookingModal }) => {
             {cms.heroSubtitle}
           </p>
 
-          {/* Quick Date Availability Search Widget in Bright White Card */}
+          {/* Primary Action Buttons: Reserve Dining Table (Gold) & Explore Villas (Outline) */}
+          <div style={{
+            display: 'flex',
+            gap: '16px',
+            justifyContent: 'center',
+            flexWrap: 'wrap',
+            marginBottom: '40px'
+          }}>
+            <button
+              onClick={handleScrollToDining}
+              className="btn-gold"
+              style={{
+                padding: '14px 32px',
+                fontSize: '1rem',
+                borderRadius: 'var(--radius-full)',
+                boxShadow: 'var(--shadow-gold)',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '10px'
+              }}
+            >
+              <UtensilsCrossed size={20} /> Reserve Dining Table
+            </button>
+
+            <button
+              onClick={() => onOpenBookingModal(null)}
+              className="btn-outline"
+              style={{
+                padding: '14px 30px',
+                fontSize: '1rem',
+                borderRadius: 'var(--radius-full)',
+                color: '#ffffff',
+                borderColor: 'rgba(255, 255, 255, 0.4)',
+                background: 'rgba(15, 23, 21, 0.5)',
+                backdropFilter: 'blur(10px)',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '10px'
+              }}
+            >
+              <Calendar size={20} /> Explore Pool Villas
+            </button>
+          </div>
+
+          {/* Quick Date Availability Search Widget */}
           <form onSubmit={handleQuickSearch} className="glass-card" style={{
-            padding: '28px 32px',
+            padding: '24px 28px',
             borderRadius: 'var(--radius-lg)',
             background: '#ffffff',
             boxShadow: 'var(--shadow-elevated)',
             border: '2px solid var(--border-glass)',
             backdropFilter: 'blur(20px)'
           }}>
-            {/* Top 3 Input Controls Row */}
             <div style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-              gap: '20px',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+              gap: '16px',
               textAlign: 'left',
-              marginBottom: '24px'
+              marginBottom: '16px'
             }}>
               <div>
-                <label className="form-label" style={{ color: 'var(--accent-gold-dark)', fontWeight: 700 }}>Villa Type</label>
+                <label className="form-label" style={{ color: 'var(--accent-gold-dark)', fontWeight: 700 }}>Villa Accommodation</label>
                 <select
                   className="form-input"
                   value={selectedVillaId}
@@ -152,25 +202,23 @@ export const HeroSection = ({ onOpenBookingModal }) => {
               </div>
             </div>
 
-            {/* Centered Check Rates & Availability Button */}
             <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
               <button
                 type="submit"
                 className="btn-gold"
                 style={{
-                  padding: '14px 36px',
-                  fontSize: '0.95rem',
+                  padding: '12px 28px',
+                  fontSize: '0.9rem',
                   letterSpacing: '0.5px',
                   borderRadius: 'var(--radius-full)',
                   boxShadow: 'var(--shadow-gold)',
                   display: 'inline-flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  gap: '10px',
-                  minWidth: '280px'
+                  gap: '8px'
                 }}
               >
-                <Search size={18} /> Check Rates & Availability
+                <Search size={16} /> Check Staycation Rates
               </button>
             </div>
           </form>
@@ -182,7 +230,7 @@ export const HeroSection = ({ onOpenBookingModal }) => {
             gap: '8px',
             color: 'rgba(255, 255, 255, 0.92)',
             fontSize: '0.88rem',
-            marginTop: '28px',
+            marginTop: '24px',
             fontWeight: 600,
             textShadow: '0 2px 8px rgba(0,0,0,0.5)'
           }}>

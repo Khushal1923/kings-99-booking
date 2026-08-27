@@ -32,7 +32,7 @@ export const AdminDashboard = () => {
   const role = userSession ? userSession.role : 'STAFF';
 
   const usingDefaultCreds = isUsingDefaultCredentials(role);
-  const [activeTab, setActiveTab] = useState(usingDefaultCreds ? 'SECURITY' : 'REQUESTS');
+  const [activeTab, setActiveTab] = useState(usingDefaultCreds ? 'SECURITY' : 'TABLES');
 
   // Force SECURITY tab if using default credentials
   useEffect(() => {
@@ -49,10 +49,10 @@ export const AdminDashboard = () => {
     .filter(b => b.status === 'CONFIRMED')
     .reduce((sum, b) => sum + (b.totalPrice || 0), 0);
 
-  // Filter available tabs based on role
+  // Filter available tabs based on role (Table Reservations First)
   const allTabs = [
-    { id: 'REQUESTS', label: 'Villa Requests', icon: <FileText size={18} />, badge: pendingVillaCount, roles: ['STAFF', 'ADMIN'] },
     { id: 'TABLES', label: 'Table Reservations', icon: <UtensilsCrossed size={18} />, badge: pendingTableCount, roles: ['STAFF', 'ADMIN'] },
+    { id: 'REQUESTS', label: 'Villa Requests', icon: <FileText size={18} />, badge: pendingVillaCount, roles: ['STAFF', 'ADMIN'] },
     { id: 'CALENDAR', label: 'Booking Calendar', icon: <Calendar size={18} />, roles: ['STAFF', 'ADMIN'] },
     { id: 'GUESTS', label: 'Guest Directory', icon: <Users size={18} />, roles: ['STAFF', 'ADMIN'] },
     { id: 'VILLAS', label: 'Villa & Photos', icon: <Home size={18} />, roles: ['ADMIN'] },

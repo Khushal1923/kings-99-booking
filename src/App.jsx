@@ -99,17 +99,17 @@ const MainApp = () => {
 
   return (
     <div style={{ position: 'relative', minHeight: '100vh', background: 'var(--bg-primary)' }}>
-      {/* Navbar (Clean Customer Front-End with Secret 3x Logo Tap Access) */}
+      {/* Navbar (Clean Customer Front-End with Restaurant Focus & Secret 3x Logo Tap Access) */}
       <Navbar onOpenBookingModal={handleOpenBookingModal} />
 
-      {/* Main Page Sections */}
+      {/* Main Page Sections (RESTAURANT FIRST, VILLAS SECOND) */}
       <main>
         <HeroSection onOpenBookingModal={handleOpenBookingModal} />
+        <RestaurantSection />
         <VillasSection
           onSelectVillaDetail={(villa) => setDetailModalVilla(villa)}
           onOpenBookingModal={handleOpenBookingModal}
         />
-        <RestaurantSection />
         <GallerySection />
         <AboutSection />
         <ContactSection />
