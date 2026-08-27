@@ -8,7 +8,6 @@ export const HeroSection = ({ onOpenBookingModal }) => {
   const [searchCheckIn, setSearchCheckIn] = useState('');
   const [searchCheckOut, setSearchCheckOut] = useState('');
   const [selectedVillaId, setSelectedVillaId] = useState('');
-  const [showSearchBox, setShowSearchBox] = useState(false);
 
   const handleQuickSearch = (e) => {
     e.preventDefault();
@@ -63,7 +62,7 @@ export const HeroSection = ({ onOpenBookingModal }) => {
       )}
 
       <div className="container" style={{ position: 'relative', zIndex: 2, padding: '100px 20px 60px' }}>
-        <div style={{ maxWidth: '860px', margin: '0 auto', textAlign: 'center' }}>
+        <div style={{ maxWidth: '880px', margin: '0 auto', textAlign: 'center' }}>
           {/* Top Rating Badge */}
           <div style={{
             display: 'inline-flex',
@@ -116,7 +115,7 @@ export const HeroSection = ({ onOpenBookingModal }) => {
           <p style={{
             fontSize: 'clamp(0.95rem, 1.8vw, 1.15rem)',
             color: 'rgba(255, 255, 255, 0.92)',
-            marginBottom: '32px',
+            marginBottom: '28px',
             lineHeight: 1.6,
             maxWidth: '750px',
             marginLeft: 'auto',
@@ -133,7 +132,7 @@ export const HeroSection = ({ onOpenBookingModal }) => {
             gap: '14px',
             justifyContent: 'center',
             flexWrap: 'wrap',
-            marginBottom: '36px'
+            marginBottom: '28px'
           }}>
             {/* Button 1: Warm Gold Pill */}
             <button
@@ -216,7 +215,7 @@ export const HeroSection = ({ onOpenBookingModal }) => {
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
             gap: '12px',
-            marginBottom: '32px'
+            marginBottom: '28px'
           }}>
             <div style={featureCardStyle}>
               <Landmark size={18} color="#2dd4bf" />
@@ -236,99 +235,77 @@ export const HeroSection = ({ onOpenBookingModal }) => {
             </div>
           </div>
 
-          {/* Toggle Date Search Widget Button */}
-          <button
-            onClick={() => setShowSearchBox(!showSearchBox)}
-            style={{
-              background: 'transparent',
-              border: 'none',
-              color: 'rgba(255, 255, 255, 0.8)',
-              fontSize: '0.82rem',
-              fontWeight: 600,
-              cursor: 'pointer',
-              textDecoration: 'underline',
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '6px'
-            }}
-          >
-            <Search size={14} /> {showSearchBox ? "Hide Check-in Search" : "Check Villa Staycation Rates & Availability"}
-          </button>
-
-          {/* Collapsible Date Availability Search Widget */}
-          {showSearchBox && (
-            <form onSubmit={handleQuickSearch} className="glass-card animate-fade-in" style={{
-              padding: '24px 28px',
-              borderRadius: 'var(--radius-lg)',
-              background: '#ffffff',
-              boxShadow: 'var(--shadow-elevated)',
-              border: '2px solid var(--border-glass)',
-              marginTop: '16px'
+          {/* ALWAYS VISIBLE Date Availability Search Widget */}
+          <form onSubmit={handleQuickSearch} className="glass-card" style={{
+            padding: '24px 28px',
+            borderRadius: 'var(--radius-lg)',
+            background: '#ffffff',
+            boxShadow: 'var(--shadow-elevated)',
+            border: '2px solid var(--border-glass)'
+          }}>
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+              gap: '16px',
+              textAlign: 'left',
+              marginBottom: '16px'
             }}>
-              <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-                gap: '16px',
-                textAlign: 'left',
-                marginBottom: '16px'
-              }}>
-                <div>
-                  <label className="form-label" style={{ color: 'var(--accent-gold-dark)', fontWeight: 700 }}>Villa Accommodation</label>
-                  <select
-                    className="form-input"
-                    value={selectedVillaId}
-                    onChange={(e) => setSelectedVillaId(e.target.value)}
-                    style={{ background: '#fafaf7' }}
-                  >
-                    <option value="">All Private Pool Villas</option>
-                    {villas.map(v => (
-                      <option key={v.id} value={v.id}>{v.name}</option>
-                    ))}
-                  </select>
-                </div>
-
-                <div>
-                  <label className="form-label" style={{ color: 'var(--accent-gold-dark)', fontWeight: 700 }}>Check-In Date</label>
-                  <input
-                    type="date"
-                    className="form-input"
-                    value={searchCheckIn}
-                    onChange={(e) => setSearchCheckIn(e.target.value)}
-                    style={{ background: '#fafaf7' }}
-                  />
-                </div>
-
-                <div>
-                  <label className="form-label" style={{ color: 'var(--accent-gold-dark)', fontWeight: 700 }}>Check-Out Date</label>
-                  <input
-                    type="date"
-                    className="form-input"
-                    value={searchCheckOut}
-                    onChange={(e) => setSearchCheckOut(e.target.value)}
-                    style={{ background: '#fafaf7' }}
-                  />
-                </div>
-              </div>
-
-              <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
-                <button
-                  type="submit"
-                  className="btn-gold"
-                  style={{
-                    padding: '12px 28px',
-                    fontSize: '0.9rem',
-                    borderRadius: 'var(--radius-full)',
-                    boxShadow: 'var(--shadow-gold)',
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '8px'
-                  }}
+              <div>
+                <label className="form-label" style={{ color: 'var(--accent-gold-dark)', fontWeight: 700 }}>Villa Accommodation</label>
+                <select
+                  className="form-input"
+                  value={selectedVillaId}
+                  onChange={(e) => setSelectedVillaId(e.target.value)}
+                  style={{ background: '#fafaf7' }}
                 >
-                  <Search size={16} /> Check Staycation Rates
-                </button>
+                  <option value="">All Private Pool Villas</option>
+                  {villas.map(v => (
+                    <option key={v.id} value={v.id}>{v.name}</option>
+                  ))}
+                </select>
               </div>
-            </form>
-          )}
+
+              <div>
+                <label className="form-label" style={{ color: 'var(--accent-gold-dark)', fontWeight: 700 }}>Check-In Date</label>
+                <input
+                  type="date"
+                  className="form-input"
+                  value={searchCheckIn}
+                  onChange={(e) => setSearchCheckIn(e.target.value)}
+                  style={{ background: '#fafaf7' }}
+                />
+              </div>
+
+              <div>
+                <label className="form-label" style={{ color: 'var(--accent-gold-dark)', fontWeight: 700 }}>Check-Out Date</label>
+                <input
+                  type="date"
+                  className="form-input"
+                  value={searchCheckOut}
+                  onChange={(e) => setSearchCheckOut(e.target.value)}
+                  style={{ background: '#fafaf7' }}
+                />
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+              <button
+                type="submit"
+                className="btn-gold"
+                style={{
+                  padding: '12px 28px',
+                  fontSize: '0.9rem',
+                  borderRadius: 'var(--radius-full)',
+                  boxShadow: 'var(--shadow-gold)',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '8px'
+                }}
+              >
+                <Search size={16} /> Check Staycation Rates & Availability
+              </button>
+            </div>
+          </form>
 
           {/* Location snippet */}
           <div style={{
