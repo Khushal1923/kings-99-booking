@@ -1,13 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useResort } from '../context/ResortContext';
 import { ImageUploader } from '../components/ImageUploader';
-import { Check, Video, Music } from 'lucide-react';
+import { Check, Video, Music, Share2 } from 'lucide-react';
 
 export const CmsEditorTab = () => {
   const { cms, updateCMS } = useResort();
 
   const [formState, setFormState] = useState(cms);
   const [savedSuccess, setSavedSuccess] = useState(false);
+
+  useEffect(() => {
+    setFormState(cms);
+  }, [cms]);
 
   const handleAudioFileChange = (e) => {
     const file = e.target.files[0];
@@ -48,10 +52,10 @@ export const CmsEditorTab = () => {
     <div>
       <div style={{ marginBottom: '24px' }}>
         <h3 className="font-serif" style={{ fontSize: '1.5rem', color: 'var(--text-dark)', fontWeight: 800 }}>
-          🌐 Live Website CMS, Video & Background Music Editor
+          🌐 Live Website CMS, Branding & Media Editor
         </h3>
         <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-          Edit resort branding, hero video loop URL, background music track, and contact details.
+          Edit restaurant branding, tagline, hero video loop, background lounge music, Instagram reels link, and contact details.
         </p>
       </div>
 
@@ -68,22 +72,22 @@ export const CmsEditorTab = () => {
           gap: '8px',
           fontWeight: 700
         }}>
-          <Check size={18} /> Website video, music & CMS content updated live!
+          <Check size={18} /> Website branding, social links, video & CMS content published live!
         </div>
       )}
 
       <form onSubmit={handleSubmit} className="glass-card" style={{ padding: '24px', borderRadius: '16px' }}>
         <h4 className="font-serif" style={{ fontSize: '1.2rem', color: 'var(--text-dark)', marginBottom: '16px', fontWeight: 700 }}>
-          General Branding & Text
+          General Restaurant Branding & Headlines
         </h4>
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
           <div>
-            <label className="form-label">Resort Name</label>
+            <label className="form-label">Restaurant / Resort Name</label>
             <input
               type="text"
               className="form-input"
-              value={formState.resortName}
+              value={formState.resortName || ''}
               onChange={(e) => setFormState({ ...formState, resortName: e.target.value })}
               required
             />
@@ -94,7 +98,7 @@ export const CmsEditorTab = () => {
             <input
               type="text"
               className="form-input"
-              value={formState.tagline}
+              value={formState.tagline || ''}
               onChange={(e) => setFormState({ ...formState, tagline: e.target.value })}
               required
             />
@@ -106,20 +110,60 @@ export const CmsEditorTab = () => {
           <input
             type="text"
             className="form-input"
-            value={formState.announcementText}
+            value={formState.announcementText || ''}
             onChange={(e) => setFormState({ ...formState, announcementText: e.target.value })}
           />
         </div>
 
         <div style={{ marginBottom: '24px' }}>
-          <label className="form-label">Hero Subtitle Story</label>
+          <label className="form-label">Hero Subtitle Story & Cuisine Highlight</label>
           <textarea
             className="form-input"
             rows="3"
-            value={formState.heroSubtitle}
+            value={formState.heroSubtitle || ''}
             onChange={(e) => setFormState({ ...formState, heroSubtitle: e.target.value })}
             required
           ></textarea>
+        </div>
+
+        {/* Social & Brand Links (Instagram Reels, Google Map, Facebook) */}
+        <div style={{ borderTop: '1px solid var(--border-subtle)', paddingTop: '20px', marginBottom: '24px' }}>
+          <h4 className="font-serif" style={{ fontSize: '1.2rem', color: '#c026d3', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 700 }}>
+            <Share2 size={20} /> Social & Media Reel Links
+          </h4>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', marginBottom: '16px' }}>
+            <div>
+              <label className="form-label">Instagram Reel / Page URL</label>
+              <input
+                type="text"
+                className="form-input"
+                placeholder="https://www.instagram.com/kings99official/"
+                value={formState.instagramLink || ''}
+                onChange={(e) => setFormState({ ...formState, instagramLink: e.target.value })}
+              />
+            </div>
+            <div>
+              <label className="form-label">Google Business / Maps URL</label>
+              <input
+                type="text"
+                className="form-input"
+                placeholder="https://www.google.com/maps/..."
+                value={formState.googleLink || ''}
+                onChange={(e) => setFormState({ ...formState, googleLink: e.target.value })}
+              />
+            </div>
+            <div>
+              <label className="form-label">Facebook Page URL</label>
+              <input
+                type="text"
+                className="form-input"
+                placeholder="https://facebook.com/kings99official"
+                value={formState.facebookLink || ''}
+                onChange={(e) => setFormState({ ...formState, facebookLink: e.target.value })}
+              />
+            </div>
+          </div>
         </div>
 
         {/* Hero Video & Background Music Config */}
@@ -152,7 +196,7 @@ export const CmsEditorTab = () => {
 
           <ImageUploader
             label="Hero Poster Image Fallback (For slow connections / Mobile)"
-            value={formState.heroImage}
+            value={formState.heroImage || ''}
             onChange={(img) => setFormState({ ...formState, heroImage: img })}
           />
         </div>
@@ -201,7 +245,7 @@ export const CmsEditorTab = () => {
         {/* Contact Details */}
         <div style={{ borderTop: '1px solid var(--border-subtle)', paddingTop: '20px', marginBottom: '24px' }}>
           <h4 className="font-serif" style={{ fontSize: '1.2rem', color: 'var(--text-dark)', marginBottom: '16px', fontWeight: 700 }}>
-            Resort Contact Details
+            Resort & Restaurant Contact Details
           </h4>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', marginBottom: '16px' }}>
@@ -210,7 +254,7 @@ export const CmsEditorTab = () => {
               <input
                 type="text"
                 className="form-input"
-                value={formState.phone}
+                value={formState.phone || ''}
                 onChange={(e) => setFormState({ ...formState, phone: e.target.value })}
                 required
               />
@@ -220,7 +264,7 @@ export const CmsEditorTab = () => {
               <input
                 type="text"
                 className="form-input"
-                value={formState.whatsappNumber}
+                value={formState.whatsappNumber || ''}
                 onChange={(e) => setFormState({ ...formState, whatsappNumber: e.target.value })}
                 required
               />
@@ -230,7 +274,7 @@ export const CmsEditorTab = () => {
               <input
                 type="email"
                 className="form-input"
-                value={formState.email}
+                value={formState.email || ''}
                 onChange={(e) => setFormState({ ...formState, email: e.target.value })}
                 required
               />
@@ -242,7 +286,7 @@ export const CmsEditorTab = () => {
             <input
               type="text"
               className="form-input"
-              value={formState.address}
+              value={formState.address || ''}
               onChange={(e) => setFormState({ ...formState, address: e.target.value })}
               required
             />
