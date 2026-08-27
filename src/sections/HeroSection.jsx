@@ -200,12 +200,13 @@ export const HeroSection = ({ onOpenBookingModal }) => {
             </a>
           </div>
 
-          {/* Premium Glassmorphic 4 Feature Highlight Cards */}
+          {/* Premium Glassmorphic 4 Feature Highlight Cards (Single Row) */}
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
-            gap: '14px',
-            marginBottom: '32px'
+            gridTemplateColumns: 'repeat(4, 1fr)',
+            gap: '10px',
+            marginBottom: '32px',
+            overflowX: 'auto'
           }}>
             <div className="hero-feature-card" style={featureCardStyle}>
               <div style={{ ...iconBadgeStyle, background: 'rgba(45, 212, 191, 0.18)', border: '1px solid rgba(45, 212, 191, 0.4)' }}>
@@ -280,14 +281,16 @@ const featureCardStyle = {
   background: 'rgba(15, 23, 21, 0.72)',
   border: '1.5px solid rgba(212, 175, 55, 0.3)',
   borderRadius: '16px',
-  padding: '12px 16px',
+  padding: '10px 12px',
   display: 'flex',
   alignItems: 'center',
-  gap: '12px',
+  justifyContent: 'flex-start',
+  gap: '10px',
   backdropFilter: 'blur(16px)',
   boxShadow: '0 8px 24px rgba(0,0,0,0.3)',
   transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-  cursor: 'default'
+  cursor: 'default',
+  minWidth: '150px'
 };
 
 const iconBadgeStyle = {
