@@ -200,28 +200,51 @@ export const HeroSection = ({ onOpenBookingModal }) => {
             </a>
           </div>
 
-          {/* Bottom 4 Feature Highlight Cards */}
+          {/* Premium Glassmorphic 4 Feature Highlight Cards */}
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
-            gap: '12px',
-            marginBottom: '28px'
+            gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
+            gap: '14px',
+            marginBottom: '32px'
           }}>
-            <div style={featureCardStyle}>
-              <Landmark size={18} color="#2dd4bf" />
-              <span>Arch & Garden Dining</span>
+            <div className="hero-feature-card" style={featureCardStyle}>
+              <div style={{ ...iconBadgeStyle, background: 'rgba(45, 212, 191, 0.18)', border: '1px solid rgba(45, 212, 191, 0.4)' }}>
+                <Landmark size={20} color="#2dd4bf" />
+              </div>
+              <div style={{ textAlign: 'left' }}>
+                <div style={{ color: '#ffffff', fontWeight: 800, fontSize: '0.88rem', lineHeight: 1.2 }}>Arch & Garden</div>
+                <div style={{ color: '#2dd4bf', fontSize: '0.72rem', fontWeight: 600, marginTop: '2px' }}>Open-Air Dining</div>
+              </div>
             </div>
-            <div style={featureCardStyle}>
-              <Mountain size={18} color="#6ee7b7" />
-              <span>Sahyadri Hill View</span>
+
+            <div className="hero-feature-card" style={featureCardStyle}>
+              <div style={{ ...iconBadgeStyle, background: 'rgba(110, 231, 183, 0.18)', border: '1px solid rgba(110, 231, 183, 0.4)' }}>
+                <Mountain size={20} color="#6ee7b7" />
+              </div>
+              <div style={{ textAlign: 'left' }}>
+                <div style={{ color: '#ffffff', fontWeight: 800, fontSize: '0.88rem', lineHeight: 1.2 }}>Sahyadri Hill</div>
+                <div style={{ color: '#6ee7b7', fontSize: '0.72rem', fontWeight: 600, marginTop: '2px' }}>Scenic Mountain View</div>
+              </div>
             </div>
-            <div style={featureCardStyle}>
-              <Flame size={18} color="#f59e0b" />
-              <span>Tandoor & Sizzlers</span>
+
+            <div className="hero-feature-card" style={featureCardStyle}>
+              <div style={{ ...iconBadgeStyle, background: 'rgba(245, 158, 11, 0.18)', border: '1px solid rgba(245, 158, 11, 0.4)' }}>
+                <Flame size={20} color="#f59e0b" />
+              </div>
+              <div style={{ textAlign: 'left' }}>
+                <div style={{ color: '#ffffff', fontWeight: 800, fontSize: '0.88rem', lineHeight: 1.2 }}>Tandoor & Sizzlers</div>
+                <div style={{ color: '#f59e0b', fontSize: '0.72rem', fontWeight: 600, marginTop: '2px' }}>Chef's Specials</div>
+              </div>
             </div>
-            <div style={featureCardStyle}>
-              <Waves size={18} color="#38bdf8" />
-              <span>Private Pool Villa</span>
+
+            <div className="hero-feature-card" style={featureCardStyle}>
+              <div style={{ ...iconBadgeStyle, background: 'rgba(56, 189, 248, 0.18)', border: '1px solid rgba(56, 189, 248, 0.4)' }}>
+                <Waves size={20} color="#38bdf8" />
+              </div>
+              <div style={{ textAlign: 'left' }}>
+                <div style={{ color: '#ffffff', fontWeight: 800, fontSize: '0.88rem', lineHeight: 1.2 }}>Private Pool Villa</div>
+                <div style={{ color: '#38bdf8', fontSize: '0.72rem', fontWeight: 600, marginTop: '2px' }}>Luxury Staycation</div>
+              </div>
             </div>
           </div>
 
@@ -232,7 +255,7 @@ export const HeroSection = ({ onOpenBookingModal }) => {
             gap: '8px',
             color: 'rgba(255, 255, 255, 0.85)',
             fontSize: '0.85rem',
-            marginTop: '12px',
+            marginTop: '8px',
             fontWeight: 600,
             textShadow: '0 2px 8px rgba(0,0,0,0.5)'
           }}>
@@ -241,22 +264,38 @@ export const HeroSection = ({ onOpenBookingModal }) => {
           </div>
         </div>
       </div>
+
+      <style>{`
+        .hero-feature-card:hover {
+          transform: translateY(-4px);
+          border-color: rgba(212, 175, 55, 0.7) !important;
+          box-shadow: 0 12px 30px rgba(212, 175, 55, 0.25) !important;
+        }
+      `}</style>
     </section>
   );
 };
 
 const featureCardStyle = {
-  background: 'rgba(15, 23, 21, 0.65)',
-  border: '1px solid rgba(255, 255, 255, 0.15)',
+  background: 'rgba(15, 23, 21, 0.72)',
+  border: '1.5px solid rgba(212, 175, 55, 0.3)',
+  borderRadius: '16px',
+  padding: '12px 16px',
+  display: 'flex',
+  alignItems: 'center',
+  gap: '12px',
+  backdropFilter: 'blur(16px)',
+  boxShadow: '0 8px 24px rgba(0,0,0,0.3)',
+  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+  cursor: 'default'
+};
+
+const iconBadgeStyle = {
+  width: '38px',
+  height: '38px',
   borderRadius: '12px',
-  padding: '12px 14px',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  gap: '8px',
-  color: '#ffffff',
-  fontSize: '0.82rem',
-  fontWeight: 700,
-  backdropFilter: 'blur(10px)',
-  boxShadow: '0 4px 14px rgba(0,0,0,0.2)'
+  flexShrink: 0
 };
