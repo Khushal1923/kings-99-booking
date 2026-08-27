@@ -1,6 +1,6 @@
 import React from 'react';
 import { useResort } from '../context/ResortContext';
-import { Sparkles, MapPin, UtensilsCrossed, Calendar, Landmark, Mountain, Flame, Waves } from 'lucide-react';
+import { Sparkles, MapPin, UtensilsCrossed, Calendar } from 'lucide-react';
 
 export const HeroSection = ({ onOpenBookingModal }) => {
   const { cms } = useResort();
@@ -13,7 +13,7 @@ export const HeroSection = ({ onOpenBookingModal }) => {
   };
 
   return (
-    <section id="home" style={{ position: 'relative', minHeight: '88vh', display: 'flex', alignItems: 'center', overflow: 'hidden' }}>
+    <section id="home" style={{ position: 'relative', minHeight: '86vh', display: 'flex', alignItems: 'center', overflow: 'hidden' }}>
       {/* Background Video element or background image */}
       {cms.heroVideo ? (
         <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, zIndex: 1, overflow: 'hidden' }}>
@@ -105,7 +105,7 @@ export const HeroSection = ({ onOpenBookingModal }) => {
           <p style={{
             fontSize: 'clamp(0.95rem, 1.8vw, 1.15rem)',
             color: 'rgba(255, 255, 255, 0.92)',
-            marginBottom: '32px',
+            marginBottom: '36px',
             lineHeight: 1.6,
             maxWidth: '750px',
             marginLeft: 'auto',
@@ -122,7 +122,7 @@ export const HeroSection = ({ onOpenBookingModal }) => {
             gap: '14px',
             justifyContent: 'center',
             flexWrap: 'wrap',
-            marginBottom: '36px'
+            marginBottom: '32px'
           }}>
             {/* Button 1: Warm Gold Pill */}
             <button
@@ -200,55 +200,6 @@ export const HeroSection = ({ onOpenBookingModal }) => {
             </a>
           </div>
 
-          {/* Premium Glassmorphic 4 Feature Highlight Cards (Single Row) */}
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(4, 1fr)',
-            gap: '10px',
-            marginBottom: '32px',
-            overflowX: 'auto'
-          }}>
-            <div className="hero-feature-card" style={featureCardStyle}>
-              <div style={{ ...iconBadgeStyle, background: 'rgba(45, 212, 191, 0.18)', border: '1px solid rgba(45, 212, 191, 0.4)' }}>
-                <Landmark size={20} color="#2dd4bf" />
-              </div>
-              <div style={{ textAlign: 'left' }}>
-                <div style={{ color: '#ffffff', fontWeight: 800, fontSize: '0.88rem', lineHeight: 1.2 }}>Arch & Garden</div>
-                <div style={{ color: '#2dd4bf', fontSize: '0.72rem', fontWeight: 600, marginTop: '2px' }}>Open-Air Dining</div>
-              </div>
-            </div>
-
-            <div className="hero-feature-card" style={featureCardStyle}>
-              <div style={{ ...iconBadgeStyle, background: 'rgba(110, 231, 183, 0.18)', border: '1px solid rgba(110, 231, 183, 0.4)' }}>
-                <Mountain size={20} color="#6ee7b7" />
-              </div>
-              <div style={{ textAlign: 'left' }}>
-                <div style={{ color: '#ffffff', fontWeight: 800, fontSize: '0.88rem', lineHeight: 1.2 }}>Sahyadri Hill</div>
-                <div style={{ color: '#6ee7b7', fontSize: '0.72rem', fontWeight: 600, marginTop: '2px' }}>Scenic Mountain View</div>
-              </div>
-            </div>
-
-            <div className="hero-feature-card" style={featureCardStyle}>
-              <div style={{ ...iconBadgeStyle, background: 'rgba(245, 158, 11, 0.18)', border: '1px solid rgba(245, 158, 11, 0.4)' }}>
-                <Flame size={20} color="#f59e0b" />
-              </div>
-              <div style={{ textAlign: 'left' }}>
-                <div style={{ color: '#ffffff', fontWeight: 800, fontSize: '0.88rem', lineHeight: 1.2 }}>Tandoor & Sizzlers</div>
-                <div style={{ color: '#f59e0b', fontSize: '0.72rem', fontWeight: 600, marginTop: '2px' }}>Chef's Specials</div>
-              </div>
-            </div>
-
-            <div className="hero-feature-card" style={featureCardStyle}>
-              <div style={{ ...iconBadgeStyle, background: 'rgba(56, 189, 248, 0.18)', border: '1px solid rgba(56, 189, 248, 0.4)' }}>
-                <Waves size={20} color="#38bdf8" />
-              </div>
-              <div style={{ textAlign: 'left' }}>
-                <div style={{ color: '#ffffff', fontWeight: 800, fontSize: '0.88rem', lineHeight: 1.2 }}>Private Pool Villa</div>
-                <div style={{ color: '#38bdf8', fontSize: '0.72rem', fontWeight: 600, marginTop: '2px' }}>Luxury Staycation</div>
-              </div>
-            </div>
-          </div>
-
           {/* Location snippet */}
           <div style={{
             display: 'inline-flex',
@@ -265,40 +216,6 @@ export const HeroSection = ({ onOpenBookingModal }) => {
           </div>
         </div>
       </div>
-
-      <style>{`
-        .hero-feature-card:hover {
-          transform: translateY(-4px);
-          border-color: rgba(212, 175, 55, 0.7) !important;
-          box-shadow: 0 12px 30px rgba(212, 175, 55, 0.25) !important;
-        }
-      `}</style>
     </section>
   );
-};
-
-const featureCardStyle = {
-  background: 'rgba(15, 23, 21, 0.72)',
-  border: '1.5px solid rgba(212, 175, 55, 0.3)',
-  borderRadius: '16px',
-  padding: '10px 12px',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'flex-start',
-  gap: '10px',
-  backdropFilter: 'blur(16px)',
-  boxShadow: '0 8px 24px rgba(0,0,0,0.3)',
-  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-  cursor: 'default',
-  minWidth: '150px'
-};
-
-const iconBadgeStyle = {
-  width: '38px',
-  height: '38px',
-  borderRadius: '12px',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  flexShrink: 0
 };
