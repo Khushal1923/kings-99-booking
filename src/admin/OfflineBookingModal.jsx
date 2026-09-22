@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useResort } from '../context/ResortContext';
-import { X, Calendar, User, Phone, Mail, Home, CreditCard, CheckCircle2, ShieldCheck, DollarSign } from 'lucide-react';
+import { X, Calendar, User, Phone, Mail, Home, CreditCard, CheckCircle2, ShieldCheck, DollarSign, IdCard } from 'lucide-react';
 
 export const OfflineBookingModal = ({ onClose }) => {
   const { villas, addBooking } = useResort();
@@ -20,11 +20,27 @@ export const OfflineBookingModal = ({ onClose }) => {
   const [paymentMode, setPaymentMode] = useState('UPI / GPay / PhonePe');
   const [paymentStatus, setPaymentStatus] = useState('Paid in Full');
   const [walkInNotes, setWalkInNotes] = useState('');
-  const [customPrice, setCustomPrice] = useState('');
 
-  const targetVilla = villas.find((v) => v.id === parseInt(selectedVillaId)) || villas[0];
+  // Identity Proof State (Aadhaar, Passport, DL, etc.)
+  const [idProofType, setIdProofType] = useState('Aadhaar Card');
+  const [idProofNumber, setIdProofNumber] = useState('');
 
-  // Calculate nights & default price
+  // Target Villa object
+  const targetVilla = villas.find((v) => String(v.id) === String(selectedVillaId)) || villas[0];
+
+  // Editable Nightly Rate & Custom Total Tariff
+  const [nightlyRate, setNightlyRate] = useState(targetVilla ? targetVilla.price : 4500);
+  const [customTotal, setCustomTotal] = useState('');
+
+  // Update nightly rate when selected villa changes
+  useEffect(() => {
+    if (targetVilla) {
+      setNightlyRate(targetVilla.price);
+      setCustomTotal('');
+    }
+  }, [selectedVillaId]);
+
+  // Calculate nights
   const calculateNights = () => {
     const start = new Date(checkIn);
     const end = new Date(checkOut);
@@ -34,8 +50,8 @@ export const OfflineBookingModal = ({ onClose }) => {
   };
 
   const nights = calculateNights();
-  const calculatedTotal = targetVilla ? targetVilla.price * nights : 0;
-  const finalPrice = customPrice !== '' ? parseFloat(customPrice) : calculatedTotal;
+  const calculatedTotal = (parseFloat(nightlyRate) || 0) * nights;
+  const finalPrice = customTotal !== '' ? parseFloat(customTotal) : calculatedTotal;
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -51,22 +67,28 @@ export const OfflineBookingModal = ({ onClose }) => {
       customerName,
       phone,
       email,
+      idProofType,
+      idProofNumber,
       villaId: targetVilla.id,
-      villaName: targetVilla.title,
+      villaName: targetVilla.title || targetVilla.name,
       checkIn,
       checkOut,
       guests: parseInt(guests),
+      nightlyRate: parseFloat(nightlyRate),
       totalPrice: finalPrice,
       status: 'CONFIRMED',
       bookingType: 'WALK_IN_OFFLINE',
       paymentMode,
       paymentStatus,
-      specialRequests: walkInNotes ? `[WALK-IN NOTES]: ${walkInNotes}` : 'Offline Reception Desk Booking',
+      specialRequests: [
+        idProofNumber ? `[ID PROOF: ${idProofType} - ${idProofNumber}]` : null,
+        walkInNotes ? `[WALK-IN NOTES]: ${walkInNotes}` : null
+      ].filter(Boolean).join(' | ') || 'Offline Reception Desk Booking',
       createdAt: new Date().toISOString()
     };
 
     addBooking(newBookingData);
-    alert(`🎉 Walk-In Booking Confirmed Successfully!\nRef ID: ${walkInRef}\nVilla: ${targetVilla.title}`);
+    alert(`🎉 Walk-In Booking Confirmed Successfully!\nRef ID: ${walkInRef}\nVilla: ${targetVilla.title || targetVilla.name}\nTotal: ₹${finalPrice.toLocaleString('en-IN')}`);
     onClose();
   };
 
@@ -75,10 +97,10 @@ export const OfflineBookingModal = ({ onClose }) => {
       <div
         className="modal-content glass-card"
         onClick={(e) => e.stopPropagation()}
-        style={{ maxWidth: '640px', width: '90%', borderRadius: '24px', padding: '30px' }}
+        style={{ maxWidth: '680px', width: '92%', borderRadius: '24px', padding: '30px', maxHeight: '90vh', overflowY: 'auto' }}
       >
         {/* Modal Header */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', borderBottom: '1px solid var(--border-subtle)', pb: '14px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', borderBottom: '1px solid var(--border-subtle)', paddingBottom: '14px' }}>
           <div>
             <span className="badge-gold" style={{ background: 'rgba(13, 92, 70, 0.12)', color: 'var(--accent-emerald)', borderColor: 'rgba(13, 92, 70, 0.25)', marginBottom: '6px' }}>
               <ShieldCheck size={13} /> RECEPTION DESK ACCESS
@@ -95,7 +117,7 @@ export const OfflineBookingModal = ({ onClose }) => {
 
         {/* Booking Form */}
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          {/* Guest Information */}
+          {/* Guest Name & Mobile */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '14px' }}>
             <div>
               <label className="form-label" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
@@ -126,37 +148,19 @@ export const OfflineBookingModal = ({ onClose }) => {
             </div>
           </div>
 
-          {/* Email (Optional) */}
-          <div>
-            <label className="form-label" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <Mail size={14} color="var(--accent-emerald)" /> Email Address (Optional)
-            </label>
-            <input
-              type="email"
-              className="form-input"
-              placeholder="e.g. rajesh@example.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
-
-          {/* Villa Selection & Guests */}
+          {/* Email Address & Guest Count */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '14px' }}>
             <div>
               <label className="form-label" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <Home size={14} color="var(--accent-emerald)" /> Select Available Villa *
+                <Mail size={14} color="var(--accent-emerald)" /> Email Address (Optional)
               </label>
-              <select
+              <input
+                type="email"
                 className="form-input"
-                value={selectedVillaId}
-                onChange={(e) => setSelectedVillaId(e.target.value)}
-              >
-                {villas.map((v) => (
-                  <option key={v.id} value={v.id}>
-                    {v.title} — ₹{v.price.toLocaleString('en-IN')}/night
-                  </option>
-                ))}
-              </select>
+                placeholder="e.g. rajesh@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
             </div>
 
             <div>
@@ -172,6 +176,69 @@ export const OfflineBookingModal = ({ onClose }) => {
                 onChange={(e) => setGuests(e.target.value)}
               />
             </div>
+          </div>
+
+          {/* Identity Proof Section (Aadhaar / Passport / DL / Voter ID) */}
+          <div style={{
+            background: 'rgba(212, 175, 55, 0.05)',
+            border: '1px solid rgba(212, 175, 55, 0.3)',
+            borderRadius: '16px',
+            padding: '16px'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+              <IdCard size={18} color="var(--accent-gold)" />
+              <span style={{ fontSize: '0.9rem', fontWeight: 700, color: 'var(--text-dark)' }}>
+                Identity Proof Details (Required for Govt Compliance)
+              </span>
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '12px' }}>
+              <div>
+                <label className="form-label">ID Proof Type</label>
+                <select
+                  className="form-input"
+                  value={idProofType}
+                  onChange={(e) => setIdProofType(e.target.value)}
+                >
+                  <option value="Aadhaar Card">🆔 Aadhaar Card</option>
+                  <option value="Passport">🛂 Passport</option>
+                  <option value="Driving License">🪪 Driving License</option>
+                  <option value="Voter ID Card">🗳️ Voter ID Card</option>
+                  <option value="PAN Card">💳 PAN Card</option>
+                  <option value="Other Govt ID">📜 Other Govt Issued ID</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="form-label">ID / Aadhaar Number</label>
+                <input
+                  type="text"
+                  className="form-input"
+                  placeholder="e.g. 1234-5678-9012"
+                  value={idProofNumber}
+                  onChange={(e) => setIdProofNumber(e.target.value)}
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Select Villa (Shows Villa Name First) */}
+          <div>
+            <label className="form-label" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <Home size={14} color="var(--accent-emerald)" /> Select Available Villa *
+            </label>
+            <select
+              className="form-input"
+              style={{ fontWeight: 600, fontSize: '0.95rem' }}
+              value={selectedVillaId}
+              onChange={(e) => setSelectedVillaId(e.target.value)}
+            >
+              {villas.map((v) => (
+                <option key={v.id} value={v.id}>
+                  🏡 {v.title || v.name} — ₹{v.price.toLocaleString('en-IN')}/night (Max {v.maxGuests} Guests)
+                </option>
+              ))}
+            </select>
           </div>
 
           {/* Check-In & Check-Out Dates */}
@@ -201,8 +268,48 @@ export const OfflineBookingModal = ({ onClose }) => {
             </div>
           </div>
 
+          {/* Editable Pricing Section (Nightly Tariff & Total Custom Tariff) */}
+          <div style={{
+            background: 'var(--bg-primary)',
+            border: '1px solid var(--border-glass)',
+            borderRadius: '16px',
+            padding: '16px'
+          }}>
+            <div style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--accent-emerald)', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <DollarSign size={16} /> Editable Pricing & Tariff Override
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '12px' }}>
+              <div>
+                <label className="form-label">Editable Nightly Rate (₹/night)</label>
+                <input
+                  type="number"
+                  className="form-input"
+                  style={{ fontWeight: 700, color: 'var(--accent-emerald)' }}
+                  placeholder={`Standard: ₹${targetVilla ? targetVilla.price : 4500}`}
+                  value={nightlyRate}
+                  onChange={(e) => {
+                    setNightlyRate(e.target.value);
+                    setCustomTotal('');
+                  }}
+                />
+              </div>
+
+              <div>
+                <label className="form-label">Total Custom Override (₹)</label>
+                <input
+                  type="number"
+                  className="form-input"
+                  placeholder={`Calculated: ₹${calculatedTotal.toLocaleString('en-IN')}`}
+                  value={customTotal}
+                  onChange={(e) => setCustomTotal(e.target.value)}
+                />
+              </div>
+            </div>
+          </div>
+
           {/* Payment Details */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '14px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '14px' }}>
             <div>
               <label className="form-label" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                 <CreditCard size={14} color="var(--accent-emerald)" /> Payment Mode
@@ -232,19 +339,6 @@ export const OfflineBookingModal = ({ onClose }) => {
                 <option value="Pending">❌ Payment Pending</option>
               </select>
             </div>
-
-            <div>
-              <label className="form-label" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <DollarSign size={14} color="var(--accent-emerald)" /> Custom Tariff (₹)
-              </label>
-              <input
-                type="number"
-                className="form-input"
-                placeholder={`Default: ₹${calculatedTotal.toLocaleString('en-IN')}`}
-                value={customPrice}
-                onChange={(e) => setCustomPrice(e.target.value)}
-              />
-            </div>
           </div>
 
           {/* Walk-in Notes */}
@@ -259,21 +353,22 @@ export const OfflineBookingModal = ({ onClose }) => {
             />
           </div>
 
-          {/* Total Tariff Summary */}
+          {/* Total Tariff Summary & Action Button */}
           <div style={{
             background: 'var(--bg-primary)',
-            padding: '16px',
-            borderRadius: '14px',
+            padding: '16px 20px',
+            borderRadius: '16px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            border: '1px solid var(--border-glass)'
+            border: '1px solid var(--border-glass)',
+            marginTop: '8px'
           }}>
             <div>
               <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)', fontWeight: 700, textTransform: 'uppercase' }}>
-                Total Tariff ({nights} {nights === 1 ? 'Night' : 'Nights'})
+                Final Total ({nights} {nights === 1 ? 'Night' : 'Nights'})
               </span>
-              <div style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--accent-emerald)' }}>
+              <div style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--accent-emerald)' }}>
                 ₹{finalPrice.toLocaleString('en-IN')}
               </div>
             </div>

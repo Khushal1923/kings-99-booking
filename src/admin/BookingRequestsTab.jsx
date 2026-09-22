@@ -28,10 +28,13 @@ export const BookingRequestsTab = () => {
       'Guest Name': b.customerName,
       'Mobile Number': b.phone,
       'Email': b.email || 'N/A',
+      'ID Proof Type': b.idProofType || 'N/A',
+      'ID Proof Number': b.idProofNumber || 'N/A',
       'Villa Name': b.villaName,
       'Check In': b.checkIn,
       'Check Out': b.checkOut,
       'Guests': b.guests,
+      'Nightly Rate (₹)': b.nightlyRate || 'N/A',
       'Total Tariff (₹)': b.totalPrice,
       'Status': b.status,
       'Booking Type': b.bookingType || 'ONLINE',
@@ -261,6 +264,12 @@ export const BookingRequestsTab = () => {
               <div>
                 <span className="form-label">Email Address</span>
                 <span>{selectedBooking.email || "Not Provided"}</span>
+              </div>
+              <div>
+                <span className="form-label">Identity Proof (Aadhaar / Passport)</span>
+                <strong style={{ color: 'var(--accent-emerald)' }}>
+                  {selectedBooking.idProofNumber ? `${selectedBooking.idProofType || 'Govt ID'}: ${selectedBooking.idProofNumber}` : "Not Provided"}
+                </strong>
               </div>
               <div>
                 <span className="form-label">Reserved Villa</span>
