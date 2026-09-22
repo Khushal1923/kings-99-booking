@@ -485,7 +485,11 @@ export const ResortProvider = ({ children }) => {
         }
 
         if (error) {
-          return { success: false, error: error.message || "Invalid credentials." };
+          if (error.message.toLowerCase().includes('failed to fetch') || error.message.toLowerCase().includes('fetch')) {
+            console.warn("Supabase network fetch failed, falling back to local credentials mode.");
+          } else {
+            return { success: false, error: error.message || "Invalid credentials." };
+          }
         }
       } catch (err) {
         console.warn("Supabase auth error, checking local credentials:", err);
