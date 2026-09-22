@@ -570,37 +570,51 @@ export const ResortProvider = ({ children }) => {
     setLoginModalOpen(true);
   };
 
-  // Date Collision Checking Engine
+  // Strict Date Collision Checking Engine
   const checkAvailability = (villaId, checkInStr, checkOutStr, excludeBookingId = null) => {
-    if (!checkInStr || !checkOutStr) return { available: false, reason: "Please select valid check-in and check-out dates." };
+    if (!checkInStr || !checkOutStr || !villaId) {
+      return { available: false, reason: "Please select valid check-in and check-out dates." };
+    }
     const checkIn = new Date(checkInStr);
     const checkOut = new Date(checkOutStr);
+
+    if (isNaN(checkIn.getTime()) || isNaN(checkOut.getTime())) {
+      return { available: false, reason: "Invalid dates selected." };
+    }
 
     if (checkIn >= checkOut) {
       return { available: false, reason: "Check-out date must be after check-in date." };
     }
 
+    // 1. Prevent collision against all active bookings (online & offline walk-in)
     for (const b of bookings) {
-      if (b.villaId === villaId && b.id !== excludeBookingId && b.status !== 'REJECTED' && b.status !== 'CANCELLED') {
+      if (
+        String(b.villaId) === String(villaId) &&
+        b.id !== excludeBookingId &&
+        b.status !== 'REJECTED' &&
+        b.status !== 'CANCELLED'
+      ) {
         const bIn = new Date(b.checkIn);
         const bOut = new Date(b.checkOut);
         if (checkIn < bOut && checkOut > bIn) {
+          const guestInfo = b.customerName ? `by ${b.customerName}` : '';
           return {
             available: false,
-            reason: `Villa is already booked from ${b.checkIn} to ${b.checkOut} (Ref: ${b.id}).`
+            reason: `⚠️ This Villa is ALREADY BOOKED from ${b.checkIn} to ${b.checkOut} ${guestInfo} (Ref: ${b.id}). Double bookings are strictly blocked.`
           };
         }
       }
     }
 
+    // 2. Prevent collision against owner-blocked dates
     for (const blk of blockedDates) {
-      if (blk.villaId === villaId) {
+      if (String(blk.villaId) === String(villaId)) {
         const blkIn = new Date(blk.startDate);
         const blkOut = new Date(blk.endDate);
         if (checkIn < blkOut && checkOut > blkIn) {
           return {
             available: false,
-            reason: `Dates blocked by owner: ${blk.reason || 'Maintenance'} (${blk.startDate} to ${blk.endDate}).`
+            reason: `⚠️ Dates blocked by management: ${blk.reason || 'Maintenance'} (${blk.startDate} to ${blk.endDate}).`
           };
         }
       }

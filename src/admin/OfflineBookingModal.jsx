@@ -3,7 +3,7 @@ import { useResort } from '../context/ResortContext';
 import { X, Calendar, User, Phone, Mail, Home, CreditCard, CheckCircle2, ShieldCheck, DollarSign, IdCard } from 'lucide-react';
 
 export const OfflineBookingModal = ({ onClose }) => {
-  const { villas, addBooking } = useResort();
+  const { villas, addBooking, checkAvailability } = useResort();
 
   const [customerName, setCustomerName] = useState('');
   const [phone, setPhone] = useState('');
@@ -20,6 +20,7 @@ export const OfflineBookingModal = ({ onClose }) => {
   const [paymentMode, setPaymentMode] = useState('UPI / GPay / PhonePe');
   const [paymentStatus, setPaymentStatus] = useState('Paid in Full');
   const [walkInNotes, setWalkInNotes] = useState('');
+  const [availabilityError, setAvailabilityError] = useState('');
 
   // Identity Proof State (Aadhaar, Passport, DL, etc.)
   const [idProofType, setIdProofType] = useState('Aadhaar Card');
@@ -40,6 +41,20 @@ export const OfflineBookingModal = ({ onClose }) => {
     }
   }, [selectedVillaId]);
 
+  // Real-time Availability Collision Validation
+  useEffect(() => {
+    if (selectedVillaId && checkIn && checkOut) {
+      const res = checkAvailability(selectedVillaId, checkIn, checkOut);
+      if (!res.available) {
+        setAvailabilityError(res.reason);
+      } else {
+        setAvailabilityError('');
+      }
+    } else {
+      setAvailabilityError('');
+    }
+  }, [selectedVillaId, checkIn, checkOut, checkAvailability]);
+
   // Calculate nights
   const calculateNights = () => {
     const start = new Date(checkIn);
@@ -57,6 +72,13 @@ export const OfflineBookingModal = ({ onClose }) => {
     e.preventDefault();
     if (!customerName.trim() || !phone.trim()) {
       alert('Please fill in Guest Name and Mobile Number.');
+      return;
+    }
+
+    // Validate collision before confirming walk-in
+    const availability = checkAvailability(selectedVillaId, checkIn, checkOut);
+    if (!availability.available) {
+      alert(`⚠️ Cannot Confirm Booking:\n\n${availability.reason}`);
       return;
     }
 
@@ -267,6 +289,22 @@ export const OfflineBookingModal = ({ onClose }) => {
               />
             </div>
           </div>
+
+          {/* Date Availability Collision Warning Banner */}
+          {availabilityError && (
+            <div style={{
+              background: 'rgba(239, 68, 68, 0.1)',
+              border: '1px solid #ef4444',
+              color: '#ef4444',
+              borderRadius: '12px',
+              padding: '12px 16px',
+              fontSize: '0.85rem',
+              fontWeight: 600,
+              lineHeight: 1.5
+            }}>
+              {availabilityError}
+            </div>
+          )}
 
           {/* Editable Pricing Section (Nightly Tariff & Total Custom Tariff) */}
           <div style={{
