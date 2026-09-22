@@ -185,62 +185,37 @@ const mapGalleryToDB = (g) => ({
   created_at: g.createdAt || new Date().toISOString()
 });
 
+// Safe LocalStorage JSON parser with fallback & object merging
+const safeParse = (key, fallback) => {
+  try {
+    const saved = localStorage.getItem(key);
+    if (!saved) return fallback;
+    const parsed = JSON.parse(saved);
+    if (!parsed) return fallback;
+    if (typeof fallback === 'object' && fallback !== null && !Array.isArray(fallback)) {
+      return { ...fallback, ...parsed };
+    }
+    return parsed;
+  } catch (e) {
+    console.warn(`Storage parse warning for ${key}:`, e);
+    return fallback;
+  }
+};
+
 export const ResortProvider = ({ children }) => {
-  const [cms, setCms] = useState(() => {
-    const saved = localStorage.getItem(STORAGE_KEYS.CMS);
-    return saved ? JSON.parse(saved) : initialCMS;
-  });
-
-  const [villas, setVillas] = useState(() => {
-    const saved = localStorage.getItem(STORAGE_KEYS.VILLAS);
-    return saved ? JSON.parse(saved) : initialVillas;
-  });
-
-  const [bookings, setBookings] = useState(() => {
-    const saved = localStorage.getItem(STORAGE_KEYS.BOOKINGS);
-    return saved ? JSON.parse(saved) : initialBookings;
-  });
-
-  const [diningBookings, setDiningBookings] = useState(() => {
-    const saved = localStorage.getItem(STORAGE_KEYS.DINING_BOOKINGS);
-    return saved ? JSON.parse(saved) : [];
-  });
-
-  const [blockedDates, setBlockedDates] = useState(() => {
-    const saved = localStorage.getItem(STORAGE_KEYS.BLOCKED_DATES);
-    return saved ? JSON.parse(saved) : initialBlockedDates;
-  });
-
-  const [restaurant, setRestaurant] = useState(() => {
-    const saved = localStorage.getItem(STORAGE_KEYS.RESTAURANT);
-    return saved ? JSON.parse(saved) : initialRestaurant;
-  });
-
-  const [gallery, setGallery] = useState(() => {
-    const saved = localStorage.getItem(STORAGE_KEYS.GALLERY);
-    return saved ? JSON.parse(saved) : initialGallery;
-  });
-
   const defaultCredentials = {
     ADMIN: { username: 'admin', email: 'admin@kings99official.com', password: 'admin' },
     STAFF: { username: 'staff', email: 'staff@kings99official.com', password: 'staff' }
   };
 
-  const [credentials, setCredentials] = useState(() => {
-    const saved = localStorage.getItem(STORAGE_KEYS.CREDENTIALS);
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved);
-        if (parsed && typeof parsed === 'object') {
-          return {
-            ADMIN: { ...defaultCredentials.ADMIN, ...(parsed.ADMIN || {}) },
-            STAFF: { ...defaultCredentials.STAFF, ...(parsed.STAFF || {}) }
-          };
-        }
-      } catch { /* fallback */ }
-    }
-    return defaultCredentials;
-  });
+  const [cms, setCms] = useState(() => safeParse(STORAGE_KEYS.CMS, initialCMS));
+  const [villas, setVillas] = useState(() => safeParse(STORAGE_KEYS.VILLAS, initialVillas));
+  const [bookings, setBookings] = useState(() => safeParse(STORAGE_KEYS.BOOKINGS, initialBookings));
+  const [diningBookings, setDiningBookings] = useState(() => safeParse(STORAGE_KEYS.DINING_BOOKINGS, []));
+  const [blockedDates, setBlockedDates] = useState(() => safeParse(STORAGE_KEYS.BLOCKED_DATES, initialBlockedDates));
+  const [restaurant, setRestaurant] = useState(() => safeParse(STORAGE_KEYS.RESTAURANT, initialRestaurant));
+  const [gallery, setGallery] = useState(() => safeParse(STORAGE_KEYS.GALLERY, initialGallery));
+  const [credentials, setCredentials] = useState(() => safeParse(STORAGE_KEYS.CREDENTIALS, defaultCredentials));
 
   const [userSession, setUserSession] = useState(() => {
     const saved = localStorage.getItem(STORAGE_KEYS.SESSION);
