@@ -405,9 +405,9 @@ export const ResortProvider = ({ children }) => {
     }
 
     // 1. Try Supabase Auth if configured
-    if (isSupabaseConfigured && supabase) {
+    if (isSupabaseConfigured && supabase && supabase.auth) {
       const email = input.includes('@') ? input : `${input}@kings99official.com`;
-      const supabasePassword = password.length < 6 ? `${password}123` : password;
+      const supabasePassword = (password || '').length < 6 ? `${password}123` : password;
       try {
         let authRes = await supabase.auth.signInWithPassword({
           email,
@@ -415,7 +415,7 @@ export const ResortProvider = ({ children }) => {
         });
 
         // Auto-provision user account in Supabase Auth if it does not exist yet
-        if (authRes.error && authRes.error.message.toLowerCase().includes('invalid login credentials')) {
+        if (authRes && authRes.error && authRes.error.message && authRes.error.message.toLowerCase().includes('invalid login credentials')) {
           const normIn = input.toLowerCase();
           const targetRole = normIn.includes('admin') ? 'ADMIN' : 'STAFF';
           const { data: signUpData, error: signUpErr } = await supabase.auth.signUp({
@@ -440,8 +440,8 @@ export const ResortProvider = ({ children }) => {
           }
         }
 
-        const data = authRes.data;
-        const error = authRes.error;
+        const data = authRes?.data;
+        const error = authRes?.error;
 
         if (!error && data?.user) {
           let role = data.user.app_metadata?.role || data.user.user_metadata?.role || (input.toLowerCase().includes('admin') ? 'ADMIN' : 'STAFF');
