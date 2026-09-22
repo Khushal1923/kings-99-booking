@@ -221,15 +221,25 @@ export const ResortProvider = ({ children }) => {
     return saved ? JSON.parse(saved) : initialGallery;
   });
 
+  const defaultCredentials = {
+    ADMIN: { username: 'admin', email: 'admin@kings99official.com', password: 'admin' },
+    STAFF: { username: 'staff', email: 'staff@kings99official.com', password: 'staff' }
+  };
+
   const [credentials, setCredentials] = useState(() => {
     const saved = localStorage.getItem(STORAGE_KEYS.CREDENTIALS);
     if (saved) {
-      try { return JSON.parse(saved); } catch { /* fallback below */ }
+      try {
+        const parsed = JSON.parse(saved);
+        if (parsed && typeof parsed === 'object') {
+          return {
+            ADMIN: { ...defaultCredentials.ADMIN, ...(parsed.ADMIN || {}) },
+            STAFF: { ...defaultCredentials.STAFF, ...(parsed.STAFF || {}) }
+          };
+        }
+      } catch { /* fallback */ }
     }
-    return {
-      ADMIN: { username: 'admin', email: 'admin@kings99official.com', password: 'admin' },
-      STAFF: { username: 'staff', email: 'staff@kings99official.com', password: 'staff' }
-    };
+    return defaultCredentials;
   });
 
   const [userSession, setUserSession] = useState(() => {
@@ -495,16 +505,18 @@ export const ResortProvider = ({ children }) => {
     // 2. Strict Local Mode Credential Verification
     const normInput = input.toLowerCase();
 
-    // Check Admin Credentials
-    const adminCreds = credentials.ADMIN;
-    const matchesAdminUser = normInput === 'admin' || normInput === adminCreds.username.toLowerCase() || normInput === adminCreds.email.toLowerCase();
+    // Check Admin Credentials (with fail-safe property access)
+    const adminCreds = (credentials && credentials.ADMIN) || { username: 'admin', email: 'admin@kings99official.com', password: 'admin' };
+    const adminUser = (adminCreds.username || 'admin').toLowerCase();
+    const adminEmail = (adminCreds.email || 'admin@kings99official.com').toLowerCase();
+    const matchesAdminUser = normInput === 'admin' || normInput === adminUser || normInput === adminEmail;
     const matchesAdminPass = password === adminCreds.password || password === 'admin' || password === 'admin123' || password === 'kings99admin';
 
     if (matchesAdminUser && matchesAdminPass) {
       const activeSession = {
         role: 'ADMIN',
-        username: adminCreds.username,
-        email: adminCreds.email
+        username: adminUser,
+        email: adminEmail
       };
       setUserSession(activeSession);
       safeSetItem(STORAGE_KEYS.SESSION, JSON.stringify(activeSession));
@@ -512,16 +524,18 @@ export const ResortProvider = ({ children }) => {
       return { success: true, role: 'ADMIN' };
     }
 
-    // Check Staff Credentials
-    const staffCreds = credentials.STAFF;
-    const matchesStaffUser = normInput === 'staff' || normInput === staffCreds.username.toLowerCase() || normInput === staffCreds.email.toLowerCase();
+    // Check Staff Credentials (with fail-safe property access)
+    const staffCreds = (credentials && credentials.STAFF) || { username: 'staff', email: 'staff@kings99official.com', password: 'staff' };
+    const staffUser = (staffCreds.username || 'staff').toLowerCase();
+    const staffEmail = (staffCreds.email || 'staff@kings99official.com').toLowerCase();
+    const matchesStaffUser = normInput === 'staff' || normInput === staffUser || normInput === staffEmail;
     const matchesStaffPass = password === staffCreds.password || password === 'staff' || password === 'staff123' || password === 'kings99staff';
 
     if (matchesStaffUser && matchesStaffPass) {
       const activeSession = {
         role: 'STAFF',
-        username: staffCreds.username,
-        email: staffCreds.email
+        username: staffUser,
+        email: staffEmail
       };
       setUserSession(activeSession);
       safeSetItem(STORAGE_KEYS.SESSION, JSON.stringify(activeSession));
