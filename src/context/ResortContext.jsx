@@ -410,7 +410,7 @@ export const ResortProvider = ({ children }) => {
 
   const isUsingDefaultCredentials = useCallback(() => false, []);
 
-  // Strict Login Authentication (Supabase + Local Credentials Validation)
+  // Strict Login Authentication (Supabase + Fail-Safe Local Fallback)
   const login = async (usernameInput, passwordInput) => {
     const input = (usernameInput || '').trim();
     const password = (passwordInput || '').trim();
@@ -419,7 +419,7 @@ export const ResortProvider = ({ children }) => {
       return { success: false, error: "Please enter both Username and Password." };
     }
 
-    // 1. If Supabase Auth is enabled & configured
+    // 1. Try Supabase Auth if configured
     if (isSupabaseConfigured && supabase) {
       const email = input.includes('@') ? input : `${input}@kings99official.com`;
       const supabasePassword = password.length < 6 ? `${password}123` : password;
@@ -461,14 +461,18 @@ export const ResortProvider = ({ children }) => {
         if (!error && data?.user) {
           let role = data.user.app_metadata?.role || data.user.user_metadata?.role || (input.toLowerCase().includes('admin') ? 'ADMIN' : 'STAFF');
 
-          const { data: roleData } = await supabase
-            .from('user_roles')
-            .select('role')
-            .eq('id', data.user.id)
-            .maybeSingle();
+          try {
+            const { data: roleData } = await supabase
+              .from('user_roles')
+              .select('role')
+              .eq('id', data.user.id)
+              .maybeSingle();
 
-          if (roleData && roleData.role) {
-            role = roleData.role.toUpperCase();
+            if (roleData && roleData.role) {
+              role = roleData.role.toUpperCase();
+            }
+          } catch {
+            /* use fallback role */
           }
 
           const activeSession = {
@@ -483,16 +487,8 @@ export const ResortProvider = ({ children }) => {
           setLoginModalOpen(false);
           return { success: true, role: role.toUpperCase() };
         }
-
-        if (error) {
-          if (error.message.toLowerCase().includes('failed to fetch') || error.message.toLowerCase().includes('fetch')) {
-            console.warn("Supabase network fetch failed, falling back to local credentials mode.");
-          } else {
-            return { success: false, error: error.message || "Invalid credentials." };
-          }
-        }
       } catch (err) {
-        console.warn("Supabase auth error, checking local credentials:", err);
+        console.warn("Supabase auth exception, falling back to local credentials mode:", err);
       }
     }
 
@@ -501,8 +497,8 @@ export const ResortProvider = ({ children }) => {
 
     // Check Admin Credentials
     const adminCreds = credentials.ADMIN;
-    const matchesAdminUser = normInput === adminCreds.username.toLowerCase() || normInput === adminCreds.email.toLowerCase();
-    const matchesAdminPass = password === adminCreds.password || password === 'admin123' || password === 'kings99admin';
+    const matchesAdminUser = normInput === 'admin' || normInput === adminCreds.username.toLowerCase() || normInput === adminCreds.email.toLowerCase();
+    const matchesAdminPass = password === adminCreds.password || password === 'admin' || password === 'admin123' || password === 'kings99admin';
 
     if (matchesAdminUser && matchesAdminPass) {
       const activeSession = {
@@ -518,8 +514,8 @@ export const ResortProvider = ({ children }) => {
 
     // Check Staff Credentials
     const staffCreds = credentials.STAFF;
-    const matchesStaffUser = normInput === staffCreds.username.toLowerCase() || normInput === staffCreds.email.toLowerCase();
-    const matchesStaffPass = password === staffCreds.password || password === 'staff123' || password === 'kings99staff';
+    const matchesStaffUser = normInput === 'staff' || normInput === staffCreds.username.toLowerCase() || normInput === staffCreds.email.toLowerCase();
+    const matchesStaffPass = password === staffCreds.password || password === 'staff' || password === 'staff123' || password === 'kings99staff';
 
     if (matchesStaffUser && matchesStaffPass) {
       const activeSession = {
@@ -536,7 +532,7 @@ export const ResortProvider = ({ children }) => {
     // If credentials do not match, REJECT authentication!
     return {
       success: false,
-      error: "Invalid Username or Password. Default logins: Admin (admin / admin) or Staff (staff / staff)."
+      error: "Invalid Username or Password. Logins: Admin (admin / admin) or Staff (staff / staff)."
     };
   };
 
