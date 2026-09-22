@@ -66,7 +66,7 @@ export const VillaManagementTab = () => {
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', flexWrap: 'wrap', gap: '16px' }}>
         <div>
-          <h3 className="font-serif" style={{ fontSize: '1.5rem', color: '#fff' }}>
+          <h3 className="font-serif" style={{ fontSize: '1.5rem', color: 'var(--text-dark)' }}>
             🏡 Villa & Residence Management (Kings 99 Nashik)
           </h3>
           <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
@@ -90,7 +90,7 @@ export const VillaManagementTab = () => {
               </span>
             </div>
 
-            <h4 className="font-serif" style={{ fontSize: '1.2rem', color: '#fff', marginBottom: '4px' }}>
+            <h4 className="font-serif" style={{ fontSize: '1.2rem', color: 'var(--text-dark)', marginBottom: '4px' }}>
               {v.name}
             </h4>
             <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '12px', height: '36px', overflow: 'hidden' }}>
@@ -100,7 +100,7 @@ export const VillaManagementTab = () => {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '12px', borderTop: '1px solid var(--border-subtle)' }}>
               <div>
                 <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Nightly Tariff</span>
-                <div style={{ fontSize: '1.2rem', fontWeight: 800, color: 'var(--accent-gold)' }}>
+                <div style={{ fontSize: '1.2rem', fontWeight: 800, color: 'var(--accent-gold-dark)' }}>
                   ₹{v.price.toLocaleString('en-IN')} <span style={{ fontSize: '0.8rem', fontWeight: 400, color: 'var(--text-muted)' }}>/night</span>
                 </div>
               </div>
@@ -139,7 +139,7 @@ export const VillaManagementTab = () => {
               <X size={24} />
             </button>
 
-            <h3 className="font-serif" style={{ fontSize: '1.6rem', color: '#fff', marginBottom: '20px' }}>
+            <h3 className="font-serif" style={{ fontSize: '1.6rem', color: 'var(--text-dark)', marginBottom: '20px' }}>
               {editingVilla ? `Edit ${editingVilla.name}` : 'Add New Villa'}
             </h3>
 

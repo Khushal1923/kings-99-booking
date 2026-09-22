@@ -79,7 +79,7 @@ export const BookingCalendarTab = () => {
       {/* Calendar Header Controls */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px', marginBottom: '24px' }}>
         <div>
-          <h3 className="font-serif" style={{ fontSize: '1.5rem', color: '#fff' }}>
+          <h3 className="font-serif" style={{ fontSize: '1.5rem', color: 'var(--text-dark)' }}>
             📅 Interactive Villa Booking Calendar
           </h3>
           <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
@@ -106,7 +106,7 @@ export const BookingCalendarTab = () => {
             <button onClick={handlePrevMonth} className="btn-outline" style={{ border: 'none', padding: '6px' }}>
               <ChevronLeft size={18} />
             </button>
-            <span style={{ fontWeight: 700, color: '#fff', padding: '0 12px', fontSize: '0.95rem' }}>
+            <span style={{ fontWeight: 700, color: 'var(--text-dark)', padding: '0 12px', fontSize: '0.95rem' }}>
               {monthNames[month]} {year}
             </span>
             <button onClick={handleNextMonth} className="btn-outline" style={{ border: 'none', padding: '6px' }}>

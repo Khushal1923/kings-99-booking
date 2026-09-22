@@ -73,7 +73,7 @@ export const RestaurantManagementTab = () => {
   return (
     <div>
       <div style={{ marginBottom: '24px' }}>
-        <h3 className="font-serif" style={{ fontSize: '1.5rem', color: '#fff' }}>
+        <h3 className="font-serif" style={{ fontSize: '1.5rem', color: 'var(--text-dark)' }}>
           🍽️ Restaurant & Culinary Management (Kings 99 Nashik)
         </h3>
         <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
@@ -83,7 +83,7 @@ export const RestaurantManagementTab = () => {
 
       {/* Main Profile Form */}
       <form onSubmit={handleSaveHeader} className="glass-card" style={{ padding: '24px', borderRadius: '16px', marginBottom: '32px' }}>
-        <h4 className="font-serif" style={{ fontSize: '1.2rem', color: '#fff', marginBottom: '16px' }}>
+        <h4 className="font-serif" style={{ fontSize: '1.2rem', color: 'var(--text-dark)', marginBottom: '16px' }}>
           Restaurant Overview & Cover Photo
         </h4>
 
@@ -123,7 +123,7 @@ export const RestaurantManagementTab = () => {
 
       {/* Ambiance Gallery Manager */}
       <div className="glass-card" style={{ padding: '24px', borderRadius: '16px', marginBottom: '32px' }}>
-        <h4 className="font-serif" style={{ fontSize: '1.2rem', color: '#fff', marginBottom: '16px' }}>
+        <h4 className="font-serif" style={{ fontSize: '1.2rem', color: 'var(--text-dark)', marginBottom: '16px' }}>
           Dining Ambiance Gallery Photos
         </h4>
 
@@ -162,14 +162,14 @@ export const RestaurantManagementTab = () => {
 
       {/* Menu Categories & Dishes Manager */}
       <div>
-        <h4 className="font-serif" style={{ fontSize: '1.4rem', color: '#fff', marginBottom: '20px' }}>
+        <h4 className="font-serif" style={{ fontSize: '1.4rem', color: 'var(--text-dark)', marginBottom: '20px' }}>
           Digital Menu Dishes & Items
         </h4>
 
         {categories.map(cat => (
           <div key={cat.id} className="glass-card" style={{ padding: '20px', borderRadius: '16px', marginBottom: '24px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-              <h5 className="font-serif" style={{ fontSize: '1.1rem', color: 'var(--accent-gold)' }}>
+              <h5 className="font-serif" style={{ fontSize: '1.1rem', color: 'var(--accent-gold-dark)', fontWeight: 700 }}>
                 {cat.title} ({cat.dishes.length} Items)
               </h5>
 
@@ -200,8 +200,8 @@ export const RestaurantManagementTab = () => {
                   <img src={dish.image} alt={dish.name} style={{ width: '70px', height: '70px', borderRadius: '8px', objectFit: 'cover', shrink: 0 }} />
                   <div style={{ flexGrow: 1 }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                      <strong style={{ color: '#fff', fontSize: '0.9rem' }}>{dish.name}</strong>
-                      <span style={{ color: 'var(--accent-gold)', fontWeight: 700 }}>₹{dish.price}</span>
+                      <strong style={{ color: 'var(--text-dark)', fontSize: '0.95rem', fontWeight: 700 }}>{dish.name}</strong>
+                      <span style={{ color: 'var(--accent-gold-dark)', fontWeight: 800 }}>₹{dish.price}</span>
                     </div>
                     <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{dish.tag}</span>
                   </div>
@@ -222,7 +222,7 @@ export const RestaurantManagementTab = () => {
       {newDishModal && (
         <div className="modal-overlay" onClick={() => setNewDishModal(false)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '500px' }}>
-            <h4 className="font-serif" style={{ fontSize: '1.4rem', color: '#fff', marginBottom: '16px' }}>
+            <h4 className="font-serif" style={{ fontSize: '1.4rem', color: 'var(--text-dark)', marginBottom: '16px' }}>
               Add New Dish Item
             </h4>
 

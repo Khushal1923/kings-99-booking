@@ -29,7 +29,7 @@ export const AvailabilityManagerTab = () => {
   return (
     <div>
       <div style={{ marginBottom: '24px' }}>
-        <h3 className="font-serif" style={{ fontSize: '1.5rem', color: '#fff' }}>
+        <h3 className="font-serif" style={{ fontSize: '1.5rem', color: 'var(--text-dark)' }}>
           🔴🟢 Villa Availability & Date Range Blocker
         </h3>
         <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
@@ -40,7 +40,7 @@ export const AvailabilityManagerTab = () => {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '32px' }}>
         {/* Block Form */}
         <div className="glass-card" style={{ padding: '24px', borderRadius: '16px' }}>
-          <h4 className="font-serif" style={{ fontSize: '1.2rem', color: '#fff', marginBottom: '16px' }}>
+          <h4 className="font-serif" style={{ fontSize: '1.2rem', color: 'var(--text-dark)', marginBottom: '16px' }}>
             🔒 Block Villa Dates
           </h4>
 
@@ -101,7 +101,7 @@ export const AvailabilityManagerTab = () => {
 
         {/* Existing Blocks List */}
         <div className="glass-card" style={{ padding: '24px', borderRadius: '16px' }}>
-          <h4 className="font-serif" style={{ fontSize: '1.2rem', color: '#fff', marginBottom: '16px' }}>
+          <h4 className="font-serif" style={{ fontSize: '1.2rem', color: 'var(--text-dark)', marginBottom: '16px' }}>
             Current Blocked Schedules ({blockedDates.length})
           </h4>
 
@@ -122,7 +122,7 @@ export const AvailabilityManagerTab = () => {
                   }}
                 >
                   <div>
-                    <strong style={{ color: '#fff', fontSize: '0.95rem' }}>{villa ? villa.name : blk.villaId}</strong>
+                    <strong style={{ color: 'var(--text-dark)', fontSize: '0.95rem' }}>{villa ? villa.name : blk.villaId}</strong>
                     <div style={{ fontSize: '0.8rem', color: '#ef4444', marginTop: '2px' }}>
                       {blk.startDate} → {blk.endDate}
                     </div>
