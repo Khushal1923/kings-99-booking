@@ -121,61 +121,68 @@ export const initialRestaurant = {
   coverImage: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=80",
   categories: [
     {
-      id: "cat-starters",
-      title: "Kings Tandoor & Starters",
+      id: "cat-maharashtrian",
+      title: "MAHARASHTRIAN",
       dishes: [
-        {
-          id: "kd1",
-          name: "Paneer Tikka Angara",
-          price: 340,
-          description: "Fresh cottage cheese marinated in spicy Indian masalas and grilled in charcoal tandoor.",
-          image: "https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?auto=format&fit=crop&w=800&q=80",
-          tag: "Chef Special"
-        },
-        {
-          id: "kd2",
-          name: "Chicken Rozali Kebab",
-          price: 420,
-          description: "Stuffed minced chicken rolls marinated in cashew gravy and aromatic Indian spices.",
-          image: "https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?auto=format&fit=crop&w=800&q=80",
-          tag: "Must Try"
-        }
+        { id: "m1", name: "Shev Bhaji", price: 350, description: "Authentic spicy gravy topped with crunchy crispy Gathiya Shev.", tag: "Nashik Special", image: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=800&q=80" },
+        { id: "m2", name: "Veg Bhuna", price: 325, description: "Mixed garden vegetables tossed in roasted spicy Maharashtrian masala.", tag: "Chef Special", image: "https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?auto=format&fit=crop&w=800&q=80" },
+        { id: "m3", name: "Veg Maratha", price: 350, description: "Spicy vegetable cutlets simmered in rich red Kolhapuri style gravy.", tag: "Spicy", image: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=800&q=80" },
+        { id: "m4", name: "Bharli Vangi", price: 350, description: "Stuffed baby eggplants cooked with roasted peanut and coconut gravy.", tag: "Traditional", image: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=800&q=80" },
+        { id: "m5", name: "Vangi Bhari", price: 350, description: "Smokey roasted eggplant mash tempered with garlic, green chillies & coriander.", tag: "Desi Taste", image: "https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?auto=format&fit=crop&w=800&q=80" },
+        { id: "m6", name: "Methi Pithla", price: 350, description: "Gram flour curry tempered with fresh fenugreek leaves, garlic & spices.", tag: "Desi Taste", image: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=800&q=80" }
       ]
     },
     {
-      id: "cat-mains",
-      title: "Royal Indian & Maharashtrian Main Course",
+      id: "cat-tandoor",
+      title: "TANDOOR",
       dishes: [
-        {
-          id: "kd3",
-          name: "Kings Special Kaju Butter Masala",
-          price: 380,
-          description: "Whole roasted cashews cooked in rich creamy tomato and butter gravy.",
-          image: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=800&q=80",
-          tag: "Pure Veg"
-        },
-        {
-          id: "kd4",
-          name: "Nashik Style Handi Chicken / Mutton",
-          price: 520,
-          description: "Slow-cooked tender meat in earthen handi with authentic Maharashtrian whole spices.",
-          image: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=800&q=80",
-          tag: "Authentic Nashik"
-        }
+        { id: "t1", name: "Paneer Tikka Angara", price: 340, description: "Fresh cottage cheese marinated in fiery spices grilled in charcoal clay oven.", tag: "Chef Special", image: "https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?auto=format&fit=crop&w=800&q=80" },
+        { id: "t2", name: "Chicken Rozali Kebab", price: 420, description: "Stuffed minced chicken rolls cooked in cashew gravy.", tag: "Must Try", image: "https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?auto=format&fit=crop&w=800&q=80" }
+      ]
+    },
+    {
+      id: "cat-indian",
+      title: "INDIAN",
+      dishes: [
+        { id: "i1", name: "Kings Special Kaju Butter Masala", price: 380, description: "Whole roasted cashews in rich butter tomato cream gravy.", tag: "Pure Veg", image: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=800&q=80" },
+        { id: "i2", name: "Paneer Butter Masala", price: 340, description: "Soft cottage cheese cubes in silky smooth butter gravy.", tag: "Popular", image: "https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?auto=format&fit=crop&w=800&q=80" }
+      ]
+    },
+    {
+      id: "cat-chinese",
+      title: "CHINESE",
+      dishes: [
+        { id: "c1", name: "Paneer Chilli Dry", price: 290, description: "Crispy paneer cubes tossed with capsicum, onion & soya sauce.", tag: "Starter", image: "https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?auto=format&fit=crop&w=800&q=80" },
+        { id: "c2", name: "Veg Hakka Noodles", price: 260, description: "Wok-tossed noodles with crunchy spring vegetables.", tag: "Kids Choice", image: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=800&q=80" }
+      ]
+    },
+    {
+      id: "cat-seafood",
+      title: "SEAFOOD",
+      dishes: [
+        { id: "s1", name: "Surmai Rava Fry", price: 480, description: "Fresh king fish steak coated with spiced semolina and crispy fried.", tag: "Fresh Catch", image: "https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?auto=format&fit=crop&w=800&q=80" },
+        { id: "s2", name: "Prawns Koliwada", price: 520, description: "Crispy deep-fried spicy prawns with mint chutney.", tag: "Popular", image: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=800&q=80" }
+      ]
+    },
+    {
+      id: "cat-breakfast",
+      title: "BREAKFAST",
+      dishes: [
+        { id: "b1", name: "Poha & Misal Pav", price: 160, description: "Authentic Nashik spicy misal with farsan & fresh pav.", tag: "Nashik Special", image: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=800&q=80" }
       ]
     },
     {
       id: "cat-beverages",
-      title: "Mocktails & Coolers",
+      title: "BEVERAGES & SNACKS",
       dishes: [
-        {
-          id: "kd5",
-          name: "Kings Sunset Passion Cooler",
-          price: 180,
-          description: "Refreshing blend of passion fruit, mint, lime juice, and soda.",
-          image: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&w=800&q=80",
-          tag: "Cooler"
-        }
+        { id: "bv1", name: "Kings Sunset Passion Cooler", price: 180, description: "Refreshing blend of passion fruit, mint, lime & soda.", tag: "Cooler", image: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&w=800&q=80" }
+      ]
+    },
+    {
+      id: "cat-desserts",
+      title: "DESSERTS",
+      dishes: [
+        { id: "d1", name: "Sizzling Sizzler Brownie with Ice Cream", price: 240, description: "Warm chocolate brownie served on a hot sizzler plate with vanilla ice cream & hot fudge.", tag: "Chef Favorite", image: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&w=800&q=80" }
       ]
     }
   ],
