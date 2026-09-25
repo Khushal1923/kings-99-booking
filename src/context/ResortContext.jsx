@@ -573,19 +573,33 @@ export const ResortProvider = ({ children }) => {
     setLoginModalOpen(true);
   };
 
+  // Helper for today's local calendar date string (YYYY-MM-DD)
+  const getTodayDateStr = () => {
+    const d = new Date();
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
   // Strict Date Collision Checking Engine
   const checkAvailability = (villaId, checkInStr, checkOutStr, excludeBookingId = null) => {
     if (!checkInStr || !checkOutStr || !villaId) {
       return { available: false, reason: "Please select valid check-in and check-out dates." };
     }
-    const checkIn = new Date(checkInStr);
-    const checkOut = new Date(checkOutStr);
+    const checkInDate = new Date(checkInStr);
+    const checkOutDate = new Date(checkOutStr);
 
-    if (isNaN(checkIn.getTime()) || isNaN(checkOut.getTime())) {
+    if (isNaN(checkInDate.getTime()) || isNaN(checkOutDate.getTime())) {
       return { available: false, reason: "Invalid dates selected." };
     }
 
-    if (checkIn >= checkOut) {
+    const todayStr = getTodayDateStr();
+    if (checkInStr < todayStr) {
+      return { available: false, reason: "Check-in date cannot be in the past." };
+    }
+
+    if (checkInStr >= checkOutStr) {
       return { available: false, reason: "Check-out date must be after check-in date." };
     }
 
@@ -597,9 +611,7 @@ export const ResortProvider = ({ children }) => {
         b.status !== 'REJECTED' &&
         b.status !== 'CANCELLED'
       ) {
-        const bIn = new Date(b.checkIn);
-        const bOut = new Date(b.checkOut);
-        if (checkIn < bOut && checkOut > bIn) {
+        if (checkInStr < b.checkOut && checkOutStr > b.checkIn) {
           const guestInfo = b.customerName ? `by ${b.customerName}` : '';
           return {
             available: false,
@@ -612,9 +624,7 @@ export const ResortProvider = ({ children }) => {
     // 2. Prevent collision against owner-blocked dates
     for (const blk of blockedDates) {
       if (String(blk.villaId) === String(villaId)) {
-        const blkIn = new Date(blk.startDate);
-        const blkOut = new Date(blk.endDate);
-        if (checkIn < blkOut && checkOut > blkIn) {
+        if (checkInStr < blk.endDate && checkOutStr > blk.startDate) {
           return {
             available: false,
             reason: `⚠️ Dates blocked by management: ${blk.reason || 'Maintenance'} (${blk.startDate} to ${blk.endDate}).`
@@ -654,16 +664,19 @@ export const ResortProvider = ({ children }) => {
       createdAt: new Date().toISOString()
     };
 
+    if (isSupabaseConfigured && supabase) {
+      const { error } = await supabase.from('bookings').insert(mapBookingToDB(newBooking));
+      if (error) {
+        console.error("Supabase addBooking error:", error);
+        throw new Error("We couldn't submit your booking right now. Please try again.");
+      }
+    }
+
     setBookings(prev => {
       const updated = [newBooking, ...prev];
       safeSetItem(STORAGE_KEYS.BOOKINGS, JSON.stringify(updated));
       return updated;
     });
-
-    if (isSupabaseConfigured && supabase) {
-      const { error } = await supabase.from('bookings').insert(mapBookingToDB(newBooking));
-      if (error) console.error("Supabase addBooking error:", error);
-    }
 
     return newBooking;
   };

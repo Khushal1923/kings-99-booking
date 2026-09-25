@@ -8,25 +8,44 @@ export const BookingModal = ({ selectedVilla, onClose }) => {
   const [bookingMode, setBookingMode] = useState('VILLA'); // 'VILLA' | 'TABLE'
 
   const activeVillas = villas.filter(v => v.isActive);
-  const initialVillaId = selectedVilla ? selectedVilla.id : (activeVillas[0]?.id || '');
 
+  // Local calendar date helper (YYYY-MM-DD) avoiding UTC shifts
+  const getLocalDateString = (offsetDays = 0) => {
+    const d = new Date();
+    d.setDate(d.getDate() + offsetDays);
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
+  const todayStr = getLocalDateString(0);
+  const defaultCheckIn = getLocalDateString(1);
+  const defaultCheckOut = getLocalDateString(3);
+
+  const initialVillaId = selectedVilla ? selectedVilla.id : (activeVillas[0]?.id || '');
   const [villaId, setVillaId] = useState(initialVillaId);
 
+  // Synchronize villaId when selectedVilla prop or activeVillas availability updates
+  useEffect(() => {
+    if (selectedVilla && selectedVilla.id) {
+      setVillaId(selectedVilla.id);
+    } else if (activeVillas.length > 0) {
+      const isValidSelection = activeVillas.some(v => v.id === villaId);
+      if (!villaId || !isValidSelection) {
+        setVillaId(activeVillas[0].id);
+      }
+    } else {
+      setVillaId('');
+    }
+  }, [selectedVilla, activeVillas, villaId]);
+
   // Villa dates
-  const tomorrow = new Date();
-  tomorrow.setDate(tomorrow.getDate() + 1);
-  const defaultCheckIn = tomorrow.toISOString().split('T')[0];
-
-  const threeDaysLater = new Date();
-  threeDaysLater.setDate(threeDaysLater.getDate() + 3);
-  const defaultCheckOut = threeDaysLater.toISOString().split('T')[0];
-
   const [checkIn, setCheckIn] = useState(defaultCheckIn);
   const [checkOut, setCheckOut] = useState(defaultCheckOut);
   const [villaGuests, setVillaGuests] = useState(2);
 
   // Dining table dates
-  const todayStr = new Date().toISOString().split('T')[0];
   const [diningDate, setDiningDate] = useState(todayStr);
   const [diningTime, setDiningTime] = useState('19:30');
   const [diningGuests, setDiningGuests] = useState(4);
@@ -66,14 +85,21 @@ export const BookingModal = ({ selectedVilla, onClose }) => {
       } else {
         setErrorMsg('');
       }
+    } else if (bookingMode === 'VILLA' && activeVillas.length === 0) {
+      setErrorMsg('No active villa accommodation is currently available for booking.');
     } else {
       setErrorMsg('');
     }
-  }, [bookingMode, villaId, checkIn, checkOut, checkAvailability]);
+  }, [bookingMode, villaId, checkIn, checkOut, checkAvailability, activeVillas.length]);
 
   const handleVillaSubmit = async (e) => {
     e.preventDefault();
     setErrorMsg('');
+
+    if (!villaId || activeVillas.length === 0) {
+      setErrorMsg("No active villa is currently selected or available.");
+      return;
+    }
 
     if (!customerName.trim() || !phone.trim()) {
       setErrorMsg("Please provide your Name and Mobile Number so we can confirm your villa booking.");
@@ -256,6 +282,7 @@ export const BookingModal = ({ selectedVilla, onClose }) => {
                     <label className="form-label">Check-In Date</label>
                     <input
                       type="date"
+                      min={todayStr}
                       className="form-input"
                       value={checkIn}
                       onChange={(e) => setCheckIn(e.target.value)}
@@ -266,6 +293,7 @@ export const BookingModal = ({ selectedVilla, onClose }) => {
                     <label className="form-label">Check-Out Date</label>
                     <input
                       type="date"
+                      min={checkIn || todayStr}
                       className="form-input"
                       value={checkOut}
                       onChange={(e) => setCheckOut(e.target.value)}
