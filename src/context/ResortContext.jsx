@@ -23,12 +23,14 @@ const STORAGE_KEYS = {
   CREDENTIALS: 'kings_99_credentials_v4'
 };
 
-// Safe LocalStorage setItem helper
+// Safe LocalStorage setItem helper (Safari Private Mode Guard)
 const safeSetItem = (key, value) => {
   try {
-    localStorage.setItem(key, value);
+    if (typeof window !== 'undefined' && window.localStorage) {
+      window.localStorage.setItem(key, value);
+    }
   } catch (e) {
-    console.error(`Storage error for ${key}:`, e);
+    console.warn(`Storage set warning for ${key}:`, e);
   }
 };
 
@@ -185,10 +187,11 @@ const mapGalleryToDB = (g) => ({
   created_at: g.createdAt || new Date().toISOString()
 });
 
-// Safe LocalStorage JSON parser with fallback & object merging
+// Safe LocalStorage JSON parser with fallback & object merging (Safari Private Mode Guard)
 const safeParse = (key, fallback) => {
   try {
-    const saved = localStorage.getItem(key);
+    if (typeof window === 'undefined' || !window.localStorage) return fallback;
+    const saved = window.localStorage.getItem(key);
     if (!saved) return fallback;
     const parsed = JSON.parse(saved);
     if (!parsed) return fallback;

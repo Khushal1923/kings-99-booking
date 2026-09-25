@@ -5,6 +5,7 @@ import react from '@vitejs/plugin-react';
 export default defineConfig({
   plugins: [react()],
   build: {
+    target: ['es2015', 'safari13', 'chrome87', 'edge88'],
     chunkSizeWarningLimit: 1600,
     rollupOptions: {
       output: {
