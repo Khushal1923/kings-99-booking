@@ -34,12 +34,12 @@ export const AdminDashboard = () => {
   const usingDefaultCreds = isUsingDefaultCredentials(role);
 
   // Stats calculation
-  const pendingVillaCount = bookings.filter(b => b.status === 'PENDING').length;
-  const pendingTableCount = diningBookings.filter(d => d.status === 'PENDING').length;
+  const pendingVillaCount = (bookings || []).filter(b => b && (b.status || '').toUpperCase() === 'PENDING').length;
+  const pendingTableCount = (diningBookings || []).filter(d => d && (d.status || '').toUpperCase() === 'PENDING').length;
 
-  const totalRevenue = bookings
-    .filter(b => b.status === 'CONFIRMED')
-    .reduce((sum, b) => sum + (b.totalPrice || 0), 0);
+  const totalRevenue = (bookings || [])
+    .filter(b => b && (b.status || '').toUpperCase() === 'CONFIRMED')
+    .reduce((sum, b) => sum + (Number(b.totalPrice || b.total_price) || 0), 0);
 
   // Filter available tabs based on role (Table Reservations First)
   const allTabs = [

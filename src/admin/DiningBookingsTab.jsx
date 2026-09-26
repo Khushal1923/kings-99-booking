@@ -9,12 +9,23 @@ export const DiningBookingsTab = () => {
   const [statusFilter, setStatusFilter] = useState('ALL');
   const [searchTerm, setSearchTerm] = useState('');
 
-  const filtered = diningBookings.filter(d => {
-    const matchesStatus = statusFilter === 'ALL' || d.status === statusFilter;
+  const filtered = (diningBookings || []).filter(d => {
+    if (!d) return false;
+    const status = (d.status || '').toUpperCase();
+    const filter = statusFilter.toUpperCase();
+    const matchesStatus = filter === 'ALL' || status === filter;
+
+    const term = (searchTerm || '').toLowerCase();
+    const custName = (d.customerName || d.customer_name || '').toLowerCase();
+    const phoneNum = (d.phone || '').toLowerCase();
+    const refId = (d.id || '').toLowerCase();
+
     const matchesSearch =
-      d.customerName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      d.phone.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      d.id.toLowerCase().includes(searchTerm.toLowerCase());
+      !term ||
+      custName.includes(term) ||
+      phoneNum.includes(term) ||
+      refId.includes(term);
+
     return matchesStatus && matchesSearch;
   });
 

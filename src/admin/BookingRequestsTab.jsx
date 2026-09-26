@@ -12,13 +12,25 @@ export const BookingRequestsTab = () => {
   const [selectedBooking, setSelectedBooking] = useState(null);
   const [showOfflineModal, setShowOfflineModal] = useState(false);
 
-  const filteredBookings = bookings.filter(b => {
-    const matchesStatus = statusFilter === 'ALL' || b.status === statusFilter;
+  const filteredBookings = (bookings || []).filter(b => {
+    if (!b) return false;
+    const status = (b.status || '').toUpperCase();
+    const filter = statusFilter.toUpperCase();
+    const matchesStatus = filter === 'ALL' || status === filter;
+
+    const term = (searchTerm || '').toLowerCase();
+    const custName = (b.customerName || b.customer_name || '').toLowerCase();
+    const phoneNum = (b.phone || '').toLowerCase();
+    const refId = (b.id || '').toLowerCase();
+    const vName = (b.villaName || b.villa_name || '').toLowerCase();
+
     const matchesSearch =
-      b.customerName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      b.phone.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      b.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      b.villaName.toLowerCase().includes(searchTerm.toLowerCase());
+      !term ||
+      custName.includes(term) ||
+      phoneNum.includes(term) ||
+      refId.includes(term) ||
+      vName.includes(term);
+
     return matchesStatus && matchesSearch;
   });
 

@@ -9,31 +9,38 @@ export const GuestDirectoryTab = () => {
 
   // Extract unique guests by phone/email
   const guestMap = {};
-  bookings.forEach(b => {
-    const key = b.phone || b.email || b.customerName;
+  (bookings || []).forEach(b => {
+    if (!b) return;
+    const name = b.customerName || b.customer_name || 'Guest';
+    const phone = b.phone || '';
+    const email = b.email || '';
+    const key = phone || email || name;
     if (!guestMap[key]) {
       guestMap[key] = {
-        name: b.customerName,
-        phone: b.phone,
-        email: b.email,
+        name,
+        phone,
+        email,
         totalBookings: 0,
         totalSpent: 0,
-        lastCheckIn: b.checkIn,
+        lastCheckIn: b.checkIn || b.check_in || 'N/A',
         history: []
       };
     }
     guestMap[key].totalBookings += 1;
-    if (b.status === 'CONFIRMED') {
-      guestMap[key].totalSpent += b.totalPrice;
+    if ((b.status || '').toUpperCase() === 'CONFIRMED') {
+      guestMap[key].totalSpent += Number(b.totalPrice || b.total_price) || 0;
     }
     guestMap[key].history.push(b);
   });
 
-  const guestList = Object.values(guestMap).filter(g =>
-    g.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    g.phone.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    (g.email && g.email.toLowerCase().includes(searchTerm.toLowerCase()))
-  );
+  const guestList = Object.values(guestMap).filter(g => {
+    const term = (searchTerm || '').toLowerCase();
+    if (!term) return true;
+    const name = (g.name || '').toLowerCase();
+    const phone = (g.phone || '').toLowerCase();
+    const email = (g.email || '').toLowerCase();
+    return name.includes(term) || phone.includes(term) || email.includes(term);
+  });
 
   const handleExportDirectoryExcel = () => {
     const csvData = guestList.map(g => ({
