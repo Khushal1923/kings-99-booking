@@ -125,7 +125,7 @@ export const BookingModal = ({ selectedVilla, onClose }) => {
       setCreatedType('VILLA');
       setCreatedBooking(result);
     } catch (err) {
-      setErrorMsg(err.message || "Could not complete villa booking request.");
+      setErrorMsg(err.message || "Unable to submit your booking right now. Please try again or contact Kings 99.");
     } finally {
       setIsSubmitting(false);
     }
@@ -155,7 +155,7 @@ export const BookingModal = ({ selectedVilla, onClose }) => {
       setCreatedType('TABLE');
       setCreatedBooking(result);
     } catch (err) {
-      setErrorMsg(err.message || "Could not complete dining table reservation.");
+      setErrorMsg(err.message || "Unable to submit your dining table reservation right now. Please try again or contact Kings 99.");
     } finally {
       setIsSubmitting(false);
     }

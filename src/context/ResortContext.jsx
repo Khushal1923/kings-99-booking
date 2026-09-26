@@ -260,8 +260,15 @@ export const ResortProvider = ({ children }) => {
       }
 
       // 3. Fetch Bookings
-      const { data: bookingData } = await supabase.from('bookings').select('*').order('created_at', { ascending: false });
-      if (bookingData && bookingData.length > 0) {
+      const { data: bookingData, error: bookingErr } = await supabase.from('bookings').select('*').order('created_at', { ascending: false });
+      if (bookingErr) {
+        console.error("Staff bookings query error:", {
+          code: bookingErr.code,
+          message: bookingErr.message,
+          details: bookingErr.details,
+          hint: bookingErr.hint
+        });
+      } else if (bookingData && bookingData.length > 0) {
         const dbBookings = bookingData.map(mapBookingFromDB);
         setBookings(prev => {
           const dbIds = new Set(dbBookings.map(b => b.id));
@@ -271,8 +278,15 @@ export const ResortProvider = ({ children }) => {
       }
 
       // 4. Fetch Dining Bookings
-      const { data: diningData } = await supabase.from('dining_bookings').select('*').order('created_at', { ascending: false });
-      if (diningData && diningData.length > 0) {
+      const { data: diningData, error: diningErr } = await supabase.from('dining_bookings').select('*').order('created_at', { ascending: false });
+      if (diningErr) {
+        console.error("Staff dining bookings query error:", {
+          code: diningErr.code,
+          message: diningErr.message,
+          details: diningErr.details,
+          hint: diningErr.hint
+        });
+      } else if (diningData && diningData.length > 0) {
         const dbDining = diningData.map(mapDiningFromDB);
         setDiningBookings(prev => {
           const dbIds = new Set(dbDining.map(d => d.id));
@@ -644,8 +658,13 @@ export const ResortProvider = ({ children }) => {
     if (isSupabaseConfigured && supabase) {
       const { error } = await supabase.from('bookings').insert(mapBookingToDB(newBooking));
       if (error) {
-        console.error("Supabase addBooking error:", error);
-        throw new Error("We couldn't submit your booking right now. Please try again.");
+        console.error("Villa booking Supabase error:", {
+          code: error.code,
+          message: error.message,
+          details: error.details,
+          hint: error.hint
+        });
+        throw new Error("Unable to submit your booking right now. Please try again or contact Kings 99.");
       }
     }
 
@@ -690,7 +709,15 @@ export const ResortProvider = ({ children }) => {
 
     if (isSupabaseConfigured && supabase) {
       const { error } = await supabase.from('dining_bookings').insert(mapDiningToDB(newTableBooking));
-      if (error) console.error("Supabase addDiningBooking error:", error);
+      if (error) {
+        console.error("Dining booking Supabase error:", {
+          code: error.code,
+          message: error.message,
+          details: error.details,
+          hint: error.hint
+        });
+        throw new Error("Unable to submit your dining table reservation right now. Please try again or contact Kings 99.");
+      }
     }
 
     return newTableBooking;
