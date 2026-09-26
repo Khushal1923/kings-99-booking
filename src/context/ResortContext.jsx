@@ -73,22 +73,22 @@ const mapVillaToDB = (v) => ({
 });
 
 const mapBookingFromDB = (b) => ({
-  id: b.id,
-  villaId: b.villa_id,
-  villaName: b.villa_name,
-  customerName: b.customer_name,
-  phone: b.phone,
+  id: b.id || `K99-DB-${Math.floor(1000 + Math.random() * 9000)}`,
+  villaId: b.villa_id || '',
+  villaName: b.villa_name || 'Kings 99 Villa',
+  customerName: b.customer_name || 'Guest',
+  phone: b.phone || '',
   email: b.email || '',
-  checkIn: b.check_in,
-  checkOut: b.check_out,
-  guests: b.guests,
-  totalPrice: Number(b.total_price),
-  status: b.status,
+  checkIn: b.check_in || '',
+  checkOut: b.check_out || '',
+  guests: Number(b.guests) || 1,
+  totalPrice: Number(b.total_price) || 0,
+  status: b.status || 'PENDING',
   bookingType: b.booking_type || 'ONLINE',
   paymentMode: b.payment_mode || 'Online',
   paymentStatus: b.payment_status || 'Pending',
   specialRequests: b.special_requests || '',
-  createdAt: b.created_at
+  createdAt: b.created_at || new Date().toISOString()
 });
 
 const mapBookingToDB = (b) => ({
@@ -111,15 +111,15 @@ const mapBookingToDB = (b) => ({
 });
 
 const mapDiningFromDB = (d) => ({
-  id: d.id,
-  customerName: d.customer_name,
-  phone: d.phone,
-  date: d.date,
-  time: d.time,
-  guests: d.guests,
+  id: d.id || `TBL-DB-${Math.floor(100 + Math.random() * 900)}`,
+  customerName: d.customer_name || 'Guest',
+  phone: d.phone || '',
+  date: d.date || '',
+  time: d.time || '',
+  guests: Number(d.guests) || 2,
   notes: d.notes || '',
-  status: d.status,
-  createdAt: d.created_at
+  status: d.status || 'PENDING',
+  createdAt: d.created_at || new Date().toISOString()
 });
 
 const mapDiningToDB = (d) => ({
@@ -268,12 +268,14 @@ export const ResortProvider = ({ children }) => {
           details: bookingErr.details,
           hint: bookingErr.hint
         });
-      } else if (bookingData && bookingData.length > 0) {
+      } else if (bookingData) {
         const dbBookings = bookingData.map(mapBookingFromDB);
         setBookings(prev => {
           const dbIds = new Set(dbBookings.map(b => b.id));
           const localOnly = prev.filter(b => !dbIds.has(b.id));
-          return [...dbBookings, ...localOnly];
+          const combined = [...dbBookings, ...localOnly];
+          safeSetItem(STORAGE_KEYS.BOOKINGS, JSON.stringify(combined));
+          return combined;
         });
       }
 
@@ -286,12 +288,14 @@ export const ResortProvider = ({ children }) => {
           details: diningErr.details,
           hint: diningErr.hint
         });
-      } else if (diningData && diningData.length > 0) {
+      } else if (diningData) {
         const dbDining = diningData.map(mapDiningFromDB);
         setDiningBookings(prev => {
           const dbIds = new Set(dbDining.map(d => d.id));
           const localOnly = prev.filter(d => !dbIds.has(d.id));
-          return [...dbDining, ...localOnly];
+          const combined = [...dbDining, ...localOnly];
+          safeSetItem(STORAGE_KEYS.DINING_BOOKINGS, JSON.stringify(combined));
+          return combined;
         });
       }
 
@@ -490,6 +494,7 @@ export const ResortProvider = ({ children }) => {
       setUserSession(activeSession);
       safeSetItem(STORAGE_KEYS.SESSION, JSON.stringify(activeSession));
       setLoginModalOpen(false);
+      await fetchSupabaseData();
       return { success: true, role: 'ADMIN' };
     }
 
@@ -509,6 +514,7 @@ export const ResortProvider = ({ children }) => {
       setUserSession(activeSession);
       safeSetItem(STORAGE_KEYS.SESSION, JSON.stringify(activeSession));
       setLoginModalOpen(false);
+      await fetchSupabaseData();
       return { success: true, role: 'STAFF' };
     }
 

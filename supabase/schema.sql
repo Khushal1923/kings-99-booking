@@ -182,6 +182,11 @@ CREATE POLICY "Admin Write User Roles" ON public.user_roles FOR ALL TO authentic
   USING (public.is_admin(auth.uid()))
   WITH CHECK (public.is_admin(auth.uid()));
 
+-- Grant API access to public tables
+GRANT USAGE ON SCHEMA public TO anon, authenticated;
+GRANT ALL ON ALL TABLES IN SCHEMA public TO anon, authenticated;
+GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO anon, authenticated;
+
 -- ==============================================================================
 -- REALTIME SUBSCRIPTION SETTINGS
 -- ==============================================================================
