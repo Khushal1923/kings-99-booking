@@ -105,7 +105,7 @@ const mapBookingToDB = (b) => ({
   status: b.status || 'PENDING',
   booking_type: b.bookingType || 'ONLINE',
   payment_mode: b.paymentMode || '',
-  payment_status: b.paymentStatus || '',
+  payment_status: b.paymentStatus || 'PENDING',
   special_requests: b.specialRequests || '',
   created_at: b.createdAt || new Date().toISOString()
 });
@@ -334,9 +334,11 @@ export const ResortProvider = ({ children }) => {
 
           setUserSession(activeSession);
           safeSetItem(STORAGE_KEYS.SESSION, JSON.stringify(activeSession));
+          fetchSupabaseData();
         } else if (event === 'SIGNED_OUT') {
           setUserSession(null);
           localStorage.removeItem(STORAGE_KEYS.SESSION);
+          fetchSupabaseData();
         }
       });
 
@@ -447,6 +449,7 @@ export const ResortProvider = ({ children }) => {
           setUserSession(activeSession);
           safeSetItem(STORAGE_KEYS.SESSION, JSON.stringify(activeSession));
           setLoginModalOpen(false);
+          await fetchSupabaseData();
           return { success: true, role: role.toUpperCase() };
         }
       } catch (err) {
@@ -632,8 +635,8 @@ export const ResortProvider = ({ children }) => {
       totalPrice: Number(bookingData.totalPrice) || 0,
       status: bookingData.status || "PENDING",
       bookingType: bookingData.bookingType || "ONLINE",
-      paymentMode: bookingData.paymentMode || "",
-      paymentStatus: bookingData.paymentStatus || "",
+      paymentMode: bookingData.paymentMode || "Online",
+      paymentStatus: bookingData.paymentStatus || "PENDING",
       specialRequests: bookingData.specialRequests || "",
       createdAt: new Date().toISOString()
     };
