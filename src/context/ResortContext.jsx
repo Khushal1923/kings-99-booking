@@ -664,7 +664,6 @@ export const ResortProvider = ({ children }) => {
           details: error.details,
           hint: error.hint
         });
-        throw new Error("Unable to submit your booking right now. Please try again or contact Kings 99.");
       }
     }
 
@@ -716,7 +715,6 @@ export const ResortProvider = ({ children }) => {
           details: error.details,
           hint: error.hint
         });
-        throw new Error("Unable to submit your dining table reservation right now. Please try again or contact Kings 99.");
       }
     }
 
