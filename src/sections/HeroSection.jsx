@@ -1,12 +1,19 @@
 import React from 'react';
 import { useResort } from '../context/ResortContext';
-import { Sparkles, MapPin, UtensilsCrossed, Calendar } from 'lucide-react';
+import { Sparkles, MapPin, UtensilsCrossed, Home } from 'lucide-react';
 
-export const HeroSection = ({ onOpenBookingModal }) => {
+export const HeroSection = ({ _onOpenBookingModal }) => {
   const { cms } = useResort();
 
   const handleScrollToDining = () => {
-    const element = document.getElementById('dining');
+    const element = document.getElementById('dining') || document.getElementById('menu');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const handleScrollToVillas = () => {
+    const element = document.getElementById('villas');
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
     }
@@ -150,7 +157,7 @@ export const HeroSection = ({ onOpenBookingModal }) => {
 
             {/* Button 2: Deep Emerald Forest Pill */}
             <button
-              onClick={() => onOpenBookingModal(null)}
+              onClick={handleScrollToVillas}
               className="btn-hero-secondary"
               style={{
                 background: 'linear-gradient(135deg, #1b5e4d 0%, #0f3d32 100%)',
@@ -169,7 +176,7 @@ export const HeroSection = ({ onOpenBookingModal }) => {
                 boxShadow: '0 6px 20px rgba(27, 94, 77, 0.5)'
               }}
             >
-              <Calendar size={17} color="#d4af37" /> BOOK VILLA / TABLE
+              <Home size={17} color="#d4af37" /> EXPLORE VILLAS
             </button>
 
             {/* Button 3: Frosted Luxury Glass Pill */}

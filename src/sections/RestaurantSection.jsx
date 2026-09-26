@@ -46,7 +46,7 @@ export const RestaurantSection = () => {
   };
 
   return (
-    <section id="menu" className="section-padding" style={{ background: '#0f172a', color: '#ffffff', position: 'relative' }}>
+    <section id="dining" className="section-padding" style={{ background: '#0f172a', color: '#ffffff', position: 'relative' }}>
       <div className="container">
         {/* Main Royal Menu Header (Matching Reference Design) */}
         <div style={{ textAlign: 'center', maxWidth: '800px', margin: '0 auto 40px' }}>

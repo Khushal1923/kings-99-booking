@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useResort } from '../context/ResortContext';
 import { BookingRequestsTab } from './BookingRequestsTab';
 import { DiningBookingsTab } from './DiningBookingsTab';
@@ -32,14 +32,6 @@ export const AdminDashboard = () => {
   const role = userSession ? userSession.role : 'STAFF';
 
   const usingDefaultCreds = isUsingDefaultCredentials(role);
-  const [activeTab, setActiveTab] = useState(usingDefaultCreds ? 'SECURITY' : 'TABLES');
-
-  // Force SECURITY tab if using default credentials
-  useEffect(() => {
-    if (usingDefaultCreds) {
-      setActiveTab('SECURITY');
-    }
-  }, [usingDefaultCreds]);
 
   // Stats calculation
   const pendingVillaCount = bookings.filter(b => b.status === 'PENDING').length;
@@ -64,6 +56,39 @@ export const AdminDashboard = () => {
   ];
 
   const tabs = allTabs.filter(t => t.roles.includes(role));
+  const validTabIds = tabs.map(t => t.id);
+
+  // Read initial tab from localStorage with role-based validation fallback
+  const getInitialTab = () => {
+    if (usingDefaultCreds) return 'SECURITY';
+    try {
+      const savedTab = localStorage.getItem('kings99_active_dashboard_tab');
+      if (savedTab && validTabIds.includes(savedTab)) {
+        return savedTab;
+      }
+    } catch {
+      // Ignore storage read errors
+    }
+    return validTabIds[0] || 'TABLES';
+  };
+
+  const [rawActiveTab, setRawActiveTab] = useState(getInitialTab);
+
+  const handleSelectTab = (tabId) => {
+    if (!usingDefaultCreds && validTabIds.includes(tabId)) {
+      setRawActiveTab(tabId);
+      try {
+        localStorage.setItem('kings99_active_dashboard_tab', tabId);
+      } catch {
+        // Ignore storage write errors
+      }
+    }
+  };
+
+  // Derive active tab with fallback protection
+  const activeTab = usingDefaultCreds
+    ? 'SECURITY'
+    : (validTabIds.includes(rawActiveTab) ? rawActiveTab : (validTabIds[0] || 'TABLES'));
 
   return (
     <div style={{ minHeight: '100vh', background: 'var(--bg-primary)', color: 'var(--text-main)', paddingBottom: '60px' }}>
@@ -165,7 +190,7 @@ export const AdminDashboard = () => {
             <button
               key={t.id}
               disabled={usingDefaultCreds && t.id !== 'SECURITY'}
-              onClick={() => !usingDefaultCreds && setActiveTab(t.id)}
+              onClick={() => handleSelectTab(t.id)}
               className={activeTab === t.id ? 'btn-gold' : 'btn-outline'}
               style={{
                 padding: '10px 18px',

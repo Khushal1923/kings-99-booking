@@ -101,6 +101,20 @@ CREATE TABLE IF NOT EXISTS public.user_roles (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
+-- Helper function to check if a user is an ADMIN without RLS recursion
+CREATE OR REPLACE FUNCTION public.is_admin(user_id UUID)
+RETURNS BOOLEAN AS $$
+BEGIN
+  RETURN EXISTS (
+    SELECT 1 FROM public.user_roles
+    WHERE id = user_id AND LOWER(role) = 'admin'
+  );
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public;
+
+REVOKE EXECUTE ON FUNCTION public.is_admin(UUID) FROM PUBLIC;
+GRANT EXECUTE ON FUNCTION public.is_admin(UUID) TO authenticated;
+
 -- ==============================================================================
 -- ROW LEVEL SECURITY (RLS) POLICIES
 -- ==============================================================================
@@ -114,39 +128,59 @@ ALTER TABLE public.gallery ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.cms ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.user_roles ENABLE ROW LEVEL SECURITY;
 
--- VILLAS Policies: Everyone can SELECT, only Authenticated users can INSERT/UPDATE/DELETE
+-- VILLAS Policies: Everyone can SELECT, only Admin users can INSERT/UPDATE/DELETE
 CREATE POLICY "Public Read Villas" ON public.villas FOR SELECT USING (true);
-CREATE POLICY "Admin Write Villas" ON public.villas FOR ALL TO authenticated USING (true) WITH CHECK (true);
+CREATE POLICY "Admin Write Villas" ON public.villas FOR ALL TO authenticated
+  USING (public.is_admin(auth.uid()))
+  WITH CHECK (public.is_admin(auth.uid()));
 
--- BOOKINGS Policies: Everyone can Read & Insert, Authenticated users can Manage
-CREATE POLICY "Public Read Bookings" ON public.bookings FOR SELECT USING (true);
-CREATE POLICY "Public Insert Bookings" ON public.bookings FOR INSERT WITH CHECK (true);
-CREATE POLICY "Auth Manage Bookings" ON public.bookings FOR ALL TO authenticated USING (true) WITH CHECK (true);
+-- BOOKINGS Policies: Public can Insert pending bookings, Authenticated users can Read, Create, Update, Admin can Delete
+CREATE POLICY "Public Insert Bookings" ON public.bookings FOR INSERT WITH CHECK (
+  (status = 'PENDING' OR status IS NULL) AND
+  (booking_type = 'ONLINE' OR booking_type IS NULL) AND
+  (payment_status = 'PENDING' OR payment_status IS NULL OR payment_status = 'UNPAID')
+);
+CREATE POLICY "Auth Read Bookings" ON public.bookings FOR SELECT TO authenticated USING (true);
+CREATE POLICY "Auth Insert Bookings" ON public.bookings FOR INSERT TO authenticated WITH CHECK (true);
+CREATE POLICY "Auth Update Bookings" ON public.bookings FOR UPDATE TO authenticated USING (true) WITH CHECK (true);
+CREATE POLICY "Admin Delete Bookings" ON public.bookings FOR DELETE TO authenticated USING (public.is_admin(auth.uid()));
 
--- DINING BOOKINGS Policies: Everyone can Read & Insert, Authenticated users can Manage
-CREATE POLICY "Public Read Dining Bookings" ON public.dining_bookings FOR SELECT USING (true);
-CREATE POLICY "Public Insert Dining Bookings" ON public.dining_bookings FOR INSERT WITH CHECK (true);
-CREATE POLICY "Auth Manage Dining Bookings" ON public.dining_bookings FOR ALL TO authenticated USING (true) WITH CHECK (true);
+-- DINING BOOKINGS Policies: Public can Insert pending dining reservations, Authenticated users can Read, Create, Update, Admin can Delete
+CREATE POLICY "Public Insert Dining Bookings" ON public.dining_bookings FOR INSERT WITH CHECK (status = 'PENDING' OR status IS NULL);
+CREATE POLICY "Auth Read Dining Bookings" ON public.dining_bookings FOR SELECT TO authenticated USING (true);
+CREATE POLICY "Auth Insert Dining Bookings" ON public.dining_bookings FOR INSERT TO authenticated WITH CHECK (true);
+CREATE POLICY "Auth Update Dining Bookings" ON public.dining_bookings FOR UPDATE TO authenticated USING (true) WITH CHECK (true);
+CREATE POLICY "Admin Delete Dining Bookings" ON public.dining_bookings FOR DELETE TO authenticated USING (public.is_admin(auth.uid()));
 
--- BLOCKED DATES Policies: Everyone can SELECT, only Authenticated users can write
+-- BLOCKED DATES Policies: Everyone can SELECT, only Admin users can write
 CREATE POLICY "Public Read Blocked Dates" ON public.blocked_dates FOR SELECT USING (true);
-CREATE POLICY "Auth Write Blocked Dates" ON public.blocked_dates FOR ALL TO authenticated USING (true) WITH CHECK (true);
+CREATE POLICY "Admin Write Blocked Dates" ON public.blocked_dates FOR ALL TO authenticated
+  USING (public.is_admin(auth.uid()))
+  WITH CHECK (public.is_admin(auth.uid()));
 
--- RESTAURANT Policies: Everyone can SELECT, only Authenticated users can write
+-- RESTAURANT Policies: Everyone can SELECT, only Admin users can write
 CREATE POLICY "Public Read Restaurant" ON public.restaurant FOR SELECT USING (true);
-CREATE POLICY "Auth Write Restaurant" ON public.restaurant FOR ALL TO authenticated USING (true) WITH CHECK (true);
+CREATE POLICY "Admin Write Restaurant" ON public.restaurant FOR ALL TO authenticated
+  USING (public.is_admin(auth.uid()))
+  WITH CHECK (public.is_admin(auth.uid()));
 
--- GALLERY Policies: Everyone can SELECT, only Authenticated users can write
+-- GALLERY Policies: Everyone can SELECT, only Admin users can write
 CREATE POLICY "Public Read Gallery" ON public.gallery FOR SELECT USING (true);
-CREATE POLICY "Auth Write Gallery" ON public.gallery FOR ALL TO authenticated USING (true) WITH CHECK (true);
+CREATE POLICY "Admin Write Gallery" ON public.gallery FOR ALL TO authenticated
+  USING (public.is_admin(auth.uid()))
+  WITH CHECK (public.is_admin(auth.uid()));
 
--- CMS Policies: Everyone can SELECT, only Authenticated users can write
+-- CMS Policies: Everyone can SELECT, only Admin users can write
 CREATE POLICY "Public Read CMS" ON public.cms FOR SELECT USING (true);
-CREATE POLICY "Auth Write CMS" ON public.cms FOR ALL TO authenticated USING (true) WITH CHECK (true);
+CREATE POLICY "Admin Write CMS" ON public.cms FOR ALL TO authenticated
+  USING (public.is_admin(auth.uid()))
+  WITH CHECK (public.is_admin(auth.uid()));
 
--- USER ROLES Policies: Authenticated users can read their role
+-- USER ROLES Policies: Authenticated users can read user roles, Admin manages user roles
 CREATE POLICY "Auth Read User Roles" ON public.user_roles FOR SELECT TO authenticated USING (true);
-CREATE POLICY "Admin Write User Roles" ON public.user_roles FOR ALL TO authenticated USING (true) WITH CHECK (true);
+CREATE POLICY "Admin Write User Roles" ON public.user_roles FOR ALL TO authenticated
+  USING (public.is_admin(auth.uid()))
+  WITH CHECK (public.is_admin(auth.uid()));
 
 -- ==============================================================================
 -- REALTIME SUBSCRIPTION SETTINGS
@@ -169,8 +203,8 @@ ON CONFLICT (id) DO NOTHING;
 CREATE POLICY "Public Read Resort Media" ON storage.objects
 FOR SELECT USING (bucket_id = 'resort-media');
 
-CREATE POLICY "Public Upload Resort Media" ON storage.objects
-FOR INSERT WITH CHECK (bucket_id = 'resort-media');
+CREATE POLICY "Admin Upload Resort Media" ON storage.objects
+FOR INSERT TO authenticated WITH CHECK (bucket_id = 'resort-media' AND public.is_admin(auth.uid()));
 
-CREATE POLICY "Public Delete Resort Media" ON storage.objects
-FOR DELETE USING (bucket_id = 'resort-media');
+CREATE POLICY "Admin Delete Resort Media" ON storage.objects
+FOR DELETE TO authenticated USING (bucket_id = 'resort-media' AND public.is_admin(auth.uid()));

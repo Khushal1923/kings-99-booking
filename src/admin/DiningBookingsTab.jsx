@@ -33,7 +33,10 @@ export const DiningBookingsTab = () => {
   };
 
   const getWhatsAppLink = (d, action = 'CONFIRM') => {
-    const phoneClean = d.phone.replace(/[^0-9]/g, '');
+    let phoneClean = d.phone.replace(/[^0-9]/g, '');
+    if (phoneClean.length === 10) {
+      phoneClean = '91' + phoneClean;
+    }
     let text = '';
     if (action === 'CONFIRM') {
       text = `Namaste ${d.customerName},\n\nWe are delighted to CONFIRM your Dining Table Reservation at ${cms.resortName} Nashik!\n\n🍽️ Ref: ${d.id}\n📅 Date: ${d.date}\n⏰ Time: ${d.time}\n👥 Guests: ${d.guests}\n\nWe look forward to serving you!`;

@@ -46,7 +46,10 @@ export const BookingRequestsTab = () => {
   };
 
   const getWhatsAppLink = (b, action = 'CONFIRM') => {
-    const phoneClean = b.phone.replace(/[^0-9]/g, '');
+    let phoneClean = b.phone.replace(/[^0-9]/g, '');
+    if (phoneClean.length === 10) {
+      phoneClean = '91' + phoneClean;
+    }
     let text = '';
     if (action === 'CONFIRM') {
       text = `Namaste ${b.customerName},\n\nWe are delighted to CONFIRM your booking at ${cms.resortName} Nashik!\n\n📋 Booking Ref: ${b.id}\n🏡 Villa: ${b.villaName}\n📅 Check-In: ${b.checkIn}\n📅 Check-Out: ${b.checkOut}\n👥 Guests: ${b.guests}\n💰 Total Amount: ₹${b.totalPrice.toLocaleString('en-IN')}\n\nWe look forward to welcoming you!`;

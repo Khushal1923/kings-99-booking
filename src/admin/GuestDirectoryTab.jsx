@@ -118,7 +118,10 @@ export const GuestDirectoryTab = () => {
                   </td>
                   <td style={{ padding: '14px 16px', textAlign: 'right' }}>
                     <a
-                      href={`https://wa.me/${g.phone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(`Namaste ${g.name}, greetings from ${cms.resortName} Nashik!`)}`}
+                      href={`https://wa.me/${(() => {
+                        const clean = (g.phone || '').replace(/[^0-9]/g, '');
+                        return clean.length === 10 ? '91' + clean : clean;
+                      })()}?text=${encodeURIComponent(`Namaste ${g.name}, greetings from ${cms.resortName} Nashik!`)}`}
                       target="_blank"
                       rel="noreferrer"
                       className="btn-outline"

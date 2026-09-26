@@ -417,32 +417,6 @@ export const ResortProvider = ({ children }) => {
           password: supabasePassword
         });
 
-        // Auto-provision user account in Supabase Auth if it does not exist yet
-        if (authRes && authRes.error && authRes.error.message && authRes.error.message.toLowerCase().includes('invalid login credentials')) {
-          const normIn = input.toLowerCase();
-          const targetRole = normIn.includes('admin') ? 'ADMIN' : 'STAFF';
-          const { data: signUpData, error: signUpErr } = await supabase.auth.signUp({
-            email,
-            password: supabasePassword,
-            options: {
-              data: { role: targetRole }
-            }
-          });
-
-          if (!signUpErr && signUpData?.user) {
-            authRes = { data: signUpData, error: null };
-            try {
-              await supabase.from('user_roles').upsert({
-                id: signUpData.user.id,
-                email: signUpData.user.email,
-                role: targetRole
-              });
-            } catch (roleErr) {
-              console.warn("Could not insert user_role:", roleErr);
-            }
-          }
-        }
-
         const data = authRes?.data;
         const error = authRes?.error;
 

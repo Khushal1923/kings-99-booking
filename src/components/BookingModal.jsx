@@ -58,6 +58,7 @@ export const BookingModal = ({ selectedVilla, onClose }) => {
   const [specialRequests, setSpecialRequests] = useState('');
 
   const [errorMsg, setErrorMsg] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [createdBooking, setCreatedBooking] = useState(null);
   const [createdType, setCreatedType] = useState('VILLA');
 
@@ -66,8 +67,8 @@ export const BookingModal = ({ selectedVilla, onClose }) => {
   // Calculate nights and total price in INR ₹ for villa
   const calculateTotal = () => {
     if (!checkIn || !checkOut || !currentVilla) return { nights: 0, total: 0 };
-    const start = new Date(checkIn);
-    const end = new Date(checkOut);
+    const start = new Date(checkIn.replace(/-/g, '/'));
+    const end = new Date(checkOut.replace(/-/g, '/'));
     const timeDiff = end.getTime() - start.getTime();
     const nights = Math.ceil(timeDiff / (1000 * 3600 * 24));
     if (nights <= 0) return { nights: 0, total: 0 };
@@ -94,6 +95,7 @@ export const BookingModal = ({ selectedVilla, onClose }) => {
 
   const handleVillaSubmit = async (e) => {
     e.preventDefault();
+    if (isSubmitting) return;
     setErrorMsg('');
 
     if (!villaId || activeVillas.length === 0) {
@@ -107,6 +109,7 @@ export const BookingModal = ({ selectedVilla, onClose }) => {
     }
 
     try {
+      setIsSubmitting(true);
       const bookingData = {
         villaId,
         customerName,
@@ -123,11 +126,14 @@ export const BookingModal = ({ selectedVilla, onClose }) => {
       setCreatedBooking(result);
     } catch (err) {
       setErrorMsg(err.message || "Could not complete villa booking request.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   const handleDiningSubmit = async (e) => {
     e.preventDefault();
+    if (isSubmitting) return;
     setErrorMsg('');
 
     if (!customerName.trim() || !phone.trim()) {
@@ -136,6 +142,7 @@ export const BookingModal = ({ selectedVilla, onClose }) => {
     }
 
     try {
+      setIsSubmitting(true);
       const tableData = {
         customerName,
         phone,
@@ -149,6 +156,8 @@ export const BookingModal = ({ selectedVilla, onClose }) => {
       setCreatedBooking(result);
     } catch (err) {
       setErrorMsg(err.message || "Could not complete dining table reservation.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -397,17 +406,17 @@ export const BookingModal = ({ selectedVilla, onClose }) => {
                 <button
                   type="submit"
                   className="btn-gold"
-                  disabled={!!errorMsg}
+                  disabled={!!errorMsg || isSubmitting}
                   style={{
                     width: '100%',
                     justifyContent: 'center',
                     padding: '14px',
                     fontSize: '1rem',
-                    opacity: errorMsg ? 0.6 : 1,
-                    cursor: errorMsg ? 'not-allowed' : 'pointer'
+                    opacity: (errorMsg || isSubmitting) ? 0.6 : 1,
+                    cursor: (errorMsg || isSubmitting) ? 'not-allowed' : 'pointer'
                   }}
                 >
-                  <Sparkles size={18} /> Confirm & Request Villa Staycation
+                  <Sparkles size={18} /> {isSubmitting ? 'Processing Villa Request...' : 'Confirm & Request Villa Staycation'}
                 </button>
               </form>
             )}
@@ -505,16 +514,19 @@ export const BookingModal = ({ selectedVilla, onClose }) => {
                 <button
                   type="submit"
                   className="btn-gold"
+                  disabled={isSubmitting}
                   style={{
                     width: '100%',
                     justifyContent: 'center',
                     padding: '14px',
                     fontSize: '1rem',
+                    opacity: isSubmitting ? 0.6 : 1,
+                    cursor: isSubmitting ? 'not-allowed' : 'pointer',
                     background: 'linear-gradient(135deg, #f59e0b, #d97706)',
                     color: '#0b1310'
                   }}
                 >
-                  <Sparkles size={18} /> Confirm & Reserve Dining Table
+                  <Sparkles size={18} /> {isSubmitting ? 'Reserving Dining Table...' : 'Confirm & Reserve Dining Table'}
                 </button>
               </form>
             )}
